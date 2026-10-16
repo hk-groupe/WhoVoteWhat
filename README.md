@@ -52,10 +52,23 @@ Build de production :
 npm run build
 ```
 
+Backend (API de contenu partagée + mise à jour quotidienne des scrutins) :
+
+```bash
+npm run api          # démarre l'API sur le port 4000 (PORT, CLE_SECRETE, ORIGINE_AUTORISEE configurables)
+npm run maj-scrutins # consolide une fois l'open data officielle des scrutins
+```
+
+Au démarrage, l'API consolide l'open data si aucune donnée locale n'existe, puis rejoue la consolidation chaque nuit (03:30 par défaut, `HEURE_MAJ_SCRUTINS`).
+
 ## 🛠️ Stack
 
-- React 19 (Vite)
-- Aucune dépendance externe, aucun backend, aucune donnée collectée — 100 % côté client.
+- **Front** : React 19 (Vite), aucune dépendance externe.
+- **Back** : Node sans dépendance (`node:http`). Deux rôles :
+  - **API de contenu partagée** — le back-office enregistre sur le serveur : tous les utilisateurs voient immédiatement les candidats, questions, thèmes et sources mis à jour, sans mettre à jour de fichiers.
+  - **Consolidation quotidienne des scrutins** — chaque nuit, l'open data officielle des scrutins de l'Assemblée nationale (`data.assemblee-nationale.fr`, Licence Ouverte 2.0) est téléchargée et agrégée par groupe ; la section « Récap des votes » se met à jour toute seule.
+- **Repli** : si le backend est injoignable, le front retombe sur les données du code source — le site reste consultable.
+- Aucune donnée personnelle collectée : le quiz tourne dans le navigateur, le backend ne sert que du contenu et des scrutins.
 
 ## 📌 Avertissement
 

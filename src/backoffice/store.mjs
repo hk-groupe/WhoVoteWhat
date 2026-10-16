@@ -1,12 +1,12 @@
-// Store back-office : persistance localStorage + import/export JSON
-// Les données de base (programmes.mjs) servent de valeurs par défaut.
-
+// Store back-office : le backend sert désormais la version partagée des données.
+// Repli : si le backend n'est pas joignable, on retombe sur les données du code source
+// (programmes.mjs), exportables/importables en JSON comme avant.
 import { CANDIDATS, THEMES, QUESTIONS, INFOS, RESULTATS_LEGEND } from '../data/programmes.mjs'
+import * as api from '../api/client.mjs'
 
-const CLE_STORE = 'voteclair-backoffice'
 const CLE_SESSION = 'voteclair-session'
 
-const BASE = {
+export const BASE = {
   candidats: CANDIDATS,
   legendes: RESULTATS_LEGEND,
   themes: THEMES,
@@ -14,29 +14,22 @@ const BASE = {
   infos: INFOS,
 }
 
-export function chargerDonnees() {
+export const donneesDefaut = () => JSON.parse(JSON.stringify(BASE))
+
+export async function chargerDonnees() {
   try {
-    const brut = localStorage.getItem(CLE_STORE)
-    if (!brut) return JSON.parse(JSON.stringify(BASE))
-    const stockees = JSON.parse(brut)
-    return {
-      candidats: stockees.candidats ?? BASE.candidats,
-      legendes: stockees.legendes ?? BASE.legendes,
-      themes: stockees.themes ?? BASE.themes,
-      questions: stockees.questions ?? BASE.questions,
-      infos: stockees.infos ?? BASE.infos,
-    }
+    return await api.chargerContenu()
   } catch {
-    return JSON.parse(JSON.stringify(BASE))
+    return donneesDefaut()
   }
 }
 
-export function sauvegarderDonnees(donnees) {
-  localStorage.setItem(CLE_STORE, JSON.stringify(donnees))
+export async function sauvegarderDonnees(donnees, jeton) {
+  return api.sauvegarderContenu(donnees, jeton)
 }
 
-export function reinitialiserDonnees() {
-  localStorage.removeItem(CLE_STORE)
+export async function reinitialiserDonnees(jeton) {
+  return api.reinitialiserContenu(jeton)
 }
 
 export function exporterJSON(donnees) {
@@ -63,36 +56,9 @@ export function importerJSON(fichier, succes, erreur) {
   lecteur.readAsText(fichier)
 }
 
-// ── Comptes utilisateurs ──
-// Compte admin par défaut : admin / admin (à changer en production !)
-const COMPTES_DEFAUT = [
-  { identifiant: 'admin', motDePasse: 'admin', role: 'admin' },
-]
-
-export function chargerComptes() {
-  try {
-    const brut = localStorage.getItem('voteclair-comptes')
-    if (!brut) {
-      localStorage.setItem('voteclair-comptes', JSON.stringify(COMPTES_DEFAUT))
-      return COMPTES_DEFAUT
-    }
-    return JSON.parse(brut)
-  } catch {
-    return COMPTES_DEFAUT
-  }
-}
-
-export function sauvegarderComptes(comptes) {
-  localStorage.setItem('voteclair-comptes', JSON.stringify(comptes))
-}
-
-export function connexion(identifiant, motDePasse) {
-  const comptes = chargerComptes()
-  const compte = comptes.find((c) => c.identifiant === identifiant && c.motDePasse === motDePasse)
-  if (!compte) return null
-  const session = { identifiant: compte.identifiant, role: compte.role, debut: Date.now() }
-  localStorage.setItem(CLE_SESSION, JSON.stringify(session))
-  return session
+// ── Session ──
+export function memoriserSession(jeton, identifiant, role) {
+  localStorage.setItem(CLE_SESSION, JSON.stringify({ jeton, identifiant, role }))
 }
 
 export function sessionEnCours() {
@@ -104,6 +70,6 @@ export function sessionEnCours() {
   }
 }
 
-export function deconnexion() {
+export function oublieSession() {
   localStorage.removeItem(CLE_SESSION)
 }

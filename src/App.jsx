@@ -38,19 +38,21 @@ function tirerQuestions(toutes, nb) {
 
 export default function App() {
   const [ecran, setEcran] = React.useState('accueil')
-  const [donnees] = React.useState(() => chargerDonnees())
+  const [donnees, setDonnees] = React.useState(null)
+
+  React.useEffect(() => {
+    chargerDonnees().then(setDonnees).catch(() => setDonnees({}))
+  }, [])
   const [nbQuestions, setNbQuestions] = React.useState(20)
   const [questions, setQuestions] = React.useState([])
   const [qIndex, setQIndex] = React.useState(0)
   const [reponses, setReponses] = React.useState({})
   const question = questions[qIndex]
 
-  const candidats = donnees.candidats
-  const themes = donnees.themes
-  const legendes = donnees.legendes
+
 
   function demarrer() {
-    setQuestions(tirerQuestions(donnees.questions, nbQuestions))
+    setQuestions(tirerQuestions(donnees.questions ?? [], nbQuestions))
     setQIndex(0)
     setReponses({})
     setEcran('quiz')
@@ -85,6 +87,22 @@ export default function App() {
       return { candidat: c, score, detail, nbAccords: Object.values(detail).filter(d => d === 'accord').length }
     }).sort((a, b) => b.score - a.score)
   }
+
+  if (!donnees) {
+    return (
+      <div className="app">
+        <header className="header">
+          <span className="logo">🗳️</span>
+          <h1>Vote<span className="accent">Clair</span></h1>
+          <p className="tagline">Chargement…</p>
+        </header>
+      </div>
+    )
+  }
+
+  const candidats = donnees.candidats ?? []
+  const themes = donnees.themes ?? {}
+  const legendes = donnees.legendes ?? {}
 
   if (ecran === 'backoffice') {
     return (
@@ -164,7 +182,7 @@ export default function App() {
             <h3>🎲 Comment fonctionne le site</h3>
             <p>Le site pose des questions sur des propositions concrètes issues des programmes des candidats. Vous répondez <em>d'accord</em>, <em>mitigé / je ne sais pas</em> ou <em>pas d'accord</em>. Chaque candidat a une position (<em>pour</em>, <em>nuancé</em>, <em>contre</em>) sur chaque question, extraite de ses propres publications.</p>
             <p><strong>Calcul du score :</strong> un accord avec la position d'un candidat rapporte +1, un désaccord −1. Les réponses « mitigé » et les positions « nuancées » sont neutralisées (elles ne comptent ni pour ni contre). Le score final, normalisé de 0 à 100 %, reflète votre proximité avec chaque programme.</p>
-            <p><strong>Aucune donnée collectée :</strong> le quiz tourne entièrement dans votre navigateur, il n'y a ni backend ni traceur. Vos réponses ne quittent jamais votre appareil.</p>
+            <p><strong>Aucune donnée personnelle collectée :</strong> le quiz tourne entièrement dans votre navigateur et vos réponses ne quittent jamais votre appareil. Le site s'appuie désormais sur un backend uniquement pour distribuer le contenu édité et les scrutins consolidés chaque jour — jamais pour vous suivre.</p>
           </div>
 
           <div className="bloc">
@@ -195,7 +213,7 @@ export default function App() {
           <div className="bloc">
             <h3>📊 Les positions de chaque candidat, question par question</h3>
             <p>L'intégralité des positions utilisées par le quiz, consultable librement :</p>
-            {donnees.questions.map((q) => (
+            {(donnees.questions ?? []).map((q) => (
               <details key={q.id} className="details-transparence">
                 <summary>{themes[q.theme]?.emoji} {q.texte}</summary>
                 <ul className="positions-liste">
@@ -217,15 +235,16 @@ export default function App() {
 
           <div className="bloc">
             <h3>🗳️ Comment la rubrique « Récap des votes » est construite</h3>
-            <p>La rubrique « Récap des votes » présente les scrutins publics de l'Assemblée nationale (17e législature). Les chiffres affichés — résultat du scrutin, votants, suffrages exprimés et répartition pour / contre / abstention de chaque groupe parlementaire — sont <strong>recopiés tels quels depuis les pages officielles « Analyse du scrutin » de l'Assemblée nationale</strong>, sans interprétation ni recalcul.</p>
+            <p>La rubrique « Récap des votes » présente les scrutins publics de l'Assemblée nationale (17e législature). Les chiffres affichés — résultat du scrutin, votants, suffrages exprimés et répartition pour / contre / abstention de chaque groupe parlementaire — sont <strong>recopiés tels quels depuis l'open data officielle des scrutins de l'Assemblée nationale</strong> (data.assemblee-nationale.fr, Licence Ouverte 2.0), sans interprétation ni recalcul. Chaque fiche renvoie vers la page officielle « Analyse du scrutin » correspondante.</p>
             <p><strong>Ce que nous affichons :</strong> pour chaque scrutin, un badge « adopté » ou « rejeté » conforme au résultat officiel, la synthèse du vote (votants, suffrages exprimés, majorité requise) et, pour chaque groupe, le décompte officiel des voix. La « position » affichée par groupe correspond à la position majoritaire des voix exprimées du groupe sur ce scrutin — quand les voix sont partagées, le groupe est classé « mixte » plutôt que rangé arbitrairement d'un côté.</p>
-            <p><strong>Limites assumées :</strong> le site affiche une sélection de scrutins (les 20 derniers et des votes de référence par thème), pas l'intégralité des scrutins de la législature. Les « non-votants » (présidents de séance, absents) ne sont pas comptés dans les jauges. Les couleurs associées aux groupes sont purement indicatives. Chaque fiche comporte un lien direct vers la page officielle de l'Assemblée nationale pour vérifier et aller plus loin.</p>
+            <p><strong>Limites assumées :</strong> le site affiche une fenêtre glissante de douze mois de scrutins (les 20 derniers et des votes de référence par thème), pas l'intégralité de la législature. Les « non-votants » (présidents de séance, absents) ne sont pas comptés dans les jauges. Les couleurs associées aux groupes sont purement indicatives. Chaque fiche comporte un lien direct vers la page officielle de l'Assemblée nationale pour vérifier et aller plus loin.</p>
+            <p><strong>Mise à jour quotidienne :</strong> chaque nuit, un travail automatisé télécharge l'open data officielle des scrutins publiée par l'Assemblée nationale (data.assemblee-nationale.fr, Licence Ouverte 2.0) et consolide les décomptes par groupe. Les chiffres affichés restent recopiés tels quels depuis la source officielle, sans interprétation ni recalcul.</p>
           </div>
 
           <div className="bloc">
             <h3>🤖 Comment ce site a été développé</h3>
             <p>Ce site a été développé en <strong>vibe coding</strong> : une méthode où l'on décrit les fonctionnalités en langage naturel et où l'IA génère et itère sur le code, sous revue humaine. Le modèle d'IA utilisé est <strong>GLM (zai-glm-5-3)</strong>, piloté par l'agent <strong>Vibe Code</strong> de Mistral AI.</p>
-            <p>La stack technique est volontairement simple et auditable : React 19 + Vite, aucune dépendance externe, aucun backend, tout côté client.</p>
+            <p>La stack technique est volontairement simple et auditable : React 19 + Vite côté client, et un backend Node sans dépendance (API de contenu partagée + consolidation quotidienne de l'open data officielle des scrutins).</p>
           </div>
 
           <div className="bloc">
