@@ -60,8 +60,8 @@ export const THEMES = {
 // Liens "En savoir plus" : fiches officielles (vie-publique.fr, service-public.gouv.fr, info.gouv.fr) et ressources complémentaires
 const INFOS = {
   regimes: [
-    { titre: 'Les régimes politiques depuis 1789 (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/les-regimes-politiques-de-la-revolution-francaise-1958' },
     { titre: 'La 6e République (Wikipédia)', url: 'https://fr.wikipedia.org/wiki/Sixi%C3%A8me_R%C3%A9publique_(projet)' },
+    { titre: 'Les régimes politiques depuis 1789 (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/les-regimes-politiques-de-la-revolution-francaise-1958' },
   ],
   censure: [{ titre: 'Le recours à l\'article 49.3 de la Constitution (info.gouv.fr)', url: 'https://www.info.gouv.fr/actualite/l-article-49-3-comment-ca-marche' }],
   scrutin: [{ titre: 'Les différents modes de scrutin (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/23948-quels-sont-les-differents-modes-de-scrutin' }],
