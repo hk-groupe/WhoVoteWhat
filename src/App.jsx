@@ -147,6 +147,87 @@ export default function App() {
             ))}
           </div>
           <button className="retour" onClick={() => setEcran('backoffice')}>🛠️ Back-office (admin)</button>
+          <button className="btn-principal btn-transparence" onClick={() => setEcran('transparence')}>🔍 Transparence : comment fonctionne ce site ?</button>
+        </section>
+      )}
+      {ecran === 'transparence' && (
+        <section className="transparence">
+          <div className="bloc">
+            <h2>🔍 Transparence</h2>
+            <p>Cette page explique <strong>comment ce site fonctionne</strong>, d'où viennent les questions et les positions, et comment il a été construit. Nous n'avons rien à cacher : tout est vérifiable.</p>
+          </div>
+
+          <div className="bloc">
+            <h3>🎲 Comment fonctionne le site</h3>
+            <p>Le site pose des questions sur des propositions concrètes issues des programmes des candidats. Vous répondez <em>d'accord</em>, <em>mitigé / je ne sais pas</em> ou <em>pas d'accord</em>. Chaque candidat a une position (<em>pour</em>, <em>nuancé</em>, <em>contre</em>) sur chaque question, extraite de ses propres publications.</p>
+            <p><strong>Calcul du score :</strong> un accord avec la position d'un candidat rapporte +1, un désaccord −1. Les réponses « mitigé » et les positions « nuancées » sont neutralisées (elles ne comptent ni pour ni contre). Le score final, normalisé de 0 à 100 %, reflète votre proximité avec chaque programme.</p>
+            <p><strong>Aucune donnée collectée :</strong> le quiz tourne entièrement dans votre navigateur, il n'y a ni backend ni traceur. Vos réponses ne quittent jamais votre appareil.</p>
+          </div>
+
+          <div className="bloc">
+            <h3>❓ Comment les questions sont choisies</h3>
+            <p>Les questions portent sur des <strong>propositions réelles et vérifiables</strong> : chaque énoncé correspond à un engagement publié par au moins un candidat. Elles couvrent tous les grands thèmes de campagne (économie, retraites, institutions, immigration, sécurité, écologie, éducation, Europe).</p>
+            <p>À chaque quiz, les questions sont <strong>tirées au hasard de façon équilibrée entre les thèmes</strong>, afin de ne pas avantager un sujet. Aucune question n'est formulée pour favoriser un candidat : elles décrivent une proposition, jamais une personne ou un parti.</p>
+          </div>
+
+          <div className="bloc">
+            <h3>📚 Comment les sources sont obtenues</h3>
+            <p>Toutes les positions proviennent <strong>exclusivement de sources officielles</strong> :</p>
+            <ul className="points">
+              <li>📄 Les programmes et sites de campagne officiels des candidats</li>
+              <li>🏛️ Les professions de foi publiées par le <a href="https://programme-candidats.interieur.gouv.fr/" target="_blank" rel="noreferrer">ministère de l'Intérieur ↗</a></li>
+              <li>📖 Des fiches institutionnelles pour les liens « En savoir plus » — liste complète ci-dessous :</li>
+            </ul>
+            <ul className="sources-infos-liste">
+              {Object.values(donnees.infos ?? {}).flat().map((info) => (
+                <li key={info.url}>
+                  <a href={info.url} target="_blank" rel="noreferrer">{info.titre} ↗</a>
+                </li>
+              ))}
+            </ul>
+            <p>La position de chaque candidat est accompagnée de la <strong>citation exacte de son programme</strong> — vous la retrouvez dans les résultats, question par question. Lorsqu'un candidat n'a pas pris position ou s'est exprimé avec nuance, il est classé « nuancé » plutôt que d'interpréter son silence.</p>
+          </div>
+
+          <div className="bloc">
+            <h3>📊 Les positions de chaque candidat, question par question</h3>
+            <p>L'intégralité des positions utilisées par le quiz, consultable librement :</p>
+            {donnees.questions.map((q) => (
+              <details key={q.id} className="details-transparence">
+                <summary>{themes[q.theme]?.emoji} {q.texte}</summary>
+                <ul className="positions-liste">
+                  {candidats.map((c) => {
+                    const p = q.positions[c.id]
+                    if (!p) return null
+                    return (
+                      <li key={c.id} className="position-item">
+                        <span className="dot" style={{ background: c.couleur, display: 'inline-block', width: 12, height: 12, margin: '0 6px 0 0', verticalAlign: 'middle' }}></span>
+                        <strong>{c.nom}</strong> — {p.position === 1 ? '✅ Pour' : p.position === -1 ? '❌ Contre' : '➖ Nuancé'}
+                        <em className="source">— {p.source}</em>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </details>
+            ))}
+          </div>
+
+          <div className="bloc">
+            <h3>🤖 Comment ce site a été développé</h3>
+            <p>Ce site a été développé en <strong>vibe coding</strong> : une méthode où l'on décrit les fonctionnalités en langage naturel et où l'IA génère et itère sur le code, sous revue humaine. Le modèle d'IA utilisé est <strong>GLM (zai-glm-5-3)</strong>, piloté par l'agent <strong>Vibe Code</strong> de Mistral AI.</p>
+            <p>La stack technique est volontairement simple et auditable : React 19 + Vite, aucune dépendance externe, aucun backend, tout côté client.</p>
+          </div>
+
+          <div className="bloc">
+            <h3>🔓 Un code libre et consultable par tous</h3>
+            <p>Le code de ce site est <strong>en accès libre</strong> : chacun peut le consulter, vérifier comment les scores sont calculés, corriger une position ou proposer une amélioration. La transparence est aussi dans le code, pas seulement dans les données.</p>
+            <p>
+              <a className="lien-repo" href="https://github.com/hk-groupe/WhoVoteWhat" target="_blank" rel="noreferrer">
+                📁 Consulter le dépôt Git (lien temporaire) ↗
+              </a>
+            </p>
+          </div>
+
+          <button className="btn-principal" onClick={() => setEcran('accueil')}>← Retour à l'accueil</button>
         </section>
       )}
 
