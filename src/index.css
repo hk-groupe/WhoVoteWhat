@@ -410,3 +410,11 @@ body {
   transition: transform 0.12s, box-shadow 0.12s;
 }
 .lien-repo:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(123,47,247,0.3); }
+
+/* ── Liste des sources « En savoir plus » (page Transparence) ── */
+.sources-infos-liste {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+}
+.sources-infos-liste li { padding: 4px 0; line-height: 1.4; }

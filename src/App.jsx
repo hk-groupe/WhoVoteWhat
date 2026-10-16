@@ -176,7 +176,14 @@ export default function App() {
             <ul className="points">
               <li>📄 Les programmes et sites de campagne officiels des candidats</li>
               <li>🏛️ Les professions de foi publiées par le <a href="https://programme-candidats.interieur.gouv.fr/" target="_blank" rel="noreferrer">ministère de l'Intérieur ↗</a></li>
-              <li>📖 Des fiches institutionnelles (vie-publique.fr, service-public.gouv.fr, info.gouv.fr) pour les liens « En savoir plus »</li>
+              <li>📖 Des fiches institutionnelles pour les liens « En savoir plus » — liste complète ci-dessous :</li>
+            </ul>
+            <ul className="sources-infos-liste">
+              {Object.values(donnees.infos ?? {}).flat().map((info) => (
+                <li key={info.url}>
+                  <a href={info.url} target="_blank" rel="noreferrer">{info.titre} ↗</a>
+                </li>
+              ))}
             </ul>
             <p>La position de chaque candidat est accompagnée de la <strong>citation exacte de son programme</strong> — vous la retrouvez dans les résultats, question par question. Lorsqu'un candidat n'a pas pris position ou s'est exprimé avec nuance, il est classé « nuancé » plutôt que d'interpréter son silence.</p>
           </div>
