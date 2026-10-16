@@ -255,3 +255,6 @@ body {
   transition: color 0.12s;
 }
 .lien-programme:hover { color: var(--rose); text-decoration: underline; }
+
+/* ── Label "En savoir plus" ── */
+.en-savoir-plus-label { font-weight: 700; color: var(--texte); }

@@ -57,20 +57,23 @@ export const THEMES = {
   europe: { label: 'Europe & international', emoji: '🇪🇺' },
 }
 
-// Liens "En savoir plus" : fiches officielles (vie-publique.fr, service-public.gouv.fr, info.gouv.fr)
+// Liens "En savoir plus" : fiches officielles (vie-publique.fr, service-public.gouv.fr, info.gouv.fr) et ressources complémentaires
 const INFOS = {
-  regimes: { titre: 'Les régimes politiques depuis 1789', url: 'https://www.vie-publique.fr/fiches/les-regimes-politiques-de-la-revolution-francaise-1958' },
-  censure: { titre: 'Le recours à l\'article 49.3 de la Constitution', url: 'https://www.info.gouv.fr/actualite/l-article-49-3-comment-ca-marche' },
-  scrutin: { titre: 'Les différents modes de scrutin', url: 'https://www.vie-publique.fr/fiches/23948-quels-sont-les-differents-modes-de-scrutin' },
-  droitVote: { titre: 'Le droit de vote', url: 'https://www.vie-publique.fr/fiches/le-droit-de-vote' },
-  voteEtrangers: { titre: 'Les étrangers ont-ils le droit de vote ?', url: 'https://www.vie-publique.fr/fiches/23928-les-etrangers-ont-ils-le-droit-de-vote' },
-  retraite2023: { titre: 'La loi réforme des retraites de 2023', url: 'https://www.vie-publique.fr/loi/287916-loi-reforme-des-retraites-2023-plfss-rectificatif' },
-  retraitesHistoire: { titre: 'Les réformes des retraites de 1993 à 2023', url: 'https://www.vie-publique.fr/eclairage/20111-retraites-les-differentes-reformes-de-1993-2023' },
-  isf: { titre: 'Suppression de l\'ISF : bilan sur la fiscalité du capital', url: 'https://www.vie-publique.fr/en-bref/281993-suppression-de-lisf-bilan-2021-sur-la-fiscalite-du-capital' },
-  loiImmigration: { titre: 'La loi immigration du 26 janvier 2024', url: 'https://www.vie-publique.fr/loi/287993-loi-immigration-integration-asile-du-26-janvier-2024' },
-  epr2: { titre: 'La construction des réacteurs EPR2', url: 'https://www.vie-publique.fr/en-bref/283969-construction-de-reacteurs-epr2-quel-cout-quels-risques' },
-  otan: { titre: 'La France et l\'OTAN', url: 'https://www.vie-publique.fr/discours-dans-lactualite/284158-l-otan-dans-les-discours-publics' },
-  parcoursup: { titre: 'Parcoursup, la plateforme d\'admission post-bac', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F23476' },
+  regimes: [
+    { titre: 'Les régimes politiques depuis 1789 (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/les-regimes-politiques-de-la-revolution-francaise-1958' },
+    { titre: 'La 6e République (Wikipédia)', url: 'https://fr.wikipedia.org/wiki/Sixi%C3%A8me_R%C3%A9publique_(projet)' },
+  ],
+  censure: [{ titre: 'Le recours à l\'article 49.3 de la Constitution (info.gouv.fr)', url: 'https://www.info.gouv.fr/actualite/l-article-49-3-comment-ca-marche' }],
+  scrutin: [{ titre: 'Les différents modes de scrutin (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/23948-quels-sont-les-differents-modes-de-scrutin' }],
+  droitVote: [{ titre: 'Le droit de vote (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/le-droit-de-vote' }],
+  voteEtrangers: [{ titre: 'Les étrangers ont-ils le droit de vote ? (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/23928-les-etrangers-ont-ils-le-droit-de-vote' }],
+  retraite2023: [{ titre: 'La loi réforme des retraites de 2023 (vie-publique.fr)', url: 'https://www.vie-publique.fr/loi/287916-loi-reforme-des-retraites-2023-plfss-rectificatif' }],
+  retraitesHistoire: [{ titre: 'Les réformes des retraites de 1993 à 2023 (vie-publique.fr)', url: 'https://www.vie-publique.fr/eclairage/20111-retraites-les-differentes-reformes-de-1993-2023' }],
+  isf: [{ titre: 'Suppression de l\'ISF : bilan sur la fiscalité du capital (vie-publique.fr)', url: 'https://www.vie-publique.fr/en-bref/281993-suppression-de-lisf-bilan-2021-sur-la-fiscalite-du-capital' }],
+  loiImmigration: [{ titre: 'La loi immigration du 26 janvier 2024 (vie-publique.fr)', url: 'https://www.vie-publique.fr/loi/287993-loi-immigration-integration-asile-du-26-janvier-2024' }],
+  epr2: [{ titre: 'La construction des réacteurs EPR2 (vie-publique.fr)', url: 'https://www.vie-publique.fr/en-bref/283969-construction-de-reacteurs-epr2-quel-cout-quels-risques' }],
+  otan: [{ titre: 'La France et l\'OTAN (vie-publique.fr)', url: 'https://www.vie-publique.fr/discours-dans-lactualite/284158-l-otan-dans-les-discours-publics' }],
+  parcoursup: [{ titre: 'Parcoursup, la plateforme d\'admission post-bac (service-public.gouv.fr)', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F23476' }],
 }
 
 // position: 1 = pour, 0 = nuancé, -1 = contre

@@ -140,7 +140,12 @@ export default function App() {
           <h2 className="question-texte">{question.texte}</h2>
           {question.info && (
             <p className="en-savoir-plus">
-              <a href={question.info.url} target="_blank" rel="noreferrer">💡 En savoir plus : {question.info.titre} ↗</a>
+              <span className="en-savoir-plus-label">💡 En savoir plus :</span>{' '}
+              {question.info.map((info) => (
+                <React.Fragment key={info.url}>
+                  <a href={info.url} target="_blank" rel="noreferrer">{info.titre} ↗</a>{' '}
+                </React.Fragment>
+              ))}
             </p>
           )}
           <div className="choix">
