@@ -207,3 +207,54 @@ body {
   .ligne-score { grid-template-columns: 30px 1fr 60px; }
   .ligne-score .jauge { grid-column: 1 / -1; }
 }
+
+/* ── Choix du nombre de questions ── */
+.choix-nb { margin-bottom: 24px; }
+.choix-nb-label { font-weight: 700; margin-bottom: 10px; }
+.boutons-nb { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-nb {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 3px solid transparent;
+  cursor: pointer;
+  background: #f6f2ff;
+  color: var(--texte);
+  transition: transform 0.12s, box-shadow 0.12s, border-color 0.12s;
+}
+.btn-nb:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+.btn-nb.actif {
+  border-color: var(--violet);
+  background: linear-gradient(90deg, var(--violet), var(--rose));
+  color: #fff;
+}
+
+/* ── Lien "En savoir plus" ── */
+.en-savoir-plus { margin-bottom: 18px; }
+.en-savoir-plus a {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--violet);
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 2px dashed var(--cyan);
+  text-decoration: none;
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.en-savoir-plus a:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,194,255,0.25); }
+
+/* ── Lien programme dans les cartes candidats ── */
+.lien-programme {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--violet);
+  text-decoration: none;
+  margin-top: 4px;
+  transition: color 0.12s;
+}
+.lien-programme:hover { color: var(--rose); text-decoration: underline; }
+
+/* ── Label "En savoir plus" ── */
+.en-savoir-plus-label { font-weight: 700; color: var(--texte); }
