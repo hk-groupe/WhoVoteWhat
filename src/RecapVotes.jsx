@@ -93,57 +93,75 @@ function SectionDerniers() {
   )
 }
 
-function SectionThemes() {
-  const themes = Object.entries(THEMES_VOTES)
+function LigneThemeParti({ theme, scrutins, codeGroupe }) {
+  const t = THEMES_VOTES[theme]
+  const cumul = scrutins.reduce(
+    (acc, s) => {
+      const g = s.groupes[codeGroupe]
+      if (g) {
+        acc.pour += g.pour
+        acc.contre += g.contre
+        acc.abstention += g.abstention
+      }
+      return acc
+    },
+    { pour: 0, contre: 0, abstention: 0 },
+  )
+  if (cumul.pour + cumul.contre + cumul.abstention === 0) return null
+  let tendance = '➖ Mixte'
+  const { pour, contre, abstention } = cumul
+  if (pour > contre && pour > abstention) tendance = '✅ Plutôt pour'
+  else if (contre > pour && contre > abstention) tendance = '❌ Plutôt contre'
+  else if (abstention >= pour && abstention >= contre) tendance = "🤷 S'abstenir"
+  return (
+    <li className="rv-ligne-theme">
+      <span className="rv-theme-label">{t.emoji} {t.label}</span>
+      <JaugeVote pour={pour} contre={contre} abstention={abstention} />
+      <span className="rv-position-groupe">{tendance}</span>
+    </li>
+  )
+}
+
+function SectionParParti() {
   return (
     <div className="bloc">
-      <h3>🗂️ Qui a voté quoi, par thème</h3>
+      <h3>🧭 Par parti politique, thème par thème</h3>
       <p>
-        Pour chaque thème, la position cumulée de chaque groupe sur les scrutins de référence :
-        c'est l'action réelle des partis au Palais-Bourbon, pas leurs communiqués.
+        Pour chaque groupe parlementaire, sa position cumulée sur les scrutins de référence, thème par
+        thème : en faveur, contre ou abstention. C'est l'action réelle des partis au Palais-Bourbon,
+        pas leurs communiqués.
       </p>
-      {themes.map(([id, t]) => {
-        const scrutins = SCRUTINS.filter((s) => s.theme === id)
-        if (scrutins.length === 0) return null
-        return (
-          <details key={id} className="rv-carte rv-theme" open>
-            <summary>
-              <span className="rv-titre">{t.emoji} {t.label} <em>({scrutins.length} scrutin{scrutins.length > 1 ? 's' : ''})</em></span>
-            </summary>
-            <ul className="rv-groupes">
-              {Object.keys(GROUPES).map((code) => {
-                const cumul = scrutins.reduce(
-                  (acc, s) => {
-                    const g = s.groupes[code]
-                    if (g) {
-                      acc.pour += g.pour
-                      acc.contre += g.contre
-                      acc.abstention += g.abstention
-                    }
-                    return acc
-                  },
-                  { pour: 0, contre: 0, abstention: 0 },
-                )
-                if (cumul.pour + cumul.contre + cumul.abstention === 0) return null
-                return (
-                  <LigneGroupe
-                    key={code}
-                    code={code}
-                    pour={cumul.pour}
-                    contre={cumul.contre}
-                    abstention={cumul.abstention}
+      <div className="rv-liste">
+        {Object.entries(GROUPES).map(([code, g]) => {
+          const themes = Object.entries(THEMES_VOTES).filter(([id]) =>
+            SCRUTINS.some((s) => s.theme === id && s.groupes[code]),
+          )
+          if (themes.length === 0) return null
+          return (
+            <details key={code} className="rv-carte rv-partie">
+              <summary>
+                <span className="rv-dot-groupe" style={{ background: g.couleur }}></span>
+                <span className="rv-titre"><strong>{g.nom}</strong></span>
+              </summary>
+              <ul className="rv-themes-partie">
+                {themes.map(([id]) => (
+                  <LigneThemeParti
+                    key={id}
+                    theme={id}
+                    codeGroupe={code}
+                    scrutins={SCRUTINS.filter((s) => s.theme === id)}
                   />
-                )
-              })}
-            </ul>
-            <div className="rv-scrutins-theme">
-              {scrutins.map((s) => (
-                <CarteScrutin key={s.numero} scrutin={s} />
-              ))}
-            </div>
-          </details>
-        )
-      })}
+                ))}
+              </ul>
+              <div className="rv-scrutins-theme">
+                {SCRUTINS.filter((s) => s.groupes[code]).map((s) => (
+                  <CarteScrutin key={s.numero} scrutin={s} />
+                ))}
+              </div>
+            </details>
+          )
+        })}
+      </div>
     </div>
   )
 }
@@ -198,7 +216,7 @@ export default function RecapVotes({ onRetour }) {
         </ul>
       </div>
       <SectionDerniers />
-      <SectionThemes />
+      <SectionParParti />
       <SectionRecherche />
       <button className="btn-principal" onClick={onRetour}>← Retour à l'accueil</button>
     </section>

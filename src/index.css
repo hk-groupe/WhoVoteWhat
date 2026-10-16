@@ -460,3 +460,14 @@ body {
 }
 
 .rv-description { margin: 10px 0 4px; font-size: 0.92rem; line-height: 1.5; background: #f6f2ff; border-left: 4px solid var(--violet); padding: 8px 12px; border-radius: 0 10px 10px 0; }
+
+.rv-partie summary { font-size: 1rem; }
+.rv-themes-partie { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 6px; }
+.rv-ligne-theme { display: grid; grid-template-columns: minmax(150px, 220px) 1fr 120px; gap: 10px; align-items: center; font-size: 0.88rem; }
+.rv-theme-label { font-weight: 600; line-height: 1.25; }
+
+@media (max-width: 600px) {
+  .rv-ligne-theme { grid-template-columns: 1fr; gap: 4px; }
+  .rv-ligne-theme .rv-jauge { grid-column: 1 / -1; }
+  .rv-ligne-theme .rv-position-groupe { text-align: left; }
+}
