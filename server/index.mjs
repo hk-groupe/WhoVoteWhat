@@ -199,6 +199,23 @@ async function route(req, res) {
     return repondre(res, 201, { identifiant, role })
   }
 
+  if (session && req.method === 'POST' && chemin === '/api/admin/mot-de-passe') {
+    const { ancien, nouveau } = await lireCorps(req)
+    const compte = etat.comptes.find((c) => c.identifiant === session.identifiant)
+    if (!compte) return repondre(res, 404, { erreur: 'Compte introuvable' })
+    if (!ancien || !nouveau) return repondre(res, 400, { erreur: 'ancien et nouveau mots de passe requis' })
+    if (!verifierMotDePasse(ancien, compte.motDePasse)) {
+      return repondre(res, 401, { erreur: 'Ancien mot de passe incorrect' })
+    }
+    if (String(nouveau).length < 8) {
+      return repondre(res, 400, { erreur: 'Le nouveau mot de passe doit faire au moins 8 caractères' })
+    }
+    const sel = randomBytes(16).toString('hex')
+    compte.motDePasse = `${sel}:${hacher(nouveau, sel)}`
+    await sauvegarder()
+    return repondre(res, 200, { ok: true })
+  }
+
   if (session && req.method === 'DELETE' && chemin.startsWith('/api/admin/comptes/')) {
     if (session.role !== 'admin') return repondre(res, 403, { erreur: 'Réservé aux administrateurs' })
     const cible = decodeURIComponent(chemin.split('/').pop())

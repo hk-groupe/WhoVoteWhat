@@ -63,6 +63,13 @@ export const supprimerCompteApi = (jeton, identifiant) =>
     headers: { Authorization: `Bearer ${jeton}` },
   })
 
+export const changerMotDePasse = (jeton, ancien, nouveau) =>
+  requete('/api/admin/mot-de-passe', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${jeton}` },
+    body: JSON.stringify({ ancien, nouveau }),
+  })
+
 export const lancerMajScrutins = (jeton) =>
   requete('/api/admin/scrutins/maj', {
     method: 'POST',

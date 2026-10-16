@@ -5,6 +5,7 @@ import {
 } from './store.mjs'
 import {
   apiDisponible, connexionAdmin, deconnexionAdmin, chargerComptes, creerCompte, supprimerCompteApi,
+  changerMotDePasse,
 } from '../api/client.mjs'
 
 const CANDIDAT_VIDE = { id: '', nom: '', parti: '', couleur: '#7b2ff7', site: '', programme: '', sourceLabel: '' }
@@ -32,6 +33,9 @@ export default function BackOffice({ onFermer }) {
   // Comptes (admin)
   const [comptes, setComptes] = React.useState([])
   const [nouveauCompte, setNouveauCompte] = React.useState({ identifiant: '', motDePasse: '', role: 'admin' })
+
+  // Changement de mot de passe (sécurité du compte)
+  const [mdp, setMdp] = React.useState({ ancien: '', nouveau: '', confirmation: '' })
 
   React.useEffect(() => {
     if (!session?.jeton) return
@@ -192,6 +196,19 @@ export default function BackOffice({ onFermer }) {
     delete infos[cle]
     persist({ ...donnees, infos })
     flash('🗑️ Sources supprimées')
+  }
+
+  function changerMdp() {
+    if (!mdp.ancien || !mdp.nouveau) return flash('⚠️️ Ancien et nouveau mot de passe requis')
+    if (mdp.nouveau !== mdp.confirmation) return flash('⚠️️ La confirmation ne correspond pas')
+    if (mdp.nouveau.length < 8) return flash('⚠️️ Le mot de passe doit faire au moins 8 caractères')
+    if (!session?.jeton) return flash('⚠️️ Backend injoignable')
+    changerMotDePasse(session.jeton, mdp.ancien, mdp.nouveau)
+      .then(() => {
+        setMdp({ ancien: '', nouveau: '', confirmation: '' })
+        flash('✅ Mot de passe modifié')
+      })
+      .catch((e) => flash(`❌ ${e.message}`))
   }
 
   // ── Comptes (admin) ──
@@ -464,6 +481,29 @@ export default function BackOffice({ onFermer }) {
           </table>
         </div>
       )}
+
+      {/* ── Sécurité : changement de mot de passe ── */}
+      <div className="bo-donnees">
+        <h3>🔒 Sécurité du compte</h3>
+        <p>Changez votre mot de passe ({session.identifiant}). Minimum 8 caractères — le compte par défaut « admin / admin » doit être changé dès la première connexion.</p>
+        <div className="bo-formulaire">
+          <label>
+            Ancien mot de passe
+            <input type="password" value={mdp.ancien} onChange={(e) => setMdp({ ...mdp, ancien: e.target.value })} />
+          </label>
+          <label>
+            Nouveau mot de passe
+            <input type="password" value={mdp.nouveau} onChange={(e) => setMdp({ ...mdp, nouveau: e.target.value })} />
+          </label>
+          <label>
+            Confirmer le nouveau mot de passe
+            <input type="password" value={mdp.confirmation} onChange={(e) => setMdp({ ...mdp, confirmation: e.target.value })} />
+          </label>
+          <div className="bo-actions">
+            <button className="btn-principal" onClick={changerMdp}>Modifier le mot de passe</button>
+          </div>
+        </div>
+      </div>
 
       {/* ── Comptes (admin) ── */}
       {onglet === 'comptes' && estAdmin && (
