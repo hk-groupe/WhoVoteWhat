@@ -1,6 +1,7 @@
 import React from 'react'
 import { chargerDonnees } from './backoffice/store.mjs'
 import BackOffice from './backoffice/BackOffice.jsx'
+import RecapVotes from './RecapVotes.jsx'
 
 const OPTIONS_NB = [10, 15, 20, 25, 30, 35, 40]
 
@@ -148,8 +149,10 @@ export default function App() {
           </div>
           <button className="retour" onClick={() => setEcran('backoffice')}>🛠️ Back-office (admin)</button>
           <button className="btn-principal btn-transparence" onClick={() => setEcran('transparence')}>🔍 Transparence : comment fonctionne ce site ?</button>
+          <button className="btn-principal btn-recap-votes" onClick={() => setEcran('recap-votes')}>🗳️ Récap des votes : qui a voté quoi à l'Assemblée ?</button>
         </section>
       )}
+      {ecran === 'recap-votes' && <RecapVotes onRetour={() => setEcran('accueil')} />}
       {ecran === 'transparence' && (
         <section className="transparence">
           <div className="bloc">
@@ -176,6 +179,7 @@ export default function App() {
             <ul className="points">
               <li>📄 Les programmes et sites de campagne officiels des candidats</li>
               <li>🏛️ Les professions de foi publiées par le <a href="https://programme-candidats.interieur.gouv.fr/" target="_blank" rel="noreferrer">ministère de l'Intérieur ↗</a></li>
+              <li>🗳️ Les analyses officielles des scrutins publics de l'Assemblée nationale — <a href="https://www.assemblee-nationale.fr/dyn/17/scrutins" target="_blank" rel="noreferrer">assemblee-nationale.fr/dyn/17/scrutins ↗</a> — pour la rubrique « Récap des votes »</li>
               <li>📖 Des fiches institutionnelles pour les liens « En savoir plus » — liste complète ci-dessous :</li>
             </ul>
             <ul className="sources-infos-liste">
@@ -209,6 +213,13 @@ export default function App() {
                 </ul>
               </details>
             ))}
+          </div>
+
+          <div className="bloc">
+            <h3>🗳️ Comment la rubrique « Récap des votes » est construite</h3>
+            <p>La rubrique « Récap des votes » présente les scrutins publics de l'Assemblée nationale (17e législature). Les chiffres affichés — résultat du scrutin, votants, suffrages exprimés et répartition pour / contre / abstention de chaque groupe parlementaire — sont <strong>recopiés tels quels depuis les pages officielles « Analyse du scrutin » de l'Assemblée nationale</strong>, sans interprétation ni recalcul.</p>
+            <p><strong>Ce que nous affichons :</strong> pour chaque scrutin, un badge « adopté » ou « rejeté » conforme au résultat officiel, la synthèse du vote (votants, suffrages exprimés, majorité requise) et, pour chaque groupe, le décompte officiel des voix. La « position » affichée par groupe correspond à la position majoritaire des voix exprimées du groupe sur ce scrutin — quand les voix sont partagées, le groupe est classé « mixte » plutôt que rangé arbitrairement d'un côté.</p>
+            <p><strong>Limites assumées :</strong> le site affiche une sélection de scrutins (les 20 derniers et des votes de référence par thème), pas l'intégralité des scrutins de la législature. Les « non-votants » (présidents de séance, absents) ne sont pas comptés dans les jauges. Les couleurs associées aux groupes sont purement indicatives. Chaque fiche comporte un lien direct vers la page officielle de l'Assemblée nationale pour vérifier et aller plus loin.</p>
           </div>
 
           <div className="bloc">
