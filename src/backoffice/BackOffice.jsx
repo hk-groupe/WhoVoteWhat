@@ -4,7 +4,7 @@ import {
   memoriserSession, sessionEnCours, oublieSession,
 } from './store.mjs'
 import {
-  connexionAdmin, deconnexionAdmin, chargerComptes, creerCompte, supprimerCompteApi,
+  apiDisponible, connexionAdmin, deconnexionAdmin, chargerComptes, creerCompte, supprimerCompteApi,
 } from '../api/client.mjs'
 
 const CANDIDAT_VIDE = { id: '', nom: '', parti: '', couleur: '#7b2ff7', site: '', programme: '', sourceLabel: '' }
@@ -27,6 +27,7 @@ export default function BackOffice({ onFermer }) {
   const [donnees, setDonnees] = React.useState(null)
   const [onglet, setOnglet] = React.useState('candidats')
   const [message, setMessage] = React.useState('')
+  const [apiHs, setApiHs] = React.useState(false)
 
   // Comptes (admin)
   const [comptes, setComptes] = React.useState([])
@@ -39,6 +40,7 @@ export default function BackOffice({ onFermer }) {
 
   React.useEffect(() => {
     chargerDonnees().then(setDonnees).catch(() => setDonnees(null))
+    apiDisponible().then(setApiHs.bind(null, false)).catch(() => setApiHs(true))
   }, [])
 
   // ── Écrans d'édition ──
@@ -86,6 +88,9 @@ export default function BackOffice({ onFermer }) {
             <button className="btn-principal" onClick={onFermer}>← Retour au quiz</button>
           </div>
           <p className="bo-note">Connexion au backend partagé. Compte par défaut : admin / admin — à changer après la première connexion.</p>
+          {apiHs && (
+            <p className="bo-erreur">🔌 Backend injoignable — démarrez-le avec la commande <code>npm run api</code> (terminal séparé), puis réessayez.</p>
+          )}
         </div>
       </section>
     )
@@ -99,6 +104,9 @@ export default function BackOffice({ onFermer }) {
           <button className="btn-principal" onClick={onFermer}>← Retour au quiz</button>
         </div>
         <p className="bo-note">Chargement des données…</p>
+        {apiHs && (
+          <p className="bo-erreur">🔌 Backend injoignable — démarrez-le avec la commande <code>npm run api</code> (terminal séparé), puis rechargez la page.</p>
+        )}
       </section>
     )
   }
@@ -222,14 +230,16 @@ export default function BackOffice({ onFermer }) {
           <span className="bo-user">{session.identifiant} ({session.role})</span>
           <button className="btn-principal" onClick={onFermer}>← Retour au quiz</button>
           <button className="btn-principal" onClick={() => {
-            if (!session?.jeton) return
-            deconnexionAdmin(session.jeton).catch(() => {})
+            if (session?.jeton) deconnexionAdmin(session.jeton).catch(() => {})
             oublieSession()
             setSession(null)
           }}>Déconnexion</button>
         </div>
       </div>
       {message && <p className="bo-message">{message}</p>}
+      {apiHs && (
+        <p className="bo-erreur">🔌 Backend injoignable — les modifications ne seront pas partagées. Démarrez-le avec <code>npm run api</code>.</p>
+      )}
       <nav className="bo-onglets">
         {onglets.map((o) => (
           <button key={o.id} className={`bo-onglet ${onglet === o.id ? 'actif' : ''}`} onClick={() => setOnglet(o.id)}>{o.label}</button>
