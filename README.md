@@ -29,6 +29,16 @@ Référence institutionnelle : [programme-candidats.interieur.gouv.fr](https://p
 - Les positions « nuancées » et les réponses « je ne sais pas » sont neutralisées (exclues du dénominateur).
 - Score final : `50 + (accords − désaccords) / questions comptées × 50`, normalisé sur 0–100 %.
 
+## 🗳️ Récap des votes
+
+La deuxième brique du site : voir clairement, **par groupe parlementaire, qui a voté quoi** dans les projets de loi à l'Assemblée nationale (17e législature).
+
+- **Les 20 derniers scrutins publics** et leur résultat officiel (adopté / rejeté), avec le détail pour / contre / abstention de chaque groupe.
+- **Par thèmes** (budget & impôts, santé & fin de vie, enfance & protection) : la position cumulée de chaque groupe sur des scrutins de référence — l'action réelle des partis.
+- **Recherche** d'un scrutin par mot-clé ou numéro.
+
+Source unique et officielle : les pages « Analyse du scrutin » de l'Assemblée nationale — https://www.assemblee-nationale.fr/dyn/17/scrutins — lien direct depuis chaque fiche.
+
 ## 🚀 Démarrer
 
 ```bash

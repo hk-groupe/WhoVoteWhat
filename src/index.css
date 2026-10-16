@@ -418,3 +418,56 @@ body {
   margin: 10px 0 0;
 }
 .sources-infos-liste li { padding: 4px 0; line-height: 1.4; }
+
+/* ===== Récap des votes ===== */
+.recap-votes { display: grid; gap: 24px; }
+.recap-votes h3 { color: var(--violet); margin-bottom: 10px; }
+.rv-liste { display: grid; gap: 12px; margin-top: 14px; }
+.rv-carte { background: #fff; border-radius: 16px; padding: 14px 18px; border: 2px solid #f0ecfa; }
+.rv-carte summary { cursor: pointer; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; line-height: 1.4; }
+.rv-carte[open] { border-color: var(--cyan); }
+.rv-badge { font-weight: 800; padding: 3px 10px; border-radius: 999px; font-size: 0.8rem; white-space: nowrap; }
+.rv-badge.adopte { background: #dcfce7; color: #166534; }
+.rv-badge.rejete { background: #fee2e2; color: #991b1b; }
+.rv-titre { flex: 1; min-width: 240px; font-size: 0.95rem; }
+.rv-meta { color: #666; font-size: 0.85rem; white-space: nowrap; }
+.rv-synthese { margin: 10px 0; color: #555; font-size: 0.85rem; }
+.rv-groupes { list-style: none; padding: 0; margin: 10px 0; display: grid; gap: 6px; }
+.rv-ligne-groupe { display: grid; grid-template-columns: 14px minmax(160px, 260px) 1fr 110px; gap: 10px; align-items: center; font-size: 0.88rem; }
+.rv-dot-groupe { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.rv-nom-groupe { font-weight: 600; line-height: 1.25; }
+.rv-jauge { display: flex; height: 14px; border-radius: 999px; overflow: hidden; background: #f0ecf8; min-width: 120px; }
+.rv-jauge-vide { background: #eee; color: #999; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
+.rv-seg { display: block; height: 100%; transition: width 0.4s; }
+.rv-pour { background: #22c55e; }
+.rv-contre { background: #ef4444; }
+.rv-abst { background: var(--jaune); }
+.rv-position-groupe { text-align: right; font-weight: 700; font-size: 0.8rem; white-space: nowrap; }
+.rv-lien-an { display: inline-block; margin-top: 8px; color: var(--violet); font-weight: 700; text-decoration: none; font-size: 0.85rem; }
+.rv-lien-an:hover { text-decoration: underline; }
+.rv-theme { margin-bottom: 14px; }
+.rv-theme > summary { font-size: 1.05rem; font-weight: 700; }
+.rv-theme em { font-weight: 400; color: #777; font-style: normal; font-size: 0.85rem; }
+.rv-scrutins-theme { margin-top: 14px; display: grid; gap: 10px; }
+.rv-recherche { width: 100%; padding: 12px 16px; border-radius: 999px; border: 2px solid #f0ecfa; font-size: 1rem; background: #fff; }
+.rv-recherche:focus { outline: none; border-color: var(--cyan); }
+.rv-compte { margin: 12px 0 4px; font-weight: 600; color: #555; }
+
+@media (max-width: 600px) {
+  .rv-ligne-groupe { grid-template-columns: 12px 1fr; grid-auto-rows: auto; }
+  .rv-jauge { grid-column: 1 / -1; }
+  .rv-position-groupe { text-align: left; }
+}
+
+.rv-description { margin: 10px 0 4px; font-size: 0.92rem; line-height: 1.5; background: #f6f2ff; border-left: 4px solid var(--violet); padding: 8px 12px; border-radius: 0 10px 10px 0; }
+
+.rv-partie summary { font-size: 1rem; }
+.rv-themes-partie { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 6px; }
+.rv-ligne-theme { display: grid; grid-template-columns: minmax(150px, 220px) 1fr 120px; gap: 10px; align-items: center; font-size: 0.88rem; }
+.rv-theme-label { font-weight: 600; line-height: 1.25; }
+
+@media (max-width: 600px) {
+  .rv-ligne-theme { grid-template-columns: 1fr; gap: 4px; }
+  .rv-ligne-theme .rv-jauge { grid-column: 1 / -1; }
+  .rv-ligne-theme .rv-position-groupe { text-align: left; }
+}
