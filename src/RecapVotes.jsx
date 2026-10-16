@@ -63,6 +63,7 @@ function CarteScrutin({ scrutin }) {
           {THEMES_VOTES[scrutin.theme]?.emoji} {new Date(scrutin.date).toLocaleDateString('fr-FR')}
         </span>
       </summary>
+      {scrutin.description && <p className="rv-description">💡 {scrutin.description}</p>}
       <p className="rv-synthese">
         {scrutin.seance} · {scrutin.votants} votants · {scrutin.exprimes} suffrages exprimés ·
         majorité requise : {scrutin.majorite}

@@ -458,3 +458,5 @@ body {
   .rv-jauge { grid-column: 1 / -1; }
   .rv-position-groupe { text-align: left; }
 }
+
+.rv-description { margin: 10px 0 4px; font-size: 0.92rem; line-height: 1.5; background: #f6f2ff; border-left: 4px solid var(--violet); padding: 8px 12px; border-radius: 0 10px 10px 0; }
