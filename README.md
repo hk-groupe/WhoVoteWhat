@@ -1,4 +1,4 @@
-# 🗳️ VoteClair — Présidentielle 2027
+# 🗳️ QuiVoteQuoi — Présidentielle 2027
 
 Site d'information électorale : un quiz d'affinité pour découvrir quel candidat à l'élection présidentielle française de 2027 se rapproche le plus de vos idées.
 
