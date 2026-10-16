@@ -1,15 +1,58 @@
 import React from 'react'
 import { CANDIDATS, THEMES, QUESTIONS, RESULTATS_LEGEND } from './data/programmes.mjs'
 
+const OPTIONS_NB = [10, 15, 20, 25, 30, 35, 40]
+
+function melanger(liste) {
+  const copie = [...liste]
+  for (let i = copie.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copie[i], copie[j]] = [copie[j], copie[i]]
+  }
+  return copie
+}
+
+// Tirage aléatoire équilibré : répartit le nombre de questions au prorata des 8 thèmes
+function tirerQuestions(nb) {
+  const parTheme = {}
+  QUESTIONS.forEach((q) => {
+    if (!parTheme[q.theme]) parTheme[q.theme] = []
+    parTheme[q.theme].push(q)
+  })
+  const themes = melanger(Object.keys(parTheme))
+  const choisi = []
+  let idx = 0
+  while (choisi.length < nb) {
+    const theme = themes[idx % themes.length]
+    const pool = parTheme[theme]
+    const dejaPris = choisi.filter(q => q.theme === theme).length
+    if (dejaPris < pool.length) {
+      choisi.push(pool[dejaPris])
+    }
+    idx++
+    if (idx >= themes.length * QUESTIONS.length) break
+  }
+  return melanger(choisi)
+}
+
 export default function App() {
   const [ecran, setEcran] = React.useState('accueil')
+  const [nbQuestions, setNbQuestions] = React.useState(20)
+  const [questions, setQuestions] = React.useState([])
   const [qIndex, setQIndex] = React.useState(0)
   const [reponses, setReponses] = React.useState({})
-  const question = QUESTIONS[qIndex]
+  const question = questions[qIndex]
+
+  function demarrer() {
+    setQuestions(tirerQuestions(nbQuestions))
+    setQIndex(0)
+    setReponses({})
+    setEcran('quiz')
+  }
 
   function choisir(valeur) {
     setReponses({ ...reponses, [question.id]: valeur })
-    if (qIndex < QUESTIONS.length - 1) setQIndex(qIndex + 1)
+    if (qIndex < questions.length - 1) setQIndex(qIndex + 1)
     else setEcran('resultat')
   }
 
@@ -22,7 +65,7 @@ export default function App() {
   function calculerScores() {
     return CANDIDATS.map((c) => {
       let total = 0, max = 0, detail = {}
-      QUESTIONS.forEach((q) => {
+      questions.forEach((q) => {
         const rep = reponses[q.id]
         if (rep === undefined || rep === 0) return
         const pos = q.positions[c.id].position
@@ -42,7 +85,7 @@ export default function App() {
       <header className="header">
         <span className="logo">🗳️</span>
         <h1>Vote<span className="accent">Clair</span></h1>
-        <p className="tagline">Trouvez le candidat 2027 qui vous ressemble, en {QUESTIONS.length} questions simples 🚀</p>
+        <p className="tagline">Trouvez le candidat 2027 qui vous ressemble, en quelques questions simples 🚀</p>
       </header>
 
       {ecran === 'accueil' && (
@@ -52,10 +95,25 @@ export default function App() {
             <p>Répondez à des questions sur les vraies propositions des candidats à la présidentielle 2027. Chaque position est issue des <strong>sites officiels</strong> des candidats et de leurs programmes publiés.</p>
             <ul className="points">
               <li>✅ 100 % sourcé : programmes officiels uniquement</li>
-              <li>⚡ Rapide : {QUESTIONS.length} questions, 2 minutes</li>
+              <li>🎲 À chaque quiz : des questions différentes, tirées au hasard</li>
+              <li>🔗 Des liens « En savoir plus » pour comprendre chaque sujet</li>
               <li>🔒 Anonyme, aucune donnée collectée</li>
             </ul>
-            <button className="btn-principal" onClick={() => setEcran('quiz')}>C'est parti ! 🔥</button>
+            <div className="choix-nb">
+              <p className="choix-nb-label">Combien de questions voulez-vous répondre ?</p>
+              <div className="boutons-nb">
+                {OPTIONS_NB.map((n) => (
+                  <button
+                    key={n}
+                    className={`btn-nb ${n === nbQuestions ? 'actif' : ''}`}
+                    onClick={() => setNbQuestions(n)}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <button className="btn-principal" onClick={demarrer}>C'est parti ! 🔥</button>
           </div>
           <div className="candidats-apercu">
             {CANDIDATS.map((c) => (
@@ -69,20 +127,25 @@ export default function App() {
         </section>
       )}
 
-      {ecran === 'quiz' && (
+      {ecran === 'quiz' && question && (
         <section className="quiz">
           <div className="progression">
-            <span>Question {qIndex + 1} / {QUESTIONS.length}</span>
+            <span>Question {qIndex + 1} / {questions.length}</span>
             <span>{THEMES[question.theme].emoji} {THEMES[question.theme].label}</span>
           </div>
           <div className="barre">
-            <div className="remplie" style={{ width: `${((qIndex) / QUESTIONS.length) * 100}%` }}></div>
+            <div className="remplie" style={{ width: `${((qIndex) / questions.length) * 100}%` }}></div>
           </div>
           <h2 className="question-texte">{question.texte}</h2>
+          {question.info && (
+            <p className="en-savoir-plus">
+              <a href={question.info.url} target="_blank" rel="noreferrer">💡 En savoir plus : {question.info.titre} ↗</a>
+            </p>
+          )}
           <div className="choix">
             <button className="btn-choix pour" onClick={() => choisir(1)}>👍 Tout à fait d'accord</button>
             <button className="btn-choix mitigee" onClick={() => choisir(0)}>🤷 Je ne sais pas / mitigé</button>
-            <button className="choix contre" onClick={() => choisir(-1)}>👎 Pas d'accord</button>
+            <button className="btn-choix contre" onClick={() => choisir(-1)}>👎 Pas d'accord</button>
           </div>
           {qIndex > 0 && <button className="retour" onClick={() => setQIndex(qIndex - 1)}>← Retour</button>}
         </section>
@@ -117,7 +180,7 @@ export default function App() {
                 <div key={s.candidat.id} className="explication-candidat">
                   <h4>{s.candidat.nom} · {s.nbAccords} accords</h4>
                   <ul>
-                    {QUESTIONS.filter(q => reponses[q.id] !== undefined && reponses[q.id] !== 0 && q.positions[s.candidat.id].position !== 0).map(q => {
+                    {questions.filter(q => reponses[q.id] !== undefined && reponses[q.id] !== 0 && q.positions[s.candidat.id].position !== 0).map(q => {
                       const accord = q.positions[s.candidat.id].position === reponses[q.id]
                       return (
                         <li key={q.id} className={accord ? 'accord' : 'desaccord'}>
