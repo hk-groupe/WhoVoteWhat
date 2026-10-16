@@ -121,6 +121,7 @@ export default function App() {
                 <span className="dot" style={{ background: c.couleur }}></span>
                 <strong>{c.nom}</strong>
                 <em>{c.parti}</em>
+                <a className="lien-programme" href={c.programme} target="_blank" rel="noreferrer">📄 Programme officiel ↗</a>
               </div>
             ))}
           </div>

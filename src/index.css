@@ -244,3 +244,14 @@ body {
   transition: transform 0.12s, box-shadow 0.12s;
 }
 .en-savoir-plus a:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,194,255,0.25); }
+
+/* ── Lien programme dans les cartes candidats ── */
+.lien-programme {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--violet);
+  text-decoration: none;
+  margin-top: 4px;
+  transition: color 0.12s;
+}
+.lien-programme:hover { color: var(--rose); text-decoration: underline; }
