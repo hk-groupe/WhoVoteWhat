@@ -1,5 +1,6 @@
 import React from 'react'
-import { CANDIDATS, THEMES, QUESTIONS, RESULTATS_LEGEND } from './data/programmes.mjs'
+import { chargerDonnees } from './backoffice/store.mjs'
+import BackOffice from './backoffice/BackOffice.jsx'
 
 const OPTIONS_NB = [10, 15, 20, 25, 30, 35, 40]
 
@@ -12,17 +13,17 @@ function melanger(liste) {
   return copie
 }
 
-// Tirage aléatoire équilibré : répartit le nombre de questions au prorata des 8 thèmes
-function tirerQuestions(nb) {
+// Tirage aléatoire équilibré : répartit le nombre de questions au prorata des thèmes
+function tirerQuestions(toutes, nb) {
   const parTheme = {}
-  QUESTIONS.forEach((q) => {
+  toutes.forEach((q) => {
     if (!parTheme[q.theme]) parTheme[q.theme] = []
     parTheme[q.theme].push(q)
   })
   const themes = melanger(Object.keys(parTheme))
   const choisi = []
   let idx = 0
-  while (choisi.length < nb) {
+  while (choisi.length < nb && idx < themes.length * toutes.length) {
     const theme = themes[idx % themes.length]
     const pool = parTheme[theme]
     const dejaPris = choisi.filter(q => q.theme === theme).length
@@ -30,21 +31,25 @@ function tirerQuestions(nb) {
       choisi.push(pool[dejaPris])
     }
     idx++
-    if (idx >= themes.length * QUESTIONS.length) break
   }
   return melanger(choisi)
 }
 
 export default function App() {
   const [ecran, setEcran] = React.useState('accueil')
+  const [donnees] = React.useState(() => chargerDonnees())
   const [nbQuestions, setNbQuestions] = React.useState(20)
   const [questions, setQuestions] = React.useState([])
   const [qIndex, setQIndex] = React.useState(0)
   const [reponses, setReponses] = React.useState({})
   const question = questions[qIndex]
 
+  const candidats = donnees.candidats
+  const themes = donnees.themes
+  const legendes = donnees.legendes
+
   function demarrer() {
-    setQuestions(tirerQuestions(nbQuestions))
+    setQuestions(tirerQuestions(donnees.questions, nbQuestions))
     setQIndex(0)
     setReponses({})
     setEcran('quiz')
@@ -63,13 +68,13 @@ export default function App() {
   }
 
   function calculerScores() {
-    return CANDIDATS.map((c) => {
+    return candidats.map((c) => {
       let total = 0, max = 0, detail = {}
       questions.forEach((q) => {
         const rep = reponses[q.id]
         if (rep === undefined || rep === 0) return
-        const pos = q.positions[c.id].position
-        if (pos === 0) return
+        const pos = q.positions[c.id]?.position
+        if (pos === undefined || pos === 0) return
         max += Math.abs(rep)
         if (pos === rep) total += Math.abs(rep)
         else total -= Math.abs(rep)
@@ -78,6 +83,22 @@ export default function App() {
       const score = max === 0 ? 50 : Math.round(50 + (total / max) * 50)
       return { candidat: c, score, detail, nbAccords: Object.values(detail).filter(d => d === 'accord').length }
     }).sort((a, b) => b.score - a.score)
+  }
+
+  if (ecran === 'backoffice') {
+    return (
+      <div className="app">
+        <header className="header">
+          <span className="logo">🗳️</span>
+          <h1>Vote<span className="accent">Clair</span></h1>
+          <p className="tagline">Back-office de gestion du contenu 🛠️</p>
+        </header>
+        <BackOffice onFermer={() => setEcran('accueil')} />
+        <footer className="footer">
+          <p>Site indépendant, non partisan. Positions extraites des programmes officiels des candidats à l'élection présidentielle 2027.</p>
+        </footer>
+      </div>
+    )
   }
 
   return (
@@ -116,7 +137,7 @@ export default function App() {
             <button className="btn-principal" onClick={demarrer}>C'est parti ! 🔥</button>
           </div>
           <div className="candidats-apercu">
-            {CANDIDATS.map((c) => (
+            {candidats.map((c) => (
               <div key={c.id} className="carte-candidat" style={{ borderColor: c.couleur }}>
                 <span className="dot" style={{ background: c.couleur }}></span>
                 <strong>{c.nom}</strong>
@@ -125,6 +146,7 @@ export default function App() {
               </div>
             ))}
           </div>
+          <button className="retour" onClick={() => setEcran('backoffice')}>🛠️ Back-office (admin)</button>
         </section>
       )}
 
@@ -132,16 +154,16 @@ export default function App() {
         <section className="quiz">
           <div className="progression">
             <span>Question {qIndex + 1} / {questions.length}</span>
-            <span>{THEMES[question.theme].emoji} {THEMES[question.theme].label}</span>
+            <span>{themes[question.theme]?.emoji} {themes[question.theme]?.label || question.theme}</span>
           </div>
           <div className="barre">
             <div className="remplie" style={{ width: `${((qIndex) / questions.length) * 100}%` }}></div>
           </div>
           <h2 className="question-texte">{question.texte}</h2>
-          {question.info && (
+          {question.info && donnees.infos[question.info] && (
             <p className="en-savoir-plus">
               <span className="en-savoir-plus-label">💡 En savoir plus :</span>{' '}
-              {question.info.map((info) => (
+              {donnees.infos[question.info].map((info) => (
                 <React.Fragment key={info.url}>
                   <a href={info.url} target="_blank" rel="noreferrer">{info.titre} ↗</a>{' '}
                 </React.Fragment>
@@ -167,7 +189,7 @@ export default function App() {
               <h2>Votre candidat le plus proche :<br />{gagnant.candidat.nom}</h2>
               <p className="parti">{gagnant.candidat.parti}</p>
               <p className="score-gagnant">{gagnant.score} % de compatibilité</p>
-              <p className="resume">{RESULTATS_LEGEND[gagnant.candidat.id]}</p>
+              <p className="resume">{legendes[gagnant.candidat.id]}</p>
             </div>
             <h3>📊 Tous vos scores</h3>
             <div className="classement">
@@ -186,7 +208,7 @@ export default function App() {
                 <div key={s.candidat.id} className="explication-candidat">
                   <h4>{s.candidat.nom} · {s.nbAccords} accords</h4>
                   <ul>
-                    {questions.filter(q => reponses[q.id] !== undefined && reponses[q.id] !== 0 && q.positions[s.candidat.id].position !== 0).map(q => {
+                    {questions.filter(q => reponses[q.id] !== undefined && reponses[q.id] !== 0 && q.positions[s.candidat.id] && q.positions[s.candidat.id].position !== 0).map(q => {
                       const accord = q.positions[s.candidat.id].position === reponses[q.id]
                       return (
                         <li key={q.id} className={accord ? 'accord' : 'desaccord'}>
@@ -200,7 +222,7 @@ export default function App() {
               ))}
             </details>
             <div className="sources-note">
-              📚 Sources officielles : {CANDIDATS.map(c => <a key={c.id} href={c.programme} target="_blank" rel="noreferrer">{c.nom.split(' ')[0]} ↗</a>)}
+              📚 Sources officielles : {candidats.map(c => <a key={c.id} href={c.programme} target="_blank" rel="noreferrer">{c.nom.split(' ')[0]} ↗</a>)}
             </div>
             <button className="btn-principal" onClick={recommencer}>🔄 Refaire le quiz</button>
           </section>
