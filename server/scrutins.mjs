@@ -49,7 +49,7 @@ function classifier(texte) {
 
 async function construireGroupes(dossierActeurs) {
   const tous = await fichiersJson(dossierActeurs)
-  const fichiers = tous.filter((f) => f.includes('/organe/'))
+  const fichiers = tous.filter((f) => path.basename(path.dirname(f)) === 'organe')
   const table = new Map()
   for (const f of fichiers) {
     const o = (await lireJson(f)).organe
