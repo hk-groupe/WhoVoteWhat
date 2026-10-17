@@ -59,6 +59,29 @@ export const THEMES = {
 
 // Liens "En savoir plus" : fiches officielles (vie-publique.fr, service-public.gouv.fr, info.gouv.fr) et ressources complémentaires
 export const INFOS = {
+  smic: [{ titre: 'Le SMIC, salaire minimum de croissance (travail-emploi.gouv.fr)', url: 'https://travail-emploi.gouv.fr/le-smic-salaire-minimum-de-croissance' }],
+  travail35h: [{ titre: 'La durée légale du travail et les 35 heures (code.travail.gouv.fr)', url: 'https://code.travail.gouv.fr/fiche-ministere-travail/la-duree-legale-du-travail' }],
+  impotsRevenu: [{ titre: "Impôt sur le revenu : calcul et paiement (service-public.gouv.fr)", url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/N219' }],
+  dettePublique: [{ titre: "Les différences entre le déficit budgétaire et la dette de l'État (vie-publique.fr)", url: 'https://www.vie-publique.fr/fiches/21878-les-differences-entre-le-deficit-budgetaire-et-la-dette-de-letat' }],
+  retraite2023: [{ titre: 'La loi réforme des retraites de 2023 (vie-publique.fr)', url: 'https://www.vie-publique.fr/loi/287916-loi-reforme-des-retraites-2023-plfss-rectificatif' }],
+  asile: [{ titre: "Demande d'asile en France (service-public.gouv.fr)", url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F2232' }],
+  eloignement: [{ titre: "Éloignement d'un étranger : expulsion, OQTF... (service-public.gouv.fr)", url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/N109' }],
+  peinesPlanchers: [{ titre: 'La loi du 10 août 2007 sur les peines planchers et la récidive (vie-publique.fr)', url: 'https://www.vie-publique.fr/loi/20500-peines-planchers-recidive-justice-des-majeurs-et-des-mineurs' }],
+  prison: [{ titre: 'Quelle est la population pénitentiaire en France ? (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/268774-quelle-est-la-population-penitentiaire' }],
+  policeQuotidien: [{ titre: 'De la police de proximité à la police de sécurité du quotidien (vie-publique.fr)', url: 'https://www.vie-publique.fr/en-bref/19840-de-la-police-de-proximite-la-police-de-securite-du-quotidien' }],
+  narcotrafic: [{ titre: 'La loi pour sortir la France du piège du narcotrafic (vie-publique.fr)', url: 'https://www.vie-publique.fr/loi/297230-narcotrafic-proposition-de-loi-sortir-du-piege-du-trafic-de-drogue' }],
+  precariteEnergetique: [{ titre: 'Lutte contre la précarité énergétique : chèque énergie, aides à la rénovation (ecologie.gouv.fr)', url: 'https://www.ecologie.gouv.fr/politiques-publiques/lutte-contre-precarite-energetique-cheque-energie-aides-renovation-energetique' }],
+  eolienMer: [{ titre: "L'éolien en mer (ecologie.gouv.fr)", url: 'https://www.ecologie.gouv.fr/politiques-publiques/eolien-mer' }],
+  bouclierTarifaire: [{ titre: "Le bouclier tarifaire pour l'électricité (ecologie.gouv.fr)", url: 'https://www.ecologie.gouv.fr/politiques-publiques/bouclier-tarifaire-lelectricite' }],
+  ecophyto: [{ titre: "Le plan Écophyto de réduction des pesticides (agriculture.gouv.fr)", url: 'https://agriculture.gouv.fr/le-plan-ecophyto-quest-ce-que-cest' }],
+  ecoleElementaire: [{ titre: "Programmes et horaires de l'école élémentaire (education.gouv.fr)", url: 'https://www.education.gouv.fr/programmes-et-horaires-l-ecole-elementaire-9011' }],
+  uniforme: [{ titre: "L'expérimentation de la tenue vestimentaire commune à l'école (education.gouv.fr)", url: 'https://www.education.gouv.fr/experimentation-de-la-tenue-vestimentaire-commune-dans-les-ecoles-et-les-etablissements-scolaires-le-416779' }],
+  remunerationEnseignants: [{ titre: 'La rémunération des enseignants (education.gouv.fr)', url: 'https://www.education.gouv.fr/la-remuneration-des-enseignants-7565' }],
+  educationPrioritaire: [{ titre: "L'éducation prioritaire et les classes dédoublées (education.gouv.fr)", url: 'https://www.education.gouv.fr/l-education-prioritaire-3140' }],
+  constructionUE: [{ titre: "Les étapes de la construction de l'Union européenne (vie-publique.fr)", url: 'https://www.vie-publique.fr/fiches/les-etapes-de-la-construction-de-lunion-europeenne' }],
+  ukraine: [{ titre: 'La guerre en Ukraine et le soutien de la France (info.gouv.fr)', url: 'https://www.info.gouv.fr/grand-dossier/info-ukraine' }],
+  budgetUE: [{ titre: 'Comment la France participe-t-elle au financement de l’UE ? (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/20380-comment-la-france-participe-t-elle-au-financement-de-lue' }],
+  marcheUnique: [{ titre: 'Le marché unique européen (vie-publique.fr)', url: 'https://www.vie-publique.fr/video/287705-video-le-marche-unique-europeen' }],
   regimes: [
     { titre: 'La 6e République (Wikipédia)', url: 'https://fr.wikipedia.org/wiki/Sixi%C3%A8me_R%C3%A9publique_(projet)' },
     { titre: 'Les régimes politiques depuis 1789 (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/les-regimes-politiques-de-la-revolution-francaise-1958' },
@@ -67,7 +90,6 @@ export const INFOS = {
   scrutin: [{ titre: 'Les différents modes de scrutin (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/23948-quels-sont-les-differents-modes-de-scrutin' }],
   droitVote: [{ titre: 'Le droit de vote (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/le-droit-de-vote' }],
   voteEtrangers: [{ titre: 'Les étrangers ont-ils le droit de vote ? (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/23928-les-etrangers-ont-ils-le-droit-de-vote' }],
-  retraite2023: [{ titre: 'La loi réforme des retraites de 2023 (vie-publique.fr)', url: 'https://www.vie-publique.fr/loi/287916-loi-reforme-des-retraites-2023-plfss-rectificatif' }],
   retraitesHistoire: [{ titre: 'Les réformes des retraites de 1993 à 2023 (vie-publique.fr)', url: 'https://www.vie-publique.fr/eclairage/20111-retraites-les-differentes-reformes-de-1993-2023' }],
   isf: [{ titre: 'Suppression de l\'ISF : bilan sur la fiscalité du capital (vie-publique.fr)', url: 'https://www.vie-publique.fr/en-bref/281993-suppression-de-lisf-bilan-2021-sur-la-fiscalite-du-capital' }],
   loiImmigration: [{ titre: 'La loi immigration du 26 janvier 2024 (vie-publique.fr)', url: 'https://www.vie-publique.fr/loi/287993-loi-immigration-integration-asile-du-26-janvier-2024' }],
@@ -83,6 +105,7 @@ export const QUESTIONS = [
     id: 'smic',
     theme: 'economie',
     texte: 'Le SMIC devrait être porté à au moins 1 600 € net par mois, avec une indexation des salaires sur l\'inflation.',
+    info: INFOS.smic,
     positions: {
       melenchon: { position: 1, source: 'Porter immédiatement le SMIC à 1600 euros net et indexer les salaires sur l\'inflation' },
       glucksmann: { position: 1, source: 'Augmenter le SMIC à 1600 euros net dans les deux ans' },
@@ -108,6 +131,7 @@ export const QUESTIONS = [
     id: 'travail',
     theme: 'economie',
     texte: 'Il faut travailler davantage : assouplir les 35 heures et inciter au travail supplémentaire plutôt que redistribuer.',
+    info: INFOS.travail35h,
     positions: {
       melenchon: { position: -1, source: 'Rétablir les 35 heures et passer aux 32 heures dans les métiers pénibles' },
       glucksmann: { position: -1, source: 'Rééquilibrer la taxation du travail et du capital pour que le travail paie, sans allonger le temps de travail' },
@@ -120,6 +144,7 @@ export const QUESTIONS = [
     id: 'impots',
     theme: 'economie',
     texte: 'Il faut baisser les impôts des ménages et des entreprises, quitte à réduire les services publics.',
+    info: INFOS.impotsRevenu,
     positions: {
       melenchon: { position: -1, source: 'Augmenter les recettes (ISF, taxe Zucman) pour financer les services publics ; pas de baisse d\'impôts' },
       glucksmann: { position: -1, source: 'Fiscalité des ultra-riches et des superprofits plutôt que baisses d\'impôts' },
@@ -132,6 +157,7 @@ export const QUESTIONS = [
     id: 'dettes',
     theme: 'economie',
     texte: 'Réduire la dette et les déficits publics doit être la priorité absolue, même si cela impose des coupes budgétaires.',
+    info: INFOS.dettePublique,
     positions: {
       melenchon: { position: -1, source: 'Plan d\'investissements de 200 Md€ ; la discipline budgétaire n\'est pas la priorité' },
       glucksmann: { position: -1, source: 'Investir massivement (écologie, défense, salaires), financé par les ultra-riches' },
@@ -171,6 +197,7 @@ export const QUESTIONS = [
     id: 'age65',
     theme: 'retraites',
     texte: 'L\'âge légal de départ à la retraite devrait être relevé à 65 ans et au-delà.',
+    info: INFOS.retraite2023,
     positions: {
       melenchon: { position: -1, source: 'Retraite à 60 ans (40 annuités)' },
       glucksmann: { position: -1, source: 'Âge légal à 62 ans, départs anticipés selon la pénibilité' },
@@ -183,6 +210,7 @@ export const QUESTIONS = [
     id: 'petites_retraites',
     theme: 'retraites',
     texte: 'Les petites retraites doivent être fortement revalorisées, y compris au-delà de l\'inflation.',
+    info: INFOS.retraite2023,
     positions: {
       melenchon: { position: 1, source: 'Porter les petites retraites au niveau du SMIC' },
       glucksmann: { position: 1, source: 'Revalorisation des petites retraites et garantie d\'un niveau décent' },
@@ -195,6 +223,7 @@ export const QUESTIONS = [
     id: 'penibilite',
     theme: 'retraites',
     texte: 'Les départs anticipés pour pénibilité au travail doivent être élargis et facilités.',
+    info: INFOS.retraite2023,
     positions: {
       melenchon: { position: 1, source: 'Départ anticipé pour pénibilité, 32 heures dans les métiers pénibles' },
       glucksmann: { position: 1, source: 'Départs anticipés selon la pénibilité des carrières' },
@@ -287,6 +316,7 @@ export const QUESTIONS = [
     id: 'asile',
     theme: 'immigration',
     texte: 'Le droit d\'asile et le regroupement familial doivent être fortement restreints.',
+    info: INFOS.asile,
     positions: {
       melenchon: { position: -1, source: 'Abroger les dernières lois asile et immigration, accès à l\'AME, accueil digne' },
       glucksmann: { position: -1, source: 'Abrogation de la loi immigration de 2024, fin du règlement Dublin' },
@@ -299,6 +329,7 @@ export const QUESTIONS = [
     id: 'expulsion',
     theme: 'immigration',
     texte: 'Les étrangers en situation irrégulière ou délinquants devraient être systématiquement expulsés.',
+    info: INFOS.eloignement,
     positions: {
       melenchon: { position: -1, source: 'Régularisation des travailleurs, étudiants, parents d\'enfants scolarisés ; titre de séjour de 10 ans' },
       glucksmann: { position: -1, source: 'Refus de l\'externalisation des politiques migratoires ; accords de réadmission négociés' },
@@ -311,6 +342,7 @@ export const QUESTIONS = [
     id: 'regularisation',
     theme: 'immigration',
     texte: 'Les travailleurs étrangers en situation irrégulière devraient être régularisés, notamment dans les métiers en tension.',
+    info: INFOS.loiImmigration,
     positions: {
       melenchon: { position: 1, source: 'Régularisation des travailleurs, étudiants et parents d\'enfants scolarisés' },
       glucksmann: { position: 1, source: 'Régularisation dans les métiers en tension, régularisation humaniste' },
@@ -323,6 +355,7 @@ export const QUESTIONS = [
     id: 'priorite_nationale',
     theme: 'immigration',
     texte: 'Les aides sociales et logements sociaux devraient être réservés en priorité aux Français.',
+    info: INFOS.loiImmigration,
     positions: {
       melenchon: { position: -1, source: 'Aides sociales universelles basées sur la résidence, pas sur la nationalité' },
       glucksmann: { position: -1, source: 'Refus de la préférence nationale' },
@@ -336,6 +369,7 @@ export const QUESTIONS = [
     id: 'justice',
     theme: 'securite',
     texte: 'La justice doit être beaucoup plus ferme : peines planchers, fin des aménagements de peine.',
+    info: INFOS.peinesPlanchers,
     positions: {
       melenchon: { position: -1, source: 'Régulation carcérale contre la surpopulation, police de proximité, interdiction des LBD' },
       glucksmann: { position: -1, source: 'Police de proximité, prévention de la délinquance, Maisons du droit et de la justice' },
@@ -348,6 +382,7 @@ export const QUESTIONS = [
     id: 'prison',
     theme: 'securite',
     texte: 'Il faut construire massivement de nouvelles places de prison.',
+    info: INFOS.prison,
     positions: {
       melenchon: { position: -1, source: 'Régulation carcérale : réduire la population carcérale, alternatives à l\'emprisonnement' },
       glucksmann: { position: 0, source: 'Priorité à la prévention et aux Maisons du droit, pas à un plan carcéral massif' },
@@ -360,6 +395,7 @@ export const QUESTIONS = [
     id: 'police',
     theme: 'securite',
     texte: 'Il faut renforcer les moyens et les prérogatives des forces de l\'ordre (présomption de légitime défense).',
+    info: INFOS.policeQuotidien,
     positions: {
       melenchon: { position: -1, source: 'Démanteler les BAC et BRAV-M, interdire tasers et grenades de désencerclement, désescalade' },
       glucksmann: { position: 0, source: 'Police de proximité moderne + muscler les moyens d\'enquête contre le narcotrafic' },
@@ -372,6 +408,7 @@ export const QUESTIONS = [
     id: 'narco',
     theme: 'securite',
     texte: 'Il faut des moyens d\'exception contre le narcotrafic (état d\'urgence narco, reconnaissance faciale ciblée).',
+    info: INFOS.narcotrafic,
     positions: {
       melenchon: { position: -1, source: 'Refus des régimes d\'exception ; traiter les causes sociales et l\'argent du narcotrafic' },
       glucksmann: { position: 0, source: 'Renforcer les moyens d\'enquête et le parquet européen contre le narcotrafic, sans régime d\'exception' },
@@ -384,6 +421,7 @@ export const QUESTIONS = [
     id: 'proximite',
     theme: 'securite',
     texte: 'Il faut développer la police de proximité et la prévention, plutôt que la seule répression.',
+    info: INFOS.policeQuotidien,
     positions: {
       melenchon: { position: 1, source: 'Police de proximité, désescalade, fin des BAC' },
       glucksmann: { position: 1, source: 'Police de proximité, prévention de la délinquance' },
@@ -410,6 +448,7 @@ export const QUESTIONS = [
     id: 'ecologie_sociale',
     theme: 'ecologie',
     texte: 'La transition écologique doit être massive et sociale (rénovation, transports publics, interdiction des produits polluants), même si elle contraint.',
+    info: INFOS.precariteEnergetique,
     positions: {
       melenchon: { position: 1, source: 'Plan de 200 Md€ d\'investissements écologiques, -65 % d\'émissions en 2030, 700 000 isolations/an' },
       glucksmann: { position: 1, source: 'Grande loi Climat (-90 % en 2040), bouclier climat, fin des plastiques jetables en 2030' },
@@ -422,6 +461,7 @@ export const QUESTIONS = [
     id: 'eoliennes',
     theme: 'ecologie',
     texte: 'Il faut stopper le développement des éoliennes, notamment en mer.',
+    info: INFOS.eolienMer,
     positions: {
       melenchon: { position: -1, source: 'Développement des renouvelables (solaire, éolien) dans le plan de bifurcation écologique' },
       glucksmann: { position: -1, source: 'Renouvelables massives : éolien, solaire, hydrogène vert' },
@@ -434,6 +474,7 @@ export const QUESTIONS = [
     id: 'bouclier_energie',
     theme: 'ecologie',
     texte: 'L\'État doit continuer de plafonner les prix de l\'énergie (bouclier tarifaire), même si cela coûte cher aux finances publiques.',
+    info: INFOS.bouclierTarifaire,
     positions: {
       melenchon: { position: 1, source: 'Instaurer une première tranche gratuite d\'électricité, d\'eau et de gaz' },
       glucksmann: { position: 1, source: 'Bouclier énergie et bouclier sobriété pour protéger les ménages' },
@@ -446,6 +487,7 @@ export const QUESTIONS = [
     id: 'agriculture',
     theme: 'ecologie',
     texte: 'L\'agriculture industrielle doit être réduite : interdiction des élevages intensifs et sortie des pesticides les plus dangereux.',
+    info: INFOS.ecophyto,
     positions: {
       melenchon: { position: 1, source: 'Interdire l\'élevage intensif, fermer les fermes-usines, éradiquer les pesticides dangereux' },
       glucksmann: { position: 1, source: 'Réduction des pesticides, bien-être animal, réforme de l\'agriculture intensive' },
@@ -459,6 +501,7 @@ export const QUESTIONS = [
     id: 'ecole',
     theme: 'education',
     texte: 'L\'école doit revenir aux fondamentaux et à l\'autorité (discipline, exigence) plutôt qu\'à la pédagogie.',
+    info: INFOS.ecoleElementaire,
     positions: {
       melenchon: { position: -1, source: 'Gratuité réelle, effectifs réduits, accès sans sélection au supérieur' },
       glucksmann: { position: 0, source: 'Revaloriser les enseignants, mixité sociale, module Médias et Influence' },
@@ -471,6 +514,7 @@ export const QUESTIONS = [
     id: 'uniforme',
     theme: 'education',
     texte: 'L\'uniforme devrait être généralisé à l\'école, au collège et au lycée.',
+    info: INFOS.uniforme,
     positions: {
       melenchon: { position: -1, source: 'Contre l\'uniforme : pas de mesure de ce type dans le programme' },
       glucksmann: { position: -1, source: 'Pas d\'uniforme dans le programme' },
@@ -483,6 +527,7 @@ export const QUESTIONS = [
     id: 'enseignants',
     theme: 'education',
     texte: 'Les salaires des enseignants devraient être fortement revalorisés (vers la moyenne européenne).',
+    info: INFOS.remunerationEnseignants,
     positions: {
       melenchon: { position: 1, source: 'Indexation des salaires sur l\'inflation dans la fonction publique' },
       glucksmann: { position: 1, source: 'Revalorisation continue et planifiée des enseignants sur 5 ans (rattrapage OCDE)' },
@@ -508,6 +553,7 @@ export const QUESTIONS = [
     id: 'effectifs',
     theme: 'education',
     texte: 'Il faut réduire fortement le nombre d\'élèves par classe, en priorité dans les quartiers populaires.',
+    info: INFOS.educationPrioritaire,
     positions: {
       melenchon: { position: 1, source: 'Effectifs réduits à l\'école primaire, classes ciblées REP+' },
       glucksmann: { position: 1, source: 'Réduire les effectifs, notamment en éducation prioritaire' },
@@ -521,6 +567,7 @@ export const QUESTIONS = [
     id: 'europe',
     theme: 'europe',
     texte: 'La France doit approfondir la construction européenne (fédéralisme, fonds communs) plutôt que renégocier sa place.',
+    info: INFOS.constructionUE,
     positions: {
       melenchon: { position: -1, source: 'Désobéir aux traités : refus des normes UE incompatibles' },
       glucksmann: { position: 1, source: 'États-Unis d\'Europe, fonds européen de défense 500 Md€, traité de réunification' },
@@ -532,7 +579,8 @@ export const QUESTIONS = [
   {
     id: 'ukraine',
     theme: 'europe',
-    texte: 'La France doit continuer à soutenir fermement l\'Ukraine face à la Russie.',
+    texte: 'La France doit continuer à soutenir l\'Ukraine, y compris par une aide militaire, jusqu\'au retrait des troupes russes des territoires occupés.',
+    info: INFOS.ukraine,
     positions: {
       melenchon: { position: -1, source: 'Cessez-le-feu et négociations diplomatiques, refus de l\'escalade' },
       glucksmann: { position: 1, source: 'Augmenter drastiquement l\'aide militaire à l\'Ukraine, première ligne de défense' },
@@ -558,6 +606,7 @@ export const QUESTIONS = [
     id: 'budget_ue',
     theme: 'europe',
     texte: 'La contribution française au budget européen doit être réduite.',
+    info: INFOS.budgetUE,
     positions: {
       melenchon: { position: 0, source: 'Désobéir aux traités et renégocier, sans réduire unilatéralement la contribution' },
       glucksmann: { position: -1, source: 'Fonds communs européens (défense, climat) financés collectivement' },
@@ -570,6 +619,7 @@ export const QUESTIONS = [
     id: 'buy_european',
     theme: 'europe',
     texte: 'L\'Europe doit protéger son industrie : préférence européenne dans les marchés publics (Buy European Act).',
+    info: INFOS.marcheUnique,
     positions: {
       melenchon: { position: 0, source: 'Préférence nationale française plutôt qu\'européenne' },
       glucksmann: { position: 1, source: 'Buy European Act, préférence européenne dans les commandes publiques' },
