@@ -252,16 +252,22 @@ export default function App() {
             <div className="remplie" style={{ width: `${((qIndex) / questions.length) * 100}%` }}></div>
           </div>
           <h2 className="question-texte">{question.texte}</h2>
-          {question.info && donnees.infos[question.info] && (
+          {(() => {
+            const infosQuestion = Array.isArray(question.info)
+              ? question.info
+              : (typeof question.info === 'string' && donnees.infos[question.info]) || []
+            if (infosQuestion.length === 0) return null
+            return (
             <p className="en-savoir-plus">
               <span className="en-savoir-plus-label">💡 En savoir plus :</span>{' '}
-              {donnees.infos[question.info].map((info) => (
+              {infosQuestion.map((info) => (
                 <React.Fragment key={info.url}>
                   <a href={info.url} target="_blank" rel="noreferrer">{info.titre} ↗</a>{' '}
                 </React.Fragment>
               ))}
             </p>
-          )}
+            )
+          })()}
           <div className="choix">
             <button className="btn-choix pour" onClick={() => choisir(1)}>👍 Tout à fait d'accord</button>
             <button className="btn-choix mitigee" onClick={() => choisir(0)}>🤷 Je ne sais pas / mitigé</button>
