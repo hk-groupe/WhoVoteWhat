@@ -93,7 +93,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Vote<span className="accent">Clair</span></h1>
+          <h1>Qui Vote<span className="accent"> Quoi</span></h1>
           <p className="tagline">Chargement…</p>
         </header>
       </div>
@@ -109,7 +109,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Vote<span className="accent">Clair</span></h1>
+          <h1>Qui Vote<span className="accent"> Quoi</span></h1>
           <p className="tagline">Back-office de gestion du contenu 🛠️</p>
         </header>
         <BackOffice onFermer={() => setEcran('accueil')} />
@@ -124,7 +124,7 @@ export default function App() {
     <div className="app">
       <header className="header">
         <span className="logo">🗳️</span>
-        <h1>Vote<span className="accent">Clair</span></h1>
+        <h1>Qui Vote<span className="accent"> Quoi</span></h1>
         <p className="tagline">Trouvez le candidat 2027 qui vous ressemble, en quelques questions simples 🚀</p>
       </header>
 
