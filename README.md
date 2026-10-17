@@ -82,16 +82,16 @@ npm ci
 |---|---|---|
 | `PORT` | Port d'écoute de l'API | `4000` (ou le port choisi) |
 | `CLE_SECRETE` | Clé de session du back-office | une chaîne aléatoire longue (obligatoire, sinon les sessions ne survivent pas à un redémarrage) |
-| `ORIGINE_AUTORISEE` | Origine CORS autorisée pour l'API | l'URL publique du site, ex. `https://whovotewhat.fr` (ne pas laisser `*` en production) |
+| `ORIGINE_AUTORISEE` | Origine CORS autorisée pour l'API | l'URL publique du site, ex. `https://quivotequoi.fr` (ne pas laisser `*` en production) |
 | `HEURE_MAJ_SCRUTINS` | Heure de la mise à jour quotidienne des scrutins | `03:30` par défaut |
-| `VITE_API_URL` | URL de l'API utilisée par le front (build/dev) | ex. `https://api.whovotewhat.fr` |
+| `VITE_API_URL` | URL de l'API utilisée par le front (build/dev) | ex. `https://api.quivotequoi.fr` |
 
 Exemple :
 
 ```bash
 export PORT=4000
 export CLE_SECRETE="$(openssl rand -hex 32)"
-export ORIGINE_AUTORISEE="https://whovotewhat.fr"
+export ORIGINE_AUTORISEE="https://quivotequoi.fr"
 ```
 
 ### 4. Construire le front
@@ -109,7 +109,7 @@ L'API Node tourne sans dépendance externe. Utilisez un process manager pour qu'
 ```bash
 # Exemple avec pm2
 npm install -g pm2
-pm2 start server/index.mjs --name whovotewhat-api
+pm2 start server/index.mjs --name quivotequoi-api
 pm2 save && pm2 startup
 ```
 
@@ -122,7 +122,7 @@ Exemple minimal Nginx : le front en statique sur le domaine public, l'API en pro
 ```nginx
 server {
   listen 443 ssl;
-  server_name whovotewhat.fr;
+  server_name quivotequoi.fr;
 
   root /srv/WhoVoteWhat/dist;
   index index.html;
@@ -151,7 +151,7 @@ server {
 git pull
 npm ci
 npm run build
-pm2 restart whovotewhat-api
+pm2 restart quivotequoi-api
 ```
 
 ## 🛠️ Stack
