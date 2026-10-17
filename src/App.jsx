@@ -3,7 +3,14 @@ import { chargerDonnees } from './backoffice/store.mjs'
 import BackOffice from './backoffice/BackOffice.jsx'
 import RecapVotes from './RecapVotes.jsx'
 
-const OPTIONS_NB = [10, 15, 20, 25, 30, 35, 40]
+const NB_MIN = 10
+const NB_MAX = 100
+
+function bornageNb(valeur) {
+  const n = Number.parseInt(valeur, 10)
+  if (!Number.isFinite(n)) return NB_MIN
+  return Math.min(NB_MAX, Math.max(NB_MIN, n))
+}
 
 function melanger(liste) {
   const copie = [...liste]
@@ -44,6 +51,14 @@ export default function App() {
     chargerDonnees().then(setDonnees).catch(() => setDonnees({}))
   }, [])
   const [nbQuestions, setNbQuestions] = React.useState(20)
+  const [saisieNb, setSaisieNb] = React.useState('20')
+
+  function majSaisieNb(valeur) {
+    setSaisieNb(valeur)
+    const nettoyee = valeur.replace(/\D/g, '').slice(0, 3)
+    if (nettoyee === '') return
+    setNbQuestions(bornageNb(nettoyee))
+  }
   const [questions, setQuestions] = React.useState([])
   const [qIndex, setQIndex] = React.useState(0)
   const [reponses, setReponses] = React.useState({})
@@ -141,16 +156,19 @@ export default function App() {
             </ul>
             <div className="choix-nb">
               <p className="choix-nb-label">Combien de questions voulez-vous répondre ?</p>
-              <div className="boutons-nb">
-                {OPTIONS_NB.map((n) => (
-                  <button
-                    key={n}
-                    className={`btn-nb ${n === nbQuestions ? 'actif' : ''}`}
-                    onClick={() => setNbQuestions(n)}
-                  >
-                    {n}
-                  </button>
-                ))}
+              <div className="champ-nb">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  className="saisie-nb"
+                  value={saisieNb}
+                  min={NB_MIN}
+                  max={NB_MAX}
+                  aria-label="Nombre de questions"
+                  onChange={(e) => majSaisieNb(e.target.value)}
+                  onBlur={(e) => { setNbQuestions(bornageNb(e.target.value)); setSaisieNb(String(bornageNb(e.target.value))) }}
+                />
+                <span className="saisie-nb-aide">entre {NB_MIN} et {NB_MAX} questions</span>
               </div>
             </div>
             <button className="btn-principal" onClick={demarrer}>C'est parti ! 🔥</button>

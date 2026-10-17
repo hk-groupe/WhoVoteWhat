@@ -4,8 +4,8 @@ Site d'information électorale : un quiz d'affinité pour découvrir quel candid
 
 ## ✨ Fonctionnement
 
-1. **17 questions simples** sur les vraies propositions des candidats (économiques, retraite, immigration, écologie, institutions, Europe...).
-2. **3 réponses possibles** : d'accord, mitigé, pas d'accord.
+1. **100 questions** (10 thèmes × 10) sur les vraies propositions des candidats : économie, retraites, institutions, immigration, sécurité, écologie, éducation, Europe & politique internationale, numérique & IA, religion & laïcité.
+2. **3 réponses possibles** : d'accord, mitigé, pas d'accord — le nombre de questions (10 à 100) est choisi librement sur la page d'accueil.
 3. **Résultat** : score de compatibilité pour chaque candidat + détail des accords/désaccords, avec la position exacte extraite du programme officiel.
 
 ## 📚 Sources — 100 % officielles
