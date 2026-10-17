@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Données générées par le backend (open data Assemblée nationale, contenu édité)
+server/data/
+server/.cache/

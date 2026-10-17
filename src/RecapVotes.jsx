@@ -7,6 +7,7 @@ import {
   DATE_MAJ_SCRUTINS,
   LEGISLATURE,
 } from './data/scrutins.mjs'
+import { chargerScrutins } from './api/client.mjs'
 
 function normaliser(s) {
   return s
@@ -14,6 +15,8 @@ function normaliser(s) {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
 }
+
+// Format attendu côté composants : { groupes: {CODE: {nom, couleur}}, scrutins: [{numero, date, seance, intitule, theme, description?, adopte, votants, exprimes, majorite, groupes: {CODE: {pour, contre, abstention}}}], majLe }
 
 function JaugeVote({ pour, contre, abstention }) {
   const total = pour + contre + abstention
@@ -27,8 +30,8 @@ function JaugeVote({ pour, contre, abstention }) {
   )
 }
 
-function LigneGroupe({ code, pour, contre, abstention }) {
-  const g = GROUPES[code]
+function LigneGroupe({ code, pour, contre, abstention, groupes = GROUPES }) {
+  const g = groupes[code]
   if (!g) return null
   const total = pour + contre + abstention
   let position = '—'
@@ -48,7 +51,7 @@ function LigneGroupe({ code, pour, contre, abstention }) {
   )
 }
 
-function CarteScrutin({ scrutin }) {
+function CarteScrutin({ scrutin, groupes }) {
   const url = `${SOURCE_SCRUTINS}/${scrutin.numero}`
   return (
     <details className="rv-carte" data-numero={scrutin.numero}>
@@ -70,7 +73,7 @@ function CarteScrutin({ scrutin }) {
       </p>
       <ul className="rv-groupes">
         {Object.entries(scrutin.groupes).map(([code, v]) => (
-          <LigneGroupe key={code} code={code} pour={v.pour} contre={v.contre} abstention={v.abstention} />
+          <LigneGroupe key={code} code={code} pour={v.pour} contre={v.contre} abstention={v.abstention} groupes={groupes} />
         ))}
       </ul>
       <a className="rv-lien-an" href={url} target="_blank" rel="noreferrer">
@@ -80,21 +83,21 @@ function CarteScrutin({ scrutin }) {
   )
 }
 
-function SectionDerniers() {
-  const derniers = [...SCRUTINS].sort((a, b) => b.numero - a.numero).slice(0, 20)
+function SectionDerniers({ scrutins, groupes }) {
+  const derniers = [...scrutins].sort((a, b) => b.numero - a.numero).slice(0, 20)
   return (
     <div className="bloc">
       <h3>🕒 Les 20 derniers votes</h3>
       <p>Les 20 scrutins publics les plus récents de la {LEGISLATURE} législature, avec leur résultat et le détail par groupe.</p>
       <div className="rv-liste">
-        {derniers.map((s) => <CarteScrutin key={s.numero} scrutin={s} />)}
+        {derniers.map((s) => <CarteScrutin key={s.numero} scrutin={s} groupes={groupes} />)}
       </div>
     </div>
   )
 }
 
 function LigneThemeParti({ theme, scrutins, codeGroupe }) {
-  const t = THEMES_VOTES[theme]
+  const t = THEMES_VOTES[theme] ?? { emoji: '📌', label: theme }
   const cumul = scrutins.reduce(
     (acc, s) => {
       const g = s.groupes[codeGroupe]
@@ -122,7 +125,7 @@ function LigneThemeParti({ theme, scrutins, codeGroupe }) {
   )
 }
 
-function SectionParParti() {
+function SectionParParti({ scrutins, groupes }) {
   return (
     <div className="bloc">
       <h3>🧭 Par parti politique, thème par thème</h3>
@@ -132,9 +135,9 @@ function SectionParParti() {
         pas leurs communiqués.
       </p>
       <div className="rv-liste">
-        {Object.entries(GROUPES).map(([code, g]) => {
+        {Object.entries(groupes).map(([code, g]) => {
           const themes = Object.entries(THEMES_VOTES).filter(([id]) =>
-            SCRUTINS.some((s) => s.theme === id && s.groupes[code]),
+            scrutins.some((s) => s.theme === id && s.groupes[code]),
           )
           if (themes.length === 0) return null
           return (
@@ -149,13 +152,14 @@ function SectionParParti() {
                     key={id}
                     theme={id}
                     codeGroupe={code}
-                    scrutins={SCRUTINS.filter((s) => s.theme === id)}
+                    groupes={groupes}
+                    scrutins={scrutins.filter((s) => s.theme === id)}
                   />
                 ))}
               </ul>
               <div className="rv-scrutins-theme">
-                {SCRUTINS.filter((s) => s.groupes[code]).map((s) => (
-                  <CarteScrutin key={s.numero} scrutin={s} />
+                {scrutins.filter((s) => s.groupes[code]).slice(0, 30).map((s) => (
+                  <CarteScrutin key={s.numero} scrutin={s} groupes={groupes} />
                 ))}
               </div>
             </details>
@@ -166,11 +170,11 @@ function SectionParParti() {
   )
 }
 
-function SectionRecherche() {
+function SectionRecherche({ scrutins, groupes }) {
   const [requete, setRequete] = React.useState('')
   const q = normaliser(requete.trim())
   const resultats = q
-    ? SCRUTINS.filter((s) =>
+    ? scrutins.filter((s) =>
         normaliser(`${s.intitule} ${s.numero} ${s.seance}`).includes(q),
       )
     : []
@@ -181,7 +185,7 @@ function SectionRecherche() {
       <input
         className="rv-recherche"
         type="search"
-        placeholder="🔍 Mot-clé ou numéro de scrutin…"
+        placeholder="🔎 Mot-clé ou numéro de scrutin…"
         value={requete}
         onChange={(e) => setRequete(e.target.value)}
       />
@@ -193,32 +197,60 @@ function SectionRecherche() {
         </p>
       )}
       <div className="rv-liste">
-        {resultats.map((s) => <CarteScrutin key={s.numero} scrutin={s} />)}
+        {resultats.slice(0, 50).map((s) => <CarteScrutin key={s.numero} scrutin={s} groupes={groupes} />)}
       </div>
     </div>
   )
 }
 
 export default function RecapVotes({ onRetour }) {
+  const [scrutins, setScrutins] = React.useState(SCRUTINS)
+  const [groupes, setGroupes] = React.useState(GROUPES)
+  const [maj, setMaj] = React.useState(null)
+  const [chargement, setChargement] = React.useState(true)
+
+  React.useEffect(() => {
+    let annule = false
+    chargerScrutins().then((donnees) => {
+      if (annule) return
+      if (donnees && Array.isArray(donnees.scrutins) && donnees.scrutins.length > 0) {
+        setScrutins(donnees.scrutins)
+        if (donnees.groupes) setGroupes({ ...GROUPES, ...donnees.groupes })
+        setMaj(donnees.majLe ? new Date(donnees.majLe) : null)
+      }
+      setChargement(false)
+    })
+    return () => { annule = true }
+  }, [])
+
+  const dateMaj = maj
+    ? maj.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+    : DATE_MAJ_SCRUTINS
+
   return (
     <section className="recap-votes">
       <div className="bloc">
         <h2>🗳️ Récap des votes</h2>
         <p>
           Qui a voté quoi à l'Assemblée nationale, groupe par groupe. Toutes les données proviennent
-          exclusivement des <strong>analyses officielles des scrutins publics</strong> publiées par
-          l'Assemblée nationale ({LEGISLATURE} législature). Dernière mise à jour : {DATE_MAJ_SCRUTINS}.
+          exclusivement de l'<strong>open data officiel des scrutins publics</strong> publié par
+          l'Assemblée nationale ({LEGISLATURE} législature). Dernière mise à jour : {dateMaj}.
         </p>
         <ul className="points">
           <li>✅ Résultat officiel de chaque scrutin : adopté ou rejeté</li>
           <li>🧭 Position de chaque groupe politique : pour, contre, abstention</li>
           <li>🏛️ Lien direct vers la source officielle pour chaque vote</li>
+          {chargement
+            ? <li>⏳ Récupération des derniers scrutins publiés…</li>
+            : maj && <li>🔄 Mise à jour quotidienne automatique depuis l'open data de l'Assemblée nationale</li>}
         </ul>
       </div>
-      <SectionDerniers />
-      <SectionParParti />
-      <SectionRecherche />
-      <button className="btn-principal" onClick={onRetour}>← Retour à l'accueil</button>
+      <SectionDerniers scrutins={scrutins} groupes={groupes} />
+      <SectionParParti scrutins={scrutins} groupes={groupes} />
+      <SectionRecherche scrutins={scrutins} groupes={groupes} />
+      <button className="btn-principal" onClick={onRetour}>
+        ← Retour à l'accueil
+      </button>
     </section>
   )
 }

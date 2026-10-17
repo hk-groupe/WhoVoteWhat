@@ -1,8 +1,12 @@
 import React from 'react'
 import {
   chargerDonnees, sauvegarderDonnees, reinitialiserDonnees, exporterJSON, importerJSON,
-  chargerComptes, sauvegarderComptes, connexion, sessionEnCours, deconnexion,
+  memoriserSession, sessionEnCours, oublieSession,
 } from './store.mjs'
+import {
+  apiDisponible, connexionAdmin, deconnexionAdmin, chargerComptes, creerCompte, supprimerCompteApi,
+  changerMotDePasse,
+} from '../api/client.mjs'
 
 const CANDIDAT_VIDE = { id: '', nom: '', parti: '', couleur: '#7b2ff7', site: '', programme: '', sourceLabel: '' }
 const THEME_VIDE = { label: '', emoji: '📌' }
@@ -21,13 +25,27 @@ export default function BackOffice({ onFermer }) {
   const [motDePasse, setMotDePasse] = React.useState('')
   const [erreur, setErreur] = React.useState('')
 
-  const [donnees, setDonnees] = React.useState(() => chargerDonnees())
+  const [donnees, setDonnees] = React.useState(null)
   const [onglet, setOnglet] = React.useState('candidats')
   const [message, setMessage] = React.useState('')
+  const [apiHs, setApiHs] = React.useState(false)
 
   // Comptes (admin)
-  const [comptes, setComptes] = React.useState(() => chargerComptes())
+  const [comptes, setComptes] = React.useState([])
   const [nouveauCompte, setNouveauCompte] = React.useState({ identifiant: '', motDePasse: '', role: 'admin' })
+
+  // Changement de mot de passe (sécurité du compte)
+  const [mdp, setMdp] = React.useState({ ancien: '', nouveau: '', confirmation: '' })
+
+  React.useEffect(() => {
+    if (!session?.jeton) return
+    chargerComptes(session.jeton).then(setComptes).catch(() => setComptes([]))
+  }, [session?.jeton])
+
+  React.useEffect(() => {
+    chargerDonnees().then(setDonnees).catch(() => setDonnees(null))
+    apiDisponible().then(setApiHs.bind(null, false)).catch(() => setApiHs(true))
+  }, [])
 
   // ── Écrans d'édition ──
   const [candidatEdite, setCandidatEdite] = React.useState(null)
@@ -38,7 +56,11 @@ export default function BackOffice({ onFermer }) {
 
   function persist(nouvelles) {
     setDonnees(nouvelles)
-    sauvegarderDonnees(nouvelles)
+    if (session?.jeton) {
+      sauvegarderDonnees(nouvelles, session.jeton).catch((e) => flash(`⚠️️ Sauvegarde serveur impossible : ${e.message}`))
+    } else {
+      flash('⚠️️ Backend injoignable — modification non partagée')
+    }
   }
 
   function flash(texte) {
@@ -63,14 +85,32 @@ export default function BackOffice({ onFermer }) {
           </label>
           <div className="bo-actions">
             <button className="btn-principal" onClick={() => {
-              const s = connexion(identifiant, motDePasse)
-              if (s) { setSession(s); setErreur('') }
-              else setErreur('Identifiant ou mot de passe incorrect')
+              connexionAdmin(identifiant, motDePasse)
+                .then((s) => { memoriserSession(s.jeton, s.identifiant, s.role); setSession({ ...sessionEnCours() }); setErreur('') })
+                .catch((e) => setErreur(e.message))
             }}>Se connecter</button>
             <button className="btn-principal" onClick={onFermer}>← Retour au quiz</button>
           </div>
-          <p className="bo-note">Compte par défaut : admin / admin — à changer après la première connexion.</p>
+          <p className="bo-note">Connexion au backend partagé. Compte par défaut : admin / admin — à changer après la première connexion.</p>
+          {apiHs && (
+            <p className="bo-erreur">🔌 Backend injoignable — démarrez-le avec la commande <code>npm run api</code> (terminal séparé), puis réessayez.</p>
+          )}
         </div>
+      </section>
+    )
+  }
+
+  if (!donnees) {
+    return (
+      <section className="backoffice">
+        <div className="bo-header">
+          <h2>🛠️ Back-office</h2>
+          <button className="btn-principal" onClick={onFermer}>← Retour au quiz</button>
+        </div>
+        <p className="bo-note">Chargement des données…</p>
+        {apiHs && (
+          <p className="bo-erreur">🔌 Backend injoignable — démarrez-le avec la commande <code>npm run api</code> (terminal séparé), puis rechargez la page.</p>
+        )}
       </section>
     )
   }
@@ -158,23 +198,37 @@ export default function BackOffice({ onFermer }) {
     flash('🗑️ Sources supprimées')
   }
 
+  function changerMdp() {
+    if (!mdp.ancien || !mdp.nouveau) return flash('⚠️️ Ancien et nouveau mot de passe requis')
+    if (mdp.nouveau !== mdp.confirmation) return flash('⚠️️ La confirmation ne correspond pas')
+    if (mdp.nouveau.length < 8) return flash('⚠️️ Le mot de passe doit faire au moins 8 caractères')
+    if (!session?.jeton) return flash('⚠️️ Backend injoignable')
+    changerMotDePasse(session.jeton, mdp.ancien, mdp.nouveau)
+      .then(() => {
+        setMdp({ ancien: '', nouveau: '', confirmation: '' })
+        flash('✅ Mot de passe modifié')
+      })
+      .catch((e) => flash(`❌ ${e.message}`))
+  }
+
   // ── Comptes (admin) ──
   function ajouterCompte() {
     if (!nouveauCompte.identifiant || !nouveauCompte.motDePasse) return flash('⚠️ identifiant et mot de passe requis')
-    if (comptes.some((c) => c.identifiant === nouveauCompte.identifiant)) return flash('⚠️ Identifiant déjà pris')
-    const liste = [...comptes, { ...nouveauCompte }]
-    setComptes(liste)
-    sauvegarderComptes(liste)
-    setNouveauCompte({ identifiant: '', motDePasse: '', role: 'admin' })
-    flash('✅ Compte créé')
+    if (!session?.jeton) return flash('⚠️ Backend injoignable')
+    creerCompte(session.jeton, nouveauCompte)
+      .then(() => chargerComptes(session.jeton))
+      .then((liste) => { setComptes(liste); setNouveauCompte({ identifiant: '', motDePasse: '', role: 'admin' }); flash('✅ Compte créé') })
+      .catch((e) => flash(`❌ ${e.message}`))
   }
   function supprimerCompte(ident) {
     if (ident === 'admin') return flash('⚠️ Le compte admin principal ne peut pas être supprimé')
     if (!confirm(`Supprimer le compte « ${ident} » ?`)) return
-    const liste = comptes.filter((c) => c.identifiant !== ident)
-    setComptes(liste)
-    sauvegarderComptes(liste)
-    flash('🗑️ Compte supprimé')
+    if (!session?.jeton) return flash('⚠️ Backend injoignable')
+    supprimerCompteApi(session.jeton, ident)
+      .then(() => chargerComptes(session.jeton))
+      .then(setComptes)
+      .then(() => flash('🗑️ Compte supprimé'))
+      .catch((e) => flash(`❌ ${e.message}`))
   }
 
   const onglets = [
@@ -192,10 +246,17 @@ export default function BackOffice({ onFermer }) {
         <div className="bo-actions">
           <span className="bo-user">{session.identifiant} ({session.role})</span>
           <button className="btn-principal" onClick={onFermer}>← Retour au quiz</button>
-          <button className="btn-principal" onClick={() => { deconnexion(); setSession(null) }}>Déconnexion</button>
+          <button className="btn-principal" onClick={() => {
+            if (session?.jeton) deconnexionAdmin(session.jeton).catch(() => {})
+            oublieSession()
+            setSession(null)
+          }}>Déconnexion</button>
         </div>
       </div>
       {message && <p className="bo-message">{message}</p>}
+      {apiHs && (
+        <p className="bo-erreur">🔌 Backend injoignable — les modifications ne seront pas partagées. Démarrez-le avec <code>npm run api</code>.</p>
+      )}
       <nav className="bo-onglets">
         {onglets.map((o) => (
           <button key={o.id} className={`bo-onglet ${onglet === o.id ? 'actif' : ''}`} onClick={() => setOnglet(o.id)}>{o.label}</button>
@@ -421,6 +482,29 @@ export default function BackOffice({ onFermer }) {
         </div>
       )}
 
+      {/* ── Sécurité : changement de mot de passe ── */}
+      <div className="bo-donnees">
+        <h3>🔒 Sécurité du compte</h3>
+        <p>Changez votre mot de passe ({session.identifiant}). Minimum 8 caractères — le compte par défaut « admin / admin » doit être changé dès la première connexion.</p>
+        <div className="bo-formulaire">
+          <label>
+            Ancien mot de passe
+            <input type="password" value={mdp.ancien} onChange={(e) => setMdp({ ...mdp, ancien: e.target.value })} />
+          </label>
+          <label>
+            Nouveau mot de passe
+            <input type="password" value={mdp.nouveau} onChange={(e) => setMdp({ ...mdp, nouveau: e.target.value })} />
+          </label>
+          <label>
+            Confirmer le nouveau mot de passe
+            <input type="password" value={mdp.confirmation} onChange={(e) => setMdp({ ...mdp, confirmation: e.target.value })} />
+          </label>
+          <div className="bo-actions">
+            <button className="btn-principal" onClick={changerMdp}>Modifier le mot de passe</button>
+          </div>
+        </div>
+      </div>
+
       {/* ── Comptes (admin) ── */}
       {onglet === 'comptes' && estAdmin && (
         <div className="bo-contenu">
@@ -453,7 +537,7 @@ export default function BackOffice({ onFermer }) {
       {/* ── Données : export / import / reset ── */}
       <div className="bo-donnees">
         <h3>📦 Données</h3>
-        <p>Les modifications sont enregistrées dans ce navigateur (localStorage). Exportez pour les intégrer au code source.</p>
+        <p>Les modifications sont enregistrées sur le backend partagé : tous les utilisateurs les voient immédiatement, sans mise à jour de fichiers.</p>
         <div className="bo-actions">
           <button className="btn-principal" onClick={() => exporterJSON(donnees)}>⬇️ Exporter JSON</button>
           <label className="btn-principal bo-import">
@@ -466,11 +550,11 @@ export default function BackOffice({ onFermer }) {
             }} />
           </label>
           <button className="btn-principal" onClick={() => {
-            if (confirm('Réinitialiser toutes les données locales vers celles du code source ?')) {
-              reinitialiserDonnees()
-              setDonnees(chargerDonnees())
-              flash('♻️ Données réinitialisées')
-            }
+            if (!confirm('Réinitialiser toutes les données vers celles du code source ?')) return
+            if (!session?.jeton) return flash('⚠️ Backend injoignable')
+            reinitialiserDonnees(session.jeton)
+              .then((d) => { setDonnees(d); flash('♻️ Données réinitialisées') })
+              .catch((e) => flash(`❌ ${e.message}`))
           }}>♻️ Réinitialiser</button>
         </div>
       </div>
