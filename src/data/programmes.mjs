@@ -105,7 +105,7 @@ export const QUESTIONS = [
     id: 'smic',
     theme: 'economie',
     texte: 'Le SMIC devrait être porté à au moins 1 600 € net par mois, avec une indexation des salaires sur l\'inflation.',
-    info: INFOS.smic,
+    info: 'smic',
     positions: {
       melenchon: { position: 1, source: 'Porter immédiatement le SMIC à 1600 euros net et indexer les salaires sur l\'inflation' },
       glucksmann: { position: 1, source: 'Augmenter le SMIC à 1600 euros net dans les deux ans' },
@@ -118,7 +118,7 @@ export const QUESTIONS = [
     id: 'fortunes',
     theme: 'economie',
     texte: 'Les très hauts patrimoines et les superprofits doivent être davantage taxés (retour de l\'ISF, taxe Zucman).',
-    info: INFOS.isf,
+    info: 'isf',
     positions: {
       melenchon: { position: 1, source: 'Rétablir l\'ISF, instaurer la taxe Zucman (2 % sur les patrimoines de milliardaires)' },
       glucksmann: { position: 1, source: 'Taxation des superprofits, des ultra-riches et des méga-héritages pour augmenter les salaires' },
@@ -131,7 +131,7 @@ export const QUESTIONS = [
     id: 'travail',
     theme: 'economie',
     texte: 'Il faut travailler davantage : assouplir les 35 heures et inciter au travail supplémentaire plutôt que redistribuer.',
-    info: INFOS.travail35h,
+    info: 'travail35h',
     positions: {
       melenchon: { position: -1, source: 'Rétablir les 35 heures et passer aux 32 heures dans les métiers pénibles' },
       glucksmann: { position: -1, source: 'Rééquilibrer la taxation du travail et du capital pour que le travail paie, sans allonger le temps de travail' },
@@ -144,7 +144,7 @@ export const QUESTIONS = [
     id: 'impots',
     theme: 'economie',
     texte: 'Il faut baisser les impôts des ménages et des entreprises, quitte à réduire les services publics.',
-    info: INFOS.impotsRevenu,
+    info: 'impotsRevenu',
     positions: {
       melenchon: { position: -1, source: 'Augmenter les recettes (ISF, taxe Zucman) pour financer les services publics ; pas de baisse d\'impôts' },
       glucksmann: { position: -1, source: 'Fiscalité des ultra-riches et des superprofits plutôt que baisses d\'impôts' },
@@ -157,7 +157,7 @@ export const QUESTIONS = [
     id: 'dettes',
     theme: 'economie',
     texte: 'Réduire la dette et les déficits publics doit être la priorité absolue, même si cela impose des coupes budgétaires.',
-    info: INFOS.dettePublique,
+    info: 'dettePublique',
     positions: {
       melenchon: { position: -1, source: 'Plan d\'investissements de 200 Md€ ; la discipline budgétaire n\'est pas la priorité' },
       glucksmann: { position: -1, source: 'Investir massivement (écologie, défense, salaires), financé par les ultra-riches' },
@@ -171,7 +171,7 @@ export const QUESTIONS = [
     id: 'retraite',
     theme: 'retraites',
     texte: 'Il faut abroger la réforme des retraites de 2023.',
-    info: INFOS.retraite2023,
+    info: 'retraite2023',
     positions: {
       melenchon: { position: 1, source: 'Abroger la réforme de 2023 et rétablir la retraite à 60 ans (40 annuités)' },
       glucksmann: { position: 1, source: 'Abroger la réforme des retraites de 2023, âge légal à 62 ans' },
@@ -184,7 +184,7 @@ export const QUESTIONS = [
     id: 'capitalisation',
     theme: 'retraites',
     texte: 'Une part de retraite par capitalisation devrait être généralisée pour compléter le système par répartition.',
-    info: INFOS.retraitesHistoire,
+    info: 'retraitesHistoire',
     positions: {
       melenchon: { position: -1, source: 'Système par répartition exclusivement, refus de la capitalisation' },
       glucksmann: { position: -1, source: 'Maintien de la répartition, sans capitalisation' },
@@ -197,7 +197,7 @@ export const QUESTIONS = [
     id: 'age65',
     theme: 'retraites',
     texte: 'L\'âge légal de départ à la retraite devrait être relevé à 65 ans et au-delà.',
-    info: INFOS.retraite2023,
+    info: 'retraite2023',
     positions: {
       melenchon: { position: -1, source: 'Retraite à 60 ans (40 annuités)' },
       glucksmann: { position: -1, source: 'Âge légal à 62 ans, départs anticipés selon la pénibilité' },
@@ -210,7 +210,7 @@ export const QUESTIONS = [
     id: 'petites_retraites',
     theme: 'retraites',
     texte: 'Les petites retraites doivent être fortement revalorisées, y compris au-delà de l\'inflation.',
-    info: INFOS.retraite2023,
+    info: 'retraite2023',
     positions: {
       melenchon: { position: 1, source: 'Porter les petites retraites au niveau du SMIC' },
       glucksmann: { position: 1, source: 'Revalorisation des petites retraites et garantie d\'un niveau décent' },
@@ -223,7 +223,7 @@ export const QUESTIONS = [
     id: 'penibilite',
     theme: 'retraites',
     texte: 'Les départs anticipés pour pénibilité au travail doivent être élargis et facilités.',
-    info: INFOS.retraite2023,
+    info: 'retraite2023',
     positions: {
       melenchon: { position: 1, source: 'Départ anticipé pour pénibilité, 32 heures dans les métiers pénibles' },
       glucksmann: { position: 1, source: 'Départs anticipés selon la pénibilité des carrières' },
@@ -237,7 +237,7 @@ export const QUESTIONS = [
     id: 'sixieme',
     theme: 'institutions',
     texte: 'La France devrait remplacer la 5e République par une 6e République, avec une nouvelle Constitution.',
-    info: INFOS.regimes,
+    info: 'regimes',
     positions: {
       melenchon: { position: 1, source: 'Convoquer une assemblée constituante pour la 6e République' },
       glucksmann: { position: 0, source: 'Réformer la Constitution (investiture du Premier ministre, article 16) sans changer de République' },
@@ -250,7 +250,7 @@ export const QUESTIONS = [
     id: 'censure493',
     theme: 'institutions',
     texte: 'Le 49.3 devrait être supprimé : le gouvernement ne devrait plus pouvoir faire adopter une loi sans le vote des députés.',
-    info: INFOS.censure,
+    info: 'censure',
     positions: {
       melenchon: { position: 1, source: 'Abolir le 49.3' },
       glucksmann: { position: 1, source: 'Fin du 49.3 et de l\'article 16' },
@@ -263,7 +263,7 @@ export const QUESTIONS = [
     id: 'proportionnelle',
     theme: 'institutions',
     texte: 'Les députés devraient être élus, au moins en partie, à la proportionnelle.',
-    info: INFOS.scrutin,
+    info: 'scrutin',
     positions: {
       melenchon: { position: 1, source: 'Proportionnelle intégrale pour l\'élection de l\'Assemblée' },
       glucksmann: { position: 1, source: 'Proportionnelle pour l\'élection des députés' },
@@ -276,7 +276,7 @@ export const QUESTIONS = [
     id: 'vote16',
     theme: 'institutions',
     texte: 'Le droit de vote devrait être ouvert dès 16 ans.',
-    info: INFOS.droitVote,
+    info: 'droitVote',
     positions: {
       melenchon: { position: 1, source: 'Droit de vote à 16 ans pour tous les scrutins, reconnaissance du vote blanc' },
       glucksmann: { position: 1, source: 'Ouvrir le droit de vote à 16 ans' },
@@ -289,7 +289,7 @@ export const QUESTIONS = [
     id: 'vote_etrangers',
     theme: 'institutions',
     texte: 'Les étrangers résidents en situation régulière devraient pouvoir voter aux élections locales.',
-    info: INFOS.voteEtrangers,
+    info: 'voteEtrangers',
     positions: {
       melenchon: { position: 1, source: 'Instituer le droit de vote des étrangers aux élections locales' },
       glucksmann: { position: 1, source: 'Ouvrir le droit de vote aux étrangers extra-communautaires aux élections locales' },
@@ -303,7 +303,7 @@ export const QUESTIONS = [
     id: 'immigration_quotas',
     theme: 'immigration',
     texte: 'L\'immigration devrait être fortement réduite, avec des quotas annuels votés par le Parlement.',
-    info: INFOS.loiImmigration,
+    info: 'loiImmigration',
     positions: {
       melenchon: { position: -1, source: 'Politique migratoire humaniste : régularisations, voies légales et sûres' },
       glucksmann: { position: -1, source: 'Voies légales d\'immigration de travail, abrogation de la loi immigration de 2024' },
@@ -316,7 +316,7 @@ export const QUESTIONS = [
     id: 'asile',
     theme: 'immigration',
     texte: 'Le droit d\'asile et le regroupement familial doivent être fortement restreints.',
-    info: INFOS.asile,
+    info: 'asile',
     positions: {
       melenchon: { position: -1, source: 'Abroger les dernières lois asile et immigration, accès à l\'AME, accueil digne' },
       glucksmann: { position: -1, source: 'Abrogation de la loi immigration de 2024, fin du règlement Dublin' },
@@ -329,7 +329,7 @@ export const QUESTIONS = [
     id: 'expulsion',
     theme: 'immigration',
     texte: 'Les étrangers en situation irrégulière ou délinquants devraient être systématiquement expulsés.',
-    info: INFOS.eloignement,
+    info: 'eloignement',
     positions: {
       melenchon: { position: -1, source: 'Régularisation des travailleurs, étudiants, parents d\'enfants scolarisés ; titre de séjour de 10 ans' },
       glucksmann: { position: -1, source: 'Refus de l\'externalisation des politiques migratoires ; accords de réadmission négociés' },
@@ -342,7 +342,7 @@ export const QUESTIONS = [
     id: 'regularisation',
     theme: 'immigration',
     texte: 'Les travailleurs étrangers en situation irrégulière devraient être régularisés, notamment dans les métiers en tension.',
-    info: INFOS.loiImmigration,
+    info: 'loiImmigration',
     positions: {
       melenchon: { position: 1, source: 'Régularisation des travailleurs, étudiants et parents d\'enfants scolarisés' },
       glucksmann: { position: 1, source: 'Régularisation dans les métiers en tension, régularisation humaniste' },
@@ -355,7 +355,7 @@ export const QUESTIONS = [
     id: 'priorite_nationale',
     theme: 'immigration',
     texte: 'Les aides sociales et logements sociaux devraient être réservés en priorité aux Français.',
-    info: INFOS.loiImmigration,
+    info: 'loiImmigration',
     positions: {
       melenchon: { position: -1, source: 'Aides sociales universelles basées sur la résidence, pas sur la nationalité' },
       glucksmann: { position: -1, source: 'Refus de la préférence nationale' },
@@ -369,7 +369,7 @@ export const QUESTIONS = [
     id: 'justice',
     theme: 'securite',
     texte: 'La justice doit être beaucoup plus ferme : peines planchers, fin des aménagements de peine.',
-    info: INFOS.peinesPlanchers,
+    info: 'peinesPlanchers',
     positions: {
       melenchon: { position: -1, source: 'Régulation carcérale contre la surpopulation, police de proximité, interdiction des LBD' },
       glucksmann: { position: -1, source: 'Police de proximité, prévention de la délinquance, Maisons du droit et de la justice' },
@@ -382,7 +382,7 @@ export const QUESTIONS = [
     id: 'prison',
     theme: 'securite',
     texte: 'Il faut construire massivement de nouvelles places de prison.',
-    info: INFOS.prison,
+    info: 'prison',
     positions: {
       melenchon: { position: -1, source: 'Régulation carcérale : réduire la population carcérale, alternatives à l\'emprisonnement' },
       glucksmann: { position: 0, source: 'Priorité à la prévention et aux Maisons du droit, pas à un plan carcéral massif' },
@@ -395,7 +395,7 @@ export const QUESTIONS = [
     id: 'police',
     theme: 'securite',
     texte: 'Il faut renforcer les moyens et les prérogatives des forces de l\'ordre (présomption de légitime défense).',
-    info: INFOS.policeQuotidien,
+    info: 'policeQuotidien',
     positions: {
       melenchon: { position: -1, source: 'Démanteler les BAC et BRAV-M, interdire tasers et grenades de désencerclement, désescalade' },
       glucksmann: { position: 0, source: 'Police de proximité moderne + muscler les moyens d\'enquête contre le narcotrafic' },
@@ -408,7 +408,7 @@ export const QUESTIONS = [
     id: 'narco',
     theme: 'securite',
     texte: 'Il faut des moyens d\'exception contre le narcotrafic (état d\'urgence narco, reconnaissance faciale ciblée).',
-    info: INFOS.narcotrafic,
+    info: 'narcotrafic',
     positions: {
       melenchon: { position: -1, source: 'Refus des régimes d\'exception ; traiter les causes sociales et l\'argent du narcotrafic' },
       glucksmann: { position: 0, source: 'Renforcer les moyens d\'enquête et le parquet européen contre le narcotrafic, sans régime d\'exception' },
@@ -421,7 +421,7 @@ export const QUESTIONS = [
     id: 'proximite',
     theme: 'securite',
     texte: 'Il faut développer la police de proximité et la prévention, plutôt que la seule répression.',
-    info: INFOS.policeQuotidien,
+    info: 'policeQuotidien',
     positions: {
       melenchon: { position: 1, source: 'Police de proximité, désescalade, fin des BAC' },
       glucksmann: { position: 1, source: 'Police de proximité, prévention de la délinquance' },
@@ -435,7 +435,7 @@ export const QUESTIONS = [
     id: 'nucleaire',
     theme: 'ecologie',
     texte: 'Le nucléaire est essentiel : il faut lancer de nouveaux réacteurs (EPR) pour garantir notre souveraineté énergétique.',
-    info: INFOS.epr2,
+    info: 'epr2',
     positions: {
       melenchon: { position: -1, source: 'Sortir du nucléaire : abandonner les projets d\'EPR, planifier le démantèlement' },
       glucksmann: { position: 1, source: 'Mix décarboné : conforter le nucléaire (sûreté + nouvelles unités) et renouvelables massives' },
@@ -448,7 +448,7 @@ export const QUESTIONS = [
     id: 'ecologie_sociale',
     theme: 'ecologie',
     texte: 'La transition écologique doit être massive et sociale (rénovation, transports publics, interdiction des produits polluants), même si elle contraint.',
-    info: INFOS.precariteEnergetique,
+    info: 'precariteEnergetique',
     positions: {
       melenchon: { position: 1, source: 'Plan de 200 Md€ d\'investissements écologiques, -65 % d\'émissions en 2030, 700 000 isolations/an' },
       glucksmann: { position: 1, source: 'Grande loi Climat (-90 % en 2040), bouclier climat, fin des plastiques jetables en 2030' },
@@ -461,7 +461,7 @@ export const QUESTIONS = [
     id: 'eoliennes',
     theme: 'ecologie',
     texte: 'Il faut stopper le développement des éoliennes, notamment en mer.',
-    info: INFOS.eolienMer,
+    info: 'eolienMer',
     positions: {
       melenchon: { position: -1, source: 'Développement des renouvelables (solaire, éolien) dans le plan de bifurcation écologique' },
       glucksmann: { position: -1, source: 'Renouvelables massives : éolien, solaire, hydrogène vert' },
@@ -474,7 +474,7 @@ export const QUESTIONS = [
     id: 'bouclier_energie',
     theme: 'ecologie',
     texte: 'L\'État doit continuer de plafonner les prix de l\'énergie (bouclier tarifaire), même si cela coûte cher aux finances publiques.',
-    info: INFOS.bouclierTarifaire,
+    info: 'bouclierTarifaire',
     positions: {
       melenchon: { position: 1, source: 'Instaurer une première tranche gratuite d\'électricité, d\'eau et de gaz' },
       glucksmann: { position: 1, source: 'Bouclier énergie et bouclier sobriété pour protéger les ménages' },
@@ -487,7 +487,7 @@ export const QUESTIONS = [
     id: 'agriculture',
     theme: 'ecologie',
     texte: 'L\'agriculture industrielle doit être réduite : interdiction des élevages intensifs et sortie des pesticides les plus dangereux.',
-    info: INFOS.ecophyto,
+    info: 'ecophyto',
     positions: {
       melenchon: { position: 1, source: 'Interdire l\'élevage intensif, fermer les fermes-usines, éradiquer les pesticides dangereux' },
       glucksmann: { position: 1, source: 'Réduction des pesticides, bien-être animal, réforme de l\'agriculture intensive' },
@@ -501,7 +501,7 @@ export const QUESTIONS = [
     id: 'ecole',
     theme: 'education',
     texte: 'L\'école doit revenir aux fondamentaux et à l\'autorité (discipline, exigence) plutôt qu\'à la pédagogie.',
-    info: INFOS.ecoleElementaire,
+    info: 'ecoleElementaire',
     positions: {
       melenchon: { position: -1, source: 'Gratuité réelle, effectifs réduits, accès sans sélection au supérieur' },
       glucksmann: { position: 0, source: 'Revaloriser les enseignants, mixité sociale, module Médias et Influence' },
@@ -514,7 +514,7 @@ export const QUESTIONS = [
     id: 'uniforme',
     theme: 'education',
     texte: 'L\'uniforme devrait être généralisé à l\'école, au collège et au lycée.',
-    info: INFOS.uniforme,
+    info: 'uniforme',
     positions: {
       melenchon: { position: -1, source: 'Contre l\'uniforme : pas de mesure de ce type dans le programme' },
       glucksmann: { position: -1, source: 'Pas d\'uniforme dans le programme' },
@@ -527,7 +527,7 @@ export const QUESTIONS = [
     id: 'enseignants',
     theme: 'education',
     texte: 'Les salaires des enseignants devraient être fortement revalorisés (vers la moyenne européenne).',
-    info: INFOS.remunerationEnseignants,
+    info: 'remunerationEnseignants',
     positions: {
       melenchon: { position: 1, source: 'Indexation des salaires sur l\'inflation dans la fonction publique' },
       glucksmann: { position: 1, source: 'Revalorisation continue et planifiée des enseignants sur 5 ans (rattrapage OCDE)' },
@@ -540,7 +540,7 @@ export const QUESTIONS = [
     id: 'parcoursup',
     theme: 'education',
     texte: 'Parcoursup doit être supprimé ou profondément réformé pour garantir l\'accès aux études sans sélection à l\'université.',
-    info: INFOS.parcoursup,
+    info: 'parcoursup',
     positions: {
       melenchon: { position: 1, source: 'Supprimer Parcoursup, accès de droit au supérieur pour tout bachelier' },
       glucksmann: { position: 0, source: 'Réformer l\'accompagnement et l\'orientation, pas d\'abolition annoncée' },
@@ -553,7 +553,7 @@ export const QUESTIONS = [
     id: 'effectifs',
     theme: 'education',
     texte: 'Il faut réduire fortement le nombre d\'élèves par classe, en priorité dans les quartiers populaires.',
-    info: INFOS.educationPrioritaire,
+    info: 'educationPrioritaire',
     positions: {
       melenchon: { position: 1, source: 'Effectifs réduits à l\'école primaire, classes ciblées REP+' },
       glucksmann: { position: 1, source: 'Réduire les effectifs, notamment en éducation prioritaire' },
@@ -567,7 +567,7 @@ export const QUESTIONS = [
     id: 'europe',
     theme: 'europe',
     texte: 'La France doit approfondir la construction européenne (fédéralisme, fonds communs) plutôt que renégocier sa place.',
-    info: INFOS.constructionUE,
+    info: 'constructionUE',
     positions: {
       melenchon: { position: -1, source: 'Désobéir aux traités : refus des normes UE incompatibles' },
       glucksmann: { position: 1, source: 'États-Unis d\'Europe, fonds européen de défense 500 Md€, traité de réunification' },
@@ -580,7 +580,7 @@ export const QUESTIONS = [
     id: 'ukraine',
     theme: 'europe',
     texte: 'La France doit continuer à soutenir l\'Ukraine, y compris par une aide militaire, jusqu\'au retrait des troupes russes des territoires occupés.',
-    info: INFOS.ukraine,
+    info: 'ukraine',
     positions: {
       melenchon: { position: -1, source: 'Cessez-le-feu et négociations diplomatiques, refus de l\'escalade' },
       glucksmann: { position: 1, source: 'Augmenter drastiquement l\'aide militaire à l\'Ukraine, première ligne de défense' },
@@ -593,7 +593,7 @@ export const QUESTIONS = [
     id: 'otan',
     theme: 'europe',
     texte: 'La France devrait sortir du commandement intégré de l\'OTAN.',
-    info: INFOS.otan,
+    info: 'otan',
     positions: {
       melenchon: { position: 1, source: 'Sortie du commandement intégré de l\'OTAN, non-alignement' },
       glucksmann: { position: -1, source: 'Renforcer l\'OTAN et bâtir l\'Europe de la défense en son sein' },
@@ -606,7 +606,7 @@ export const QUESTIONS = [
     id: 'budget_ue',
     theme: 'europe',
     texte: 'La contribution française au budget européen doit être réduite.',
-    info: INFOS.budgetUE,
+    info: 'budgetUE',
     positions: {
       melenchon: { position: 0, source: 'Désobéir aux traités et renégocier, sans réduire unilatéralement la contribution' },
       glucksmann: { position: -1, source: 'Fonds communs européens (défense, climat) financés collectivement' },
@@ -619,7 +619,7 @@ export const QUESTIONS = [
     id: 'buy_european',
     theme: 'europe',
     texte: 'L\'Europe doit protéger son industrie : préférence européenne dans les marchés publics (Buy European Act).',
-    info: INFOS.marcheUnique,
+    info: 'marcheUnique',
     positions: {
       melenchon: { position: 0, source: 'Préférence nationale française plutôt qu\'européenne' },
       glucksmann: { position: 1, source: 'Buy European Act, préférence européenne dans les commandes publiques' },
