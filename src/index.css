@@ -48,6 +48,10 @@ body {
   box-shadow: 0 10px 30px rgba(31, 22, 51, 0.08);
 }
 .bloc h2 { font-size: 1.6rem; margin-bottom: 12px; }
+.disclaimer { border-left: 6px solid #ffb020; background: #fffdf5; font-size: 0.92rem; }
+.disclaimer h3 { margin-bottom: 10px; }
+.disclaimer p { line-height: 1.55; margin-bottom: 10px; }
+.disclaimer p:last-child { margin-bottom: 0; }
 .bloc p { line-height: 1.6; margin-bottom: 16px; }
 .points { list-style: none; margin-bottom: 24px; }
 .points li { padding: 6px 0; font-weight: 600; }
