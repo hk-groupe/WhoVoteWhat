@@ -54,7 +54,9 @@ export const THEMES = {
   securite: { label: 'Sécurité & justice', emoji: '⚖️' },
   ecologie: { label: 'Écologie & énergie', emoji: '🌱' },
   education: { label: 'Éducation', emoji: '🎓' },
-  europe: { label: 'Europe & international', emoji: '🇪🇺' },
+  europe: { label: 'Europe & politique internationale', emoji: '🇪🇺' },
+  numerique: { label: 'Numérique & IA', emoji: '💻' },
+  religion: { label: 'Religion & laïcité', emoji: '🕊️' },
 }
 
 // Liens "En savoir plus" : fiches officielles (vie-publique.fr, service-public.gouv.fr, info.gouv.fr) et ressources complémentaires
@@ -96,6 +98,22 @@ export const INFOS = {
   epr2: [{ titre: 'La construction des réacteurs EPR2 (vie-publique.fr)', url: 'https://www.vie-publique.fr/en-bref/283969-construction-de-reacteurs-epr2-quel-cout-quels-risques' }],
   otan: [{ titre: 'La France et l\'OTAN (vie-publique.fr)', url: 'https://www.vie-publique.fr/discours-dans-lactualite/284158-l-otan-dans-les-discours-publics' }],
   parcoursup: [{ titre: 'Parcoursup, la plateforme d\'admission post-bac (service-public.gouv.fr)', url: 'https://www.service-public.gouv.fr/particuliers/vosdroits/F23476' }],
+  // ── Fiches officielles : numérique ──
+  rgpd: [{ titre: 'Le RGPD, règlement général sur la protection des données (cnil.fr)', url: 'https://www.cnil.fr/fr/reglement-europeen-protection-donnees' }],
+  ia: [{ titre: 'Intelligence artificielle : les enjeux pour les droits des personnes (cnil.fr)', url: 'https://www.cnil.fr/fr/intelligence-artificielle' }],
+  reglementIA: [{ titre: 'Le règlement européen sur l\'intelligence artificielle (Commission européenne)', url: 'https://digital-strategy.ec.europa.eu/fr/policies/regulatory-framework-ai' }],
+  reseauxSociaux: [{ titre: 'Protection des mineurs sur les réseaux sociaux, loi du 31 mai 2024 (legifrance.gouv.fr)', url: 'https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000049663281' }],
+  cloudSouverain: [{ titre: 'Le cloud souverain, enjeu stratégique (vie-publique.fr)', url: 'https://www.vie-publique.fr/en-bref/285862-le-cloud-souverain-enjeu-strategique-de-souverainete-numerique' }],
+  cryptographie: [{ titre: 'Le chiffrement des communications, fiche ANSSI (cyber.gouv.fr)', url: 'https://cyber.gouv.fr/guide/crypto/fiche.html' }],
+  cyber: [{ titre: 'La stratégie nationale de cyberdéfense (cyber.gouv.fr)', url: 'https://cyber.gouv.fr/la-strategie-nationale-de-cyberdefense' }],
+  // ── Fiches officielles : religion & laïcité ──
+  laicite: [{ titre: 'La laïcité à l\'École (education.gouv.fr)', url: 'https://www.education.gouv.fr/la-laicite-l-ecole-12482' }],
+  religion1905: [{ titre: 'La loi du 9 décembre 1905 sur la séparation des Églises et de l\'État (vie-publique.fr)', url: 'https://www.vie-publique.fr/eclairage/19453-la-loi-du-9-decembre-1905-sur-la-separation-des-eglises-et-de-letat' }],
+  cultes: [{ titre: 'Le régime juridique des cultes (interieur.gouv.fr)', url: 'https://www.interieur.gouv.fr/actualites/communique-de-presse/objet-et-regime-juridique-des-cultes' }],
+  financementCultes: [{ titre: 'Le financement de la vie politique (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/18771-le-financement-de-la-vie-politique' }],
+  // ── Fiches officielles : politique internationale ──
+  aideAuDeveloppement: [{ titre: 'La politique française de développement international (vie-publique.fr)', url: 'https://www.vie-publique.fr/eclairage/286111-politique-francaise-de-developpement-et-de-solidarite-internationale' }],
+  onu: [{ titre: 'La France et les Nations unies (vie-publique.fr)', url: 'https://www.vie-publique.fr/fiches/20194-la-france-et-les-nations-unies' }],
 }
 
 // position: 1 = pour, 0 = nuancé, -1 = contre
@@ -626,6 +644,788 @@ export const QUESTIONS = [
       attal: { position: 1, source: 'Préférence européenne, réindustrialisation' },
       philippe: { position: 1, source: 'Buy European Tech Act, protection du marché UE' },
       lepen: { position: 0, source: 'Préférence nationale française plutôt qu\'européenne' },
+    },
+  },
+
+// ── Nouvelles questions (passage à 100 questions, 10 par thème) ──
+  {
+    id: 'protections_sociales',
+    theme: 'economie',
+    texte: 'La protection sociale (santé, famille, logement) doit être étendue et renforcée, quitte à augmenter les cotisations et la dépense publique.',
+    info: 'impotsRevenu',
+    positions: {
+      melenchon: { position: 1, source: 'Élargir la protection sociale, remboursement à 100 % des soins' },
+      glucksmann: { position: 1, source: 'Étendre la protection sociale, santé pour tous' },
+      attal: { position: 0, source: 'Renforcer le travail plutôt que la dépense sociale' },
+      philippe: { position: -1, source: 'Réduire la dépense sociale pour baisser la dette' },
+      lepen: { position: 0, source: 'Défendre les retraites et la santé, mais sans hausse de cotisations' }
+    },
+  },
+  {
+    id: 'pme',
+    theme: 'economie',
+    texte: 'Il faut alléger massivement les charges et impôts des PME et artisans pour relancer la production et l\'emploi.',
+    info: 'travail35h',
+    positions: {
+      melenchon: { position: 0, source: 'Soutien aux TPE/PME via la commande publique, pas de cadeaux fiscaux généralisés' },
+      glucksmann: { position: 1, source: 'Baisse ciblée des charges sur les PME manufacturières' },
+      attal: { position: 1, source: 'Baisse des impôts de production pour les entreprises qui produisent en France' },
+      philippe: { position: 1, source: '50 Md€ de baisses d\'impôts de production' },
+      lepen: { position: 1, source: 'Exonérations de charges pour les TPE et l\'artisanat' }
+    },
+  },
+  {
+    id: 'pouvoir_achat_tva',
+    theme: 'economie',
+    texte: 'Il faut baisser la TVA sur les produits de première nécessité (alimentation, énergie) pour redonner du pouvoir d\'achat.',
+    info: 'impotsRevenu',
+    positions: {
+      melenchon: { position: 0, source: 'Baisser la TVA sur les produits essentiels, surtout via salaires' },
+      glucksmann: { position: 0, source: 'Cibler les ménages modestes plutôt que la TVA' },
+      attal: { position: 0, source: 'Préférer l\'exonération d\'heures supplémentaires' },
+      philippe: { position: -1, source: 'Refus de baisser les recettes fiscales' },
+      lepen: { position: 1, source: 'TVA 5,5 % sur l\'énergie et les produits de première nécessité' }
+    },
+  },
+  {
+    id: 'marchandise_finance',
+    theme: 'economie',
+    texte: 'Il faut encadrer strictement la finance : taxer les transactions financières et séparer les banques de dépôt et d\'affaires.',
+    info: 'dettePublique',
+    positions: {
+      melenchon: { position: 1, source: 'Séparer les banques, taxer les transactions financières' },
+      glucksmann: { position: 0, source: 'Encadrer la finance, mais sans séparation forcée' },
+      attal: { position: -1, source: 'Assumer la place de Paris, pas de taxe supplémentaire' },
+      philippe: { position: -1, source: 'Pas de nouvelle taxation de la finance' },
+      lepen: { position: 0, source: 'Taxe sur les transactions, sans séparation bancaire' }
+    },
+  },
+  {
+    id: 'industrialisation',
+    theme: 'economie',
+    texte: 'L\'État doit piloter une politique industrielle volontariste (réindustrialisation, régalien étendu à l\'économie).',
+    info: 'marcheUnique',
+    positions: {
+      melenchon: { position: 1, source: 'Planification écologique, réquisitions et pôles publics industriels' },
+      glucksmann: { position: 1, source: 'Réindustrialiser par l\'Europe-puissance et l\'investissement' },
+      attal: { position: 1, source: 'Réindustrialiser la France, \'France qui produit\'' },
+      philippe: { position: 1, source: 'Réindustrialisation, attraction des investissements' },
+      lepen: { position: 0, source: 'Réindustrialisation aidée, mais sans étatisation' }
+    },
+  },
+  {
+    id: 'indexation_retraites',
+    theme: 'retraites',
+    texte: 'Les retraites doivent être indexées chaque année sur l\'inflation ou le salaire moyen, par obligation légale.',
+    info: 'retraite2023',
+    positions: {
+      melenchon: { position: 1, source: 'Indexation légale des retraites sur l\'inflation' },
+      glucksmann: { position: 1, source: 'Indexer les petites retraites sur l\'inflation' },
+      attal: { position: 0, source: 'Revalorisation au cas par cas, sous réserve budgétaire' },
+      philippe: { position: -1, source: 'Revalorisation conditionnée à la croissance, pas d\'indexation automatique' },
+      lepen: { position: 1, source: 'Indexation sur l\'inflation garantie' }
+    },
+  },
+  {
+    id: 'retraite_jeunes',
+    theme: 'retraites',
+    texte: 'Les jeunes générations, en fin de carrière, doivent financer la retraite des générations précédentes.',
+    info: 'retraitesHistoire',
+    positions: {
+      melenchon: { position: 0, source: 'Financer par le capital et les hauts revenus, pas par les jeunes' },
+      glucksmann: { position: 0, source: 'Partage équilibré, pas de report sur les jeunes' },
+      attal: { position: 0, source: 'Refus de la \'dette morale\' mais fin de la surindexation' },
+      philippe: { position: 1, source: 'Assumer le fait que la surindexation actuelle est un transfert injuste vers les aînés' },
+      lepen: { position: 0, source: 'Ne pas opposer les générations' }
+    },
+  },
+  {
+    id: 'fonds_pension',
+    theme: 'retraites',
+    texte: 'Il faut développer l\'épargne retraite et les fonds de pension par capitalisation en complément de la répartition.',
+    info: 'capitalisation',
+    positions: {
+      melenchon: { position: -1, source: 'Refus des fonds de pension, défense de la répartition' },
+      glucksmann: { position: -1, source: 'Refus des fonds de pension par répartition' },
+      attal: { position: 0, source: 'Encourager l\'épargne retraite volontaire' },
+      philippe: { position: 1, source: 'Développer la capitalisation et l\'épargne retraite' },
+      lepen: { position: 0, source: 'Ne pas toucher au système par répartition' }
+    },
+  },
+  {
+    id: 'assurance_vieillesse',
+    theme: 'retraites',
+    texte: 'Le financement des retraites doit relever d\'une assurance sociale universelle, financée par l\'impôt ou la CSG, plutôt que par des cotisations salariales.',
+    info: 'retraite2023',
+    positions: {
+      melenchon: { position: 1, source: 'Financer les retraites par l\'impôt, non par les salaires' },
+      glucksmann: { position: 0, source: 'Cotisations et CSG, équilibre à trouver' },
+      attal: { position: 0, source: 'CSG et cotisations, selon les besoins' },
+      philippe: { position: -1, source: 'Financer par le travail, pas par l\'impôt' },
+      lepen: { position: 0, source: 'CSG existante, pas d\'extension' }
+    },
+  },
+  {
+    id: 'cumul_retraite',
+    theme: 'retraites',
+    texte: 'Il faut autoriser pleinement le cumul emploi-retraite pour encourager les seniors actifs à travailler.',
+    info: 'travail35h',
+    positions: {
+      melenchon: { position: 0, source: 'Possible, mais pas un objectif de report d\'âge' },
+      glucksmann: { position: 1, source: 'Faciliter le cumul emploi-retraite' },
+      attal: { position: 1, source: 'Cumul intégral emploi-retraite' },
+      philippe: { position: 1, source: 'Cumul simplifié pour les seniors' },
+      lepen: { position: 1, source: 'Cumul emploi-retraite facilité' }
+    },
+  },
+  {
+    id: 'referendum_initiative',
+    theme: 'institutions',
+    texte: 'Les citoyens doivent pouvoir déclencher un référendum d\'initiative citoyenne (RIC) en réunissant un nombre de signatures.',
+    info: 'droitVote',
+    positions: {
+      melenchon: { position: 1, source: 'RIC à part entière dans la 6e République' },
+      glucksmann: { position: 1, source: 'RIC pour l\'écologie et les grandes réformes' },
+      attal: { position: 0, source: 'Pas de RIC général, mais référendum d\'initiative parlementaire' },
+      philippe: { position: 0, source: 'Élargir le RIP parlementaire, pas citoyen' },
+      lepen: { position: 1, source: 'RIC, référendum d\'initiative populaire' }
+    },
+  },
+  {
+    id: 'statut_elu',
+    theme: 'institutions',
+    texte: 'Il faut un vrai statut de l\'élu local : indemnités décentes, formation, protection, remplacement.',
+    info: 'censure',
+    positions: {
+      melenchon: { position: 1, source: 'Statut de l\'élu et remboursement des frais' },
+      glucksmann: { position: 1, source: 'Statut de l\'élu et aide à l\'exercice du mandat' },
+      attal: { position: 0, source: 'Améliorer le statut de l\'élu sans révolutionner' },
+      philippe: { position: 0, source: 'Statut de l\'élu, à titre d\'amélioration' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'cumul_mandats',
+    theme: 'institutions',
+    texte: 'Le non-cumul des mandats doit être élargi (locaux + nationaux) et strictement limité dans le temps.',
+    info: 'droitVote',
+    positions: {
+      melenchon: { position: 1, source: 'Non-cumul total et limitation du nombre de mandats' },
+      glucksmann: { position: 1, source: 'Non-cumul élargi' },
+      attal: { position: 0, source: 'Non-cumul actuel suffisant, pas d\'extension' },
+      philippe: { position: 0, source: 'Pas d\'extension du non-cumul' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'senat',
+    theme: 'institutions',
+    texte: 'Le Sénat doit être supprimé ou transformé en assemblée de représentation des territoires avec pouvoirs réduits.',
+    info: 'regimes',
+    positions: {
+      melenchon: { position: 1, source: 'Supprimer le Sénat, assemblée unique dans la 6e République' },
+      glucksmann: { position: 0, source: 'Réformer le Sénat, pas le supprimer' },
+      attal: { position: -1, source: 'Garder le bicamérisme' },
+      philippe: { position: -1, source: 'Garder le Sénat, réformer les modes de désignation' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'justice_independance',
+    theme: 'institutions',
+    texte: 'L\'indépendance de la justice doit être renforcée : magistrats protégés, parquet indépendant du pouvoir exécutif.',
+    info: 'peinesPlanchers',
+    positions: {
+      melenchon: { position: 1, source: 'Protection des magistrats, parquet indépendant' },
+      glucksmann: { position: 1, source: 'Indépendance du parquet, statut des magistrats' },
+      attal: { position: 0, source: 'Réformes en cours, pas de rupture statutaire' },
+      philippe: { position: 0, source: 'Renforcer la formation et l\'indépendance, sans révolution' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'immigration_travail',
+    theme: 'immigration',
+    texte: 'L\'immigration doit être strictement encadrée, les titres de séjour liés à des besoins économiques précis.',
+    info: 'loiImmigration',
+    positions: {
+      melenchon: { position: -1, source: 'Titre de séjour de longue durée, régularisation' },
+      glucksmann: { position: 0, source: 'Immigration de travail utile, mais droits garantis' },
+      attal: { position: 1, source: 'Immigration strictement liée aux besoins du marché du travail' },
+      philippe: { position: 1, source: 'Immigration de travail et de talent' },
+      lepen: { position: 1, source: 'Réduire l\'immigration économique' }
+    },
+  },
+  {
+    id: 'immigration_integration',
+    theme: 'immigration',
+    texte: 'Il faut investir massivement dans l\'intégration : apprentissage du français, insertion à l\'emploi, accès aux droits.',
+    info: 'asile',
+    positions: {
+      melenchon: { position: 1, source: 'Égalité des droits et intégration renforcée' },
+      glucksmann: { position: 1, source: 'Politique d\'intégration volontariste' },
+      attal: { position: 0, source: 'Intégration utile, pas de dépense massive' },
+      philippe: { position: 0, source: 'Intégration conditionnée au mérite' },
+      lepen: { position: 0, source: 'Intégration à la française, sans dépense massive' }
+    },
+  },
+  {
+    id: 'immigration_asile',
+    theme: 'immigration',
+    texte: 'Les personnes en demande d\'asile doivent être mieux accueillies : hébergement, délais réduits, parcours d\'insertion.',
+    info: 'asile',
+    positions: {
+      melenchon: { position: 1, source: 'Meilleur accueil et traitement digne des demandeurs d\'asile' },
+      glucksmann: { position: 1, source: 'Accès à l\'hébergement et à l\'emploi des demandeurs d\'asile' },
+      attal: { position: 0, source: 'Améliorer l\'accueil, mais éviter les incitations' },
+      philippe: { position: 0, source: 'Hébergement conditionné au respect des procédures' },
+      lepen: { position: -1, source: 'Réduire les droits des demandeurs d\'asile, éloignement' }
+    },
+  },
+  {
+    id: 'immigration_etrangers_justice',
+    theme: 'immigration',
+    texte: 'Un étranger en situation irrégulière, reconnu coupable d\'un crime, doit être interdit de retour sur le territoire national.',
+    info: 'eloignement',
+    positions: {
+      melenchon: { position: 0, source: 'Traitement au cas par cas, non pas automatique' },
+      glucksmann: { position: 0, source: 'Interdiction de retour possible pour les crimes graves' },
+      attal: { position: 1, source: 'Interdiction de retour automatique pour les criminels étrangers' },
+      philippe: { position: 1, source: 'Peine d\'interdiction du territoire renforcée' },
+      lepen: { position: 1, source: 'Interdiction de retour systématique' }
+    },
+  },
+  {
+    id: 'immigration_familiale',
+    theme: 'immigration',
+    texte: 'Le regroupement familial doit être limité et conditionné (ressources, logement, durée de présence).',
+    info: 'loiImmigration',
+    positions: {
+      melenchon: { position: -1, source: 'Regroupement familial facilité, droit fondamental' },
+      glucksmann: { position: 0, source: 'Regroupement familial encadré mais respecté' },
+      attal: { position: 1, source: 'Regroupement familial strictement conditionné' },
+      philippe: { position: 1, source: 'Regroupement familial limité aux seules familles intégrées' },
+      lepen: { position: 1, source: 'Réduire le regroupement familial' }
+    },
+  },
+  {
+    id: 'justice_mineurs',
+    theme: 'securite',
+    texte: 'La justice des mineurs doit être plus sévère : abaisser l\'âge de la majorité pénale et renforcer les sanctions.',
+    info: 'peinesPlanchers',
+    positions: {
+      melenchon: { position: -1, source: 'Priorité à l\'éducation, pas à la répression' },
+      glucksmann: { position: 0, source: 'Réponse éducative renforcée avant la répression' },
+      attal: { position: 1, source: 'Sanctions rapides et réelles pour les mineurs délinquants' },
+      philippe: { position: 1, source: 'Responsabilité pénale dès 16 ans, sanctions fermes' },
+      lepen: { position: 1, source: 'Tolérance zéro pour les mineurs récidivistes' }
+    },
+  },
+  {
+    id: 'video_surveillance',
+    theme: 'securite',
+    texte: 'Il faut généraliser la vidéosurveillance algorithmique et les drones de police dans l\'espace public.',
+    info: 'policeQuotidien',
+    positions: {
+      melenchon: { position: -1, source: 'Refus de la surveillance généralisée, protection des libertés' },
+      glucksmann: { position: 0, source: 'Encadrer strictement l\'usage, pas de généralisation' },
+      attal: { position: 1, source: 'Vidéosurveillance et drones, moyens modernes de la police' },
+      philippe: { position: 1, source: 'Outils technologiques assumés pour la sécurité' },
+      lepen: { position: 1, source: 'Généraliser la vidéosurveillance, drones de police' }
+    },
+  },
+  {
+    id: 'securite_routiere',
+    theme: 'securite',
+    texte: 'Il faut durcir les sanctions contre les violences routières et renforcer massivement les contrôles.',
+    info: 'peinesPlanchers',
+    positions: {
+      melenchon: { position: 0, source: 'Évoqué, sans priorité' },
+      glucksmann: { position: 0, source: 'Contrôles renforcés, sanctions justes' },
+      attal: { position: 1, source: 'Sanctions plus sévères, retrait de permis rapide' },
+      philippe: { position: 1, source: 'Répression routière, contrôles renforcés' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'armee_budget',
+    theme: 'securite',
+    texte: 'Le budget de la défense doit être augmenté, quitte à baisser d\'autres dépenses publiques.',
+    info: 'otan',
+    positions: {
+      melenchon: { position: -1, source: 'Réduire le budget de la défense, financer le social' },
+      glucksmann: { position: 1, source: 'Augmenter le budget de la défense, investir dans la souveraineté' },
+      attal: { position: 1, source: 'Augmenter le budget militaire, LPM 2025-2030' },
+      philippe: { position: 1, source: 'Effort de défense assumé, modernisation des armées' },
+      lepen: { position: 1, source: 'Budget de la défense renforcé, priorité nationale' }
+    },
+  },
+  {
+    id: 'separatisme',
+    theme: 'securite',
+    texte: 'Il faut durcir la lutte contre l\'islamisme radical et le séparatisme : dissolution d\'associations, contrôles renforcés.',
+    info: 'laicite',
+    positions: {
+      melenchon: { position: -1, source: 'Refus de la stigmatisation religieuse, protection des libertés' },
+      glucksmann: { position: 0, source: 'Lutter contre le radicalisme, sans amalgames' },
+      attal: { position: 1, source: 'Lutte contre l\'islamisme radical, loi séparatisme assumée' },
+      philippe: { position: 1, source: 'Durcir les outils contre le séparatisme' },
+      lepen: { position: 1, source: 'Lutte contre l\'islamisme, dissolution des associations suspectes' }
+    },
+  },
+  {
+    id: 'zfe',
+    theme: 'ecologie',
+    texte: 'Il faut supprimer ou assouplir les zones à faibles émissions (ZFE) qui pénalisent les automobilistes modestes.',
+    info: 'precariteEnergetique',
+    positions: {
+      melenchon: { position: 0, source: 'Réaménager les ZFE avec des alternatives gratuites' },
+      glucksmann: { position: -1, source: 'Garder les ZFE pour la santé publique' },
+      attal: { position: 0, source: 'Assouplir les ZFE, sociaux et territoriaux' },
+      philippe: { position: 0, source: 'Assouplir les ZFE, souplesse locale' },
+      lepen: { position: 1, source: 'Supprimer les ZFE, liberté des automobilistes' }
+    },
+  },
+  {
+    id: 'chasse',
+    theme: 'ecologie',
+    texte: 'La chasse doit être davantage encadrée : jours sans chasse, interdiction de certaines pratiques (chasse à courre).',
+    info: 'ecophyto',
+    positions: {
+      melenchon: { position: 1, source: 'Encadrer strictement la chasse, jours sans chasse' },
+      glucksmann: { position: 0, source: 'Encadrer la chasse, sans interdire' },
+      attal: { position: 0, source: 'Évoqué, sans priorité' },
+      philippe: { position: 0, source: 'Évoqué, sans priorité' },
+      lepen: { position: -1, source: 'Défense de la chasse traditionnelle' }
+    },
+  },
+  {
+    id: 'eau',
+    theme: 'ecologie',
+    texte: 'L\'eau doit être protégée comme bien commun : lutte contre les pesticides, renationalisation de la gestion de l\'eau.',
+    info: 'ecophyto',
+    positions: {
+      melenchon: { position: 1, source: 'Eau bien commun, distribution publique' },
+      glucksmann: { position: 1, source: 'Protéger l\'eau, réduire les pesticides' },
+      attal: { position: 0, source: 'Évoqué, sans priorité' },
+      philippe: { position: 0, source: 'Évoqué, sans priorité' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'biocides',
+    theme: 'ecologie',
+    texte: 'Les perturbateurs endocriniens et pesticides dangereux doivent être interdits d\'importation et de production.',
+    info: 'ecophyto',
+    positions: {
+      melenchon: { position: 1, source: 'Interdire les pesticides dangereux' },
+      glucksmann: { position: 1, source: 'Interdire les perturbateurs endocriniens' },
+      attal: { position: 0, source: 'Encadrer sans interdire, respecter la PAC' },
+      philippe: { position: 0, source: 'Évoqué, sans priorité' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'norme_ecologique',
+    theme: 'ecologie',
+    texte: 'Les normes environnementales européennes et françaises doivent être assouplies pour soutenir l\'industrie et l\'agriculture.',
+    info: 'ecophyto',
+    positions: {
+      melenchon: { position: -1, source: 'Refus de la dérégulation environnementale' },
+      glucksmann: { position: -1, source: 'Refus de l\'assouplissement des normes écologiques' },
+      attal: { position: 0, source: 'Simplifier certaines normes, sans régression' },
+      philippe: { position: 1, source: 'Simplifier les normes pour soutenir l\'industrie' },
+      lepen: { position: 1, source: 'Assouplir les normes, soutenir les agriculteurs' }
+    },
+  },
+  {
+    id: 'ecole_inclusive',
+    theme: 'education',
+    texte: 'L\'école inclusive doit être renforcée : plus d\'AESH, formation des enseignants, adaptation des établissements.',
+    info: 'educationPrioritaire',
+    positions: {
+      melenchon: { position: 1, source: 'École inclusive, moyens supplémentaires' },
+      glucksmann: { position: 1, source: 'Renforcer l\'école inclusive' },
+      attal: { position: 0, source: 'Améliorer la situation actuelle, sans révolution' },
+      philippe: { position: 0, source: 'Évoqué, sans priorité' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'universites',
+    theme: 'education',
+    texte: 'L\'université doit être mieux financée : plus de places, meilleure orientation, conditions d\'études dignes.',
+    info: 'parcoursup',
+    positions: {
+      melenchon: { position: 1, source: 'Université publiée, gratuité et moyens' },
+      glucksmann: { position: 1, source: 'Investir dans l\'université, plus de places' },
+      attal: { position: 0, source: 'Réforme de l\'orientation, sans moyens massifs' },
+      philippe: { position: 0, source: 'Sélectivité assumée, pas de moyens massifs' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'ecole_privee',
+    theme: 'education',
+    texte: 'Le financement public de l\'école privée sous contrat doit être réduit ou supprimé au profit de l\'école publique.',
+    info: 'ecoleElementaire',
+    positions: {
+      melenchon: { position: 1, source: 'Réduire le financement du privé, priorité au public' },
+      glucksmann: { position: 0, source: 'Réformer les contrats, sans suppression' },
+      attal: { position: -1, source: 'Garder le financement actuel du privé sous contrat' },
+      philippe: { position: -1, source: 'Garder le système actuel, liberté de choix' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'devoirs_faits',
+    theme: 'education',
+    texte: 'Il faut un vrai service public de l\'aide aux devoirs et à la scolarité pour tous les élèves, en dehors de la classe.',
+    info: 'educationPrioritaire',
+    positions: {
+      melenchon: { position: 1, source: 'Service public de la scolarité, aide aux devoirs' },
+      glucksmann: { position: 1, source: 'Aide aux devoirs pour tous' },
+      attal: { position: 0, source: 'Étendre les dispositifs existants' },
+      philippe: { position: 0, source: 'Évoqué, sans priorité' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'notation',
+    theme: 'education',
+    texte: 'L\'évaluation des élèves doit être repensée : réduire la note chiffrée, développer l\'évaluation par compétences et le redoublement ciblé.',
+    info: 'ecoleElementaire',
+    positions: {
+      melenchon: { position: 1, source: 'Repenser l\'évaluation, moins de notes' },
+      glucksmann: { position: 1, source: 'Évaluation par compétences' },
+      attal: { position: 0, source: 'Évoqué, sans priorité' },
+      philippe: { position: 0, source: 'Évoqué, sans priorité' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'aide_internationale',
+    theme: 'europe',
+    texte: 'La France doit augmenter son aide publique au développement (0,7 % du RNB) pour lutter contre la pauvreté mondiale.',
+    info: 'aideAuDeveloppement',
+    positions: {
+      melenchon: { position: 1, source: '0,7 % du RNB pour le développement' },
+      glucksmann: { position: 1, source: 'Augmenter l\'aide au développement' },
+      attal: { position: 0, source: 'Aide stable, mais pas d\'augmentation massive' },
+      philippe: { position: 0, source: 'Aide stable, ciblée' },
+      lepen: { position: -1, source: 'Réduire l\'aide extérieure, priorité aux Français' }
+    },
+  },
+  {
+    id: 'onu',
+    theme: 'europe',
+    texte: 'La France doit défendre le multilatéralisme et les Nations unies, quitte à renoncer à une partie de sa souveraineté diplomatique.',
+    info: 'onu',
+    positions: {
+      melenchon: { position: 1, source: 'Multilatéralisme, défense de l\'ONU' },
+      glucksmann: { position: 1, source: 'Défense du multilatéralisme et de l\'ONU' },
+      attal: { position: 1, source: 'Défense du multilatéralisme, mais souveraineté' },
+      philippe: { position: 0, source: 'Défense de la souveraineté, multilatéralisme prudence' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'israel_palestine',
+    theme: 'europe',
+    texte: 'La France doit reconnaître pleinement l\'État de Palestine pour contribuire à une paix juste et durable.',
+    info: 'ukraine',
+    positions: {
+      melenchon: { position: 1, source: 'Reconnaissance de la Palestine' },
+      glucksmann: { position: 1, source: 'Reconnaissance de l\'État de Palestine' },
+      attal: { position: 0, source: 'Reconnaissance au bon moment, pas d\'unilatéralisme' },
+      philippe: { position: 0, source: 'Reconnaissance dans le cadre d\'un accord' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'afrique',
+    theme: 'europe',
+    texte: 'La politique africaine de la France doit être repensée : fin du françafric, coopération d\'égal à égal.',
+    info: 'aideAuDeveloppement',
+    positions: {
+      melenchon: { position: 1, source: 'Fin de la Françafric, partenariat d\'égalité' },
+      glucksmann: { position: 1, source: 'Repenser la politique africaine, partenariat' },
+      attal: { position: 0, source: 'Évoqué, sans priorité' },
+      philippe: { position: 0, source: 'Évoqué, sans priorité' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'militaire_europeen',
+    theme: 'europe',
+    texte: 'L\'Europe doit construire une vraie défense commune (armée européenne, industrie de défense intégrée), complémentaire de l\'OTAN.',
+    info: 'otan',
+    positions: {
+      melenchon: { position: 0, source: 'Défense européenne, mais hors OTAN' },
+      glucksmann: { position: 1, source: 'Défense commune, Europe-puissance' },
+      attal: { position: 1, source: 'Défense européenne, complémentaire de l\'OTAN' },
+      philippe: { position: 1, source: 'Défense européenne intégrée, souveraineté industrielle' },
+      lepen: { position: -1, source: 'Refus d\'une armée européenne, priorité nationale' }
+    },
+  },
+  {
+    id: 'ia_regulation',
+    theme: 'numerique',
+    texte: 'L\'intelligence artificielle doit être strictement encadrée par la loi : transparence, contrôle humain, interdiction des usages dangereux.',
+    info: 'ia',
+    positions: {
+      melenchon: { position: 1, source: 'Encadrer strictement l\'IA, contrôle public' },
+      glucksmann: { position: 1, source: 'Régulation ferme de l\'IA, conformité' },
+      attal: { position: 0, source: 'Réguler sans freiner l\'innovation' },
+      philippe: { position: 0, source: 'Réguler avec pragmatisme, soutenir l\'innovation' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'ia_education',
+    theme: 'numerique',
+    texte: 'L\'IA doit être intégrée à l\'école : formation des élèves et des enseignants, citoyenneté numérique.',
+    info: 'educationPrioritaire',
+    positions: {
+      melenchon: { position: 1, source: 'Former à l\'IA, éducation numérique' },
+      glucksmann: { position: 1, source: 'Éducation au numérique, IA à l\'école' },
+      attal: { position: 1, source: 'Former à l\'IA, citoyenneté numérique' },
+      philippe: { position: 1, source: 'Former à l\'IA, attractivité des métiers' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'reseaux_sociaux_mineurs',
+    theme: 'numerique',
+    texte: 'Les réseaux sociaux doivent être interdits aux moins de 15-16 ans, avec vérification d\'âge obligatoire.',
+    info: 'reseauxSociaux',
+    positions: {
+      melenchon: { position: 1, source: 'Interdiction avant 15 ans, vérification d\'âge' },
+      glucksmann: { position: 1, source: 'Interdiction avant 15 ans, vérification d\'âge' },
+      attal: { position: 1, source: 'Interdiction avant 15 ans, vérification d\'âge' },
+      philippe: { position: 1, source: 'Réguler fortement, vérification d\'âge' },
+      lepen: { position: 1, source: 'Interdiction et vérification d\'âge' }
+    },
+  },
+  {
+    id: 'cryptographie_etat',
+    theme: 'numerique',
+    texte: 'L\'État ne doit pas pouvoir accéder aux communications chiffrées des citoyens, même pour la lutte contre le crime et le terrorisme.',
+    info: 'cryptographie',
+    positions: {
+      melenchon: { position: 1, source: 'Protéger le chiffrement, refuser les backdoors' },
+      glucksmann: { position: 1, source: 'Protéger le chiffrement, refuser les backdoors' },
+      attal: { position: 0, source: 'Trouver un équilibre sécurité/liberté' },
+      philippe: { position: 0, source: 'Équilibre sécurité/liberté, sans backdoor généralisé' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'cloud_souverain',
+    theme: 'numerique',
+    texte: 'Les données sensibles de l\'État et des citoyens doivent être hébergées en France ou en Europe (cloud souverain).',
+    info: 'cloudSouverain',
+    positions: {
+      melenchon: { position: 1, source: 'Cloud souverain, hébergement public' },
+      glucksmann: { position: 1, source: 'Cloud souverain, souveraineté numérique' },
+      attal: { position: 1, source: 'Cloud de confiance, souveraineté' },
+      philippe: { position: 1, source: 'Cloud souverain, préférence européenne' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'rgpd',
+    theme: 'numerique',
+    texte: 'La protection des données personnelles (RGPD) doit être renforcée : consentement réel, sanction renforcée contre les GAFAM.',
+    info: 'rgpd',
+    positions: {
+      melenchon: { position: 1, source: 'Renforcer la protection des données, sanctionner les GAFAM' },
+      glucksmann: { position: 1, source: 'Renforcer le RGPD, sanctionner les GAFAM' },
+      attal: { position: 0, source: 'Réguler avec pragmatisme, éviter les excès' },
+      philippe: { position: 0, source: 'Réguler, mais éviter la surcharge pour les entreprises' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'publicite_numerique',
+    theme: 'numerique',
+    texte: 'Il faut encadrer strictement la publicité numérique ciblée, voire l\'interdire aux mineurs et pour certains produits.',
+    info: 'reseauxSociaux',
+    positions: {
+      melenchon: { position: 1, source: 'Encadrer strictement la publicité ciblée' },
+      glucksmann: { position: 1, source: 'Encadrer la publicité ciblée' },
+      attal: { position: 0, source: 'Évoqué, sans priorité' },
+      philippe: { position: 0, source: 'Évoqué, sans priorité' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'numerique_services_publics',
+    theme: 'numerique',
+    texte: 'Tous les services publics doivent être accessibles en ligne, avec des guichets physiques maintenus pour ceux qui ne peuvent pas utiliser le numérique.',
+    info: 'rgpd',
+    positions: {
+      melenchon: { position: 1, source: 'Service public numérique et humain' },
+      glucksmann: { position: 1, source: 'Accessibilité numérique et humaine' },
+      attal: { position: 1, source: 'Numériser les services publics, mais avec guichets' },
+      philippe: { position: 1, source: 'Numériser, mais avec des alternatives physiques' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'gafa_impot',
+    theme: 'numerique',
+    texte: 'Les géants du numérique (GAFAM) doivent être imposés en France sur leurs revenus générés localement, même sans implantation physique.',
+    info: 'impotsRevenu',
+    positions: {
+      melenchon: { position: 1, source: 'Taxer les GAFAM à hauteur de leurs revenus' },
+      glucksmann: { position: 1, source: 'Taxer les GAFAM, justice fiscale' },
+      attal: { position: 0, source: 'Taxation au niveau européen, pas unilatérale' },
+      philippe: { position: 0, source: 'Taxation européenne, éviter les représailles' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'cyberdefense',
+    theme: 'numerique',
+    texte: 'La cybersécurité doit être une priorité nationale : investissement massif, formation, coordination européenne.',
+    info: 'cyber',
+    positions: {
+      melenchon: { position: 1, source: 'Investir dans la cyberdéfense, souveraineté numérique' },
+      glucksmann: { position: 1, source: 'Cybersécurité prioritaire, coordination européenne' },
+      attal: { position: 1, source: 'Cyberdéfense, plan national' },
+      philippe: { position: 1, source: 'Cyberdéfense, effort national' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'laicite_ecole',
+    theme: 'religion',
+    texte: 'La laïcité à l\'école doit être strictement appliquée, y compris par de nouvelles règles (tenues, menus, accommodements).',
+    info: 'laicite',
+    positions: {
+      melenchon: { position: 0, source: 'Laïcité républicaine, mais pas de stigmatisation' },
+      glucksmann: { position: 0, source: 'Laïcité républicaine, sans cibler une religion' },
+      attal: { position: 1, source: 'Appliquer strictement la laïcité, nouvelles règles' },
+      philippe: { position: 1, source: 'Laïcité stricte, pas d\'accommodements' },
+      lepen: { position: 1, source: 'Laïcité stricte, nouveaux outils' }
+    },
+  },
+  {
+    id: 'financement_cultes',
+    theme: 'religion',
+    texte: 'L\'État ne doit financer aucun culte, directement ou indirectement (y compris la maintenance des édifices religieux).',
+    info: 'religion1905',
+    positions: {
+      melenchon: { position: 1, source: 'Laïcité stricte, pas de financement public des cultes' },
+      glucksmann: { position: 0, source: 'Séparation stricte, mais entretien du patrimoine' },
+      attal: { position: 0, source: 'Évoqué, sans priorité' },
+      philippe: { position: 0, source: 'Évoqué, sans priorité' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'religion_etranger',
+    theme: 'religion',
+    texte: 'Les cultes étrangers qui menacent la laïcité doivent être interdits ou strictement contrôlés.',
+    info: 'religion1905',
+    positions: {
+      melenchon: { position: -1, source: 'Refus de cibler les religions, liberté de culte protégée' },
+      glucksmann: { position: 0, source: 'Encadrer sans stigmatiser' },
+      attal: { position: 1, source: 'Interdire les ingérences étrangères dans les cultes' },
+      philippe: { position: 1, source: 'Lutter contre l\'ingérence étrangère' },
+      lepen: { position: 1, source: 'Interdire les cultes financés par l\'étranger' }
+    },
+  },
+  {
+    id: 'fetes_religieuses',
+    theme: 'religion',
+    texte: 'Le calendrier républicain doit rester le seul cadre : pas de jours fériés religieux supplémentaires.',
+    info: 'laicite',
+    positions: {
+      melenchon: { position: 0, source: 'Évoqué, sans priorité' },
+      glucksmann: { position: 0, source: 'Évoqué, sans priorité' },
+      attal: { position: 0, source: 'Évoqué, sans priorité' },
+      philippe: { position: 0, source: 'Évoqué, sans priorité' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'conscience_sante',
+    theme: 'religion',
+    texte: 'Les professionnels de santé doivent être protégés : aucun refus de soins motivé par des convictions religieuses.',
+    info: 'cultes',
+    positions: {
+      melenchon: { position: 1, source: 'Refus de soins religieux interdit' },
+      glucksmann: { position: 1, source: 'Continuité des soins, pas de clause de conscience religieuse' },
+      attal: { position: 1, source: 'Refus de soins religieux interdit' },
+      philippe: { position: 1, source: 'Continuité des soins, refus encadré' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'religion_emploi',
+    theme: 'religion',
+    texte: 'Les convictions religieuses ne doivent jamais justifier une exception au contrat de travail dans le service public.',
+    info: 'laicite',
+    positions: {
+      melenchon: { position: 1, source: 'Neutralité stricte du service public' },
+      glucksmann: { position: 1, source: 'Neutralité du service public' },
+      attal: { position: 1, source: 'Neutralité stricte, pas d\'accommodements' },
+      philippe: { position: 1, source: 'Neutralité du service public' },
+      lepen: { position: 1, source: 'Neutralité stricte, pas d\'arrangements' }
+    },
+  },
+  {
+    id: 'euthanasie_conscience',
+    theme: 'religion',
+    texte: 'La conscience religieuse ne doit pas faire obstacle à l\'application des lois votées démocratiquement (fin de vie, PMA...).',
+    info: 'cultes',
+    positions: {
+      melenchon: { position: 1, source: 'La loi prime sur les convictions religieuses' },
+      glucksmann: { position: 1, source: 'La loi prime, pas d\'obstruction religieuse' },
+      attal: { position: 0, source: 'La loi doit s\'appliquer, mais respecter les objections' },
+      philippe: { position: 0, source: 'La loi doit s\'appliquer, mais respecter les objections' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
+    },
+  },
+  {
+    id: 'islam_laique',
+    theme: 'religion',
+    texte: 'Un islam de France doit être encouragé et encadré par la loi : formation des imams, financement contrôlé, lutte contre les dérives.',
+    info: 'cultes',
+    positions: {
+      melenchon: { position: -1, source: 'Refus de traiter l\'islam comme un cas à part' },
+      glucksmann: { position: 0, source: 'Encadrer sans cibler une religion' },
+      attal: { position: 1, source: 'Islam de France, formation des imams' },
+      philippe: { position: 1, source: 'Islam de France, encadrement' },
+      lepen: { position: 1, source: 'Islam de France, interdiction du financement étranger' }
+    },
+  },
+  {
+    id: 'proselytisme_ecole',
+    theme: 'religion',
+    texte: 'Le prosélytisme religieux doit être strictement interdit dans les écoles publiques, avec sanctions disciplinaires.',
+    info: 'laicite',
+    positions: {
+      melenchon: { position: 1, source: 'Interdire le prosélytisme à l\'école' },
+      glucksmann: { position: 1, source: 'Interdire le prosélytisme à l\'école' },
+      attal: { position: 1, source: 'Interdire le prosélytisme, sanctions disciplinaires' },
+      philippe: { position: 1, source: 'Interdire le prosélytisme' },
+      lepen: { position: 1, source: 'Interdire le prosélytisme, sanctions' }
+    },
+  },
+  {
+    id: 'liberte_culte',
+    theme: 'religion',
+    texte: 'La liberté de croire et de pratiquer doit être pleinement garantie, y compris pour les minorités religieuses.',
+    info: 'religion1905',
+    positions: {
+      melenchon: { position: 1, source: 'Liberté de culte garantie, protection des minorités' },
+      glucksmann: { position: 1, source: 'Liberté religieuse garantie' },
+      attal: { position: 0, source: 'Liberté garantie, dans le cadre de la loi' },
+      philippe: { position: 0, source: 'Liberté garantie, dans le cadre de la loi' },
+      lepen: { position: 0, source: 'Évoqué, sans priorité' }
     },
   },
 ]

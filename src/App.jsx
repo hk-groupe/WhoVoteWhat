@@ -3,7 +3,14 @@ import { chargerDonnees } from './backoffice/store.mjs'
 import BackOffice from './backoffice/BackOffice.jsx'
 import RecapVotes from './RecapVotes.jsx'
 
-const OPTIONS_NB = [10, 15, 20, 25, 30, 35, 40]
+const NB_MIN = 10
+const NB_MAX = 100
+
+function bornageNb(valeur) {
+  const n = Number.parseInt(valeur, 10)
+  if (!Number.isFinite(n)) return NB_MIN
+  return Math.min(NB_MAX, Math.max(NB_MIN, n))
+}
 
 function melanger(liste) {
   const copie = [...liste]
@@ -44,6 +51,14 @@ export default function App() {
     chargerDonnees().then(setDonnees).catch(() => setDonnees({}))
   }, [])
   const [nbQuestions, setNbQuestions] = React.useState(20)
+  const [saisieNb, setSaisieNb] = React.useState('20')
+
+  function majSaisieNb(valeur) {
+    setSaisieNb(valeur)
+    const nettoyee = valeur.replace(/\D/g, '').slice(0, 3)
+    if (nettoyee === '') return
+    setNbQuestions(bornageNb(nettoyee))
+  }
   const [questions, setQuestions] = React.useState([])
   const [qIndex, setQIndex] = React.useState(0)
   const [reponses, setReponses] = React.useState({})
@@ -93,7 +108,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Vote<span className="accent">Clair</span></h1>
+          <h1>Qui Vote<span className="accent"> Quoi</span></h1>
           <p className="tagline">Chargement…</p>
         </header>
       </div>
@@ -109,7 +124,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Vote<span className="accent">Clair</span></h1>
+          <h1>Qui Vote<span className="accent"> Quoi</span></h1>
           <p className="tagline">Back-office de gestion du contenu 🛠️</p>
         </header>
         <BackOffice onFermer={() => setEcran('accueil')} />
@@ -124,7 +139,7 @@ export default function App() {
     <div className="app">
       <header className="header">
         <span className="logo">🗳️</span>
-        <h1>Vote<span className="accent">Clair</span></h1>
+        <h1>Qui Vote<span className="accent"> Quoi</span></h1>
         <p className="tagline">Trouvez le candidat 2027 qui vous ressemble, en quelques questions simples 🚀</p>
       </header>
 
@@ -141,16 +156,19 @@ export default function App() {
             </ul>
             <div className="choix-nb">
               <p className="choix-nb-label">Combien de questions voulez-vous répondre ?</p>
-              <div className="boutons-nb">
-                {OPTIONS_NB.map((n) => (
-                  <button
-                    key={n}
-                    className={`btn-nb ${n === nbQuestions ? 'actif' : ''}`}
-                    onClick={() => setNbQuestions(n)}
-                  >
-                    {n}
-                  </button>
-                ))}
+              <div className="champ-nb">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  className="saisie-nb"
+                  value={saisieNb}
+                  min={NB_MIN}
+                  max={NB_MAX}
+                  aria-label="Nombre de questions"
+                  onChange={(e) => majSaisieNb(e.target.value)}
+                  onBlur={(e) => { setNbQuestions(bornageNb(e.target.value)); setSaisieNb(String(bornageNb(e.target.value))) }}
+                />
+                <span className="saisie-nb-aide">entre {NB_MIN} et {NB_MAX} questions</span>
               </div>
             </div>
             <button className="btn-principal" onClick={demarrer}>C'est parti ! 🔥</button>
@@ -164,6 +182,11 @@ export default function App() {
                 <a className="lien-programme" href={c.programme} target="_blank" rel="noreferrer">📄 Programme officiel ↗</a>
               </div>
             ))}
+          </div>
+          <div className="bloc disclaimer" role="note">
+            <h3>⚠️ Avertissement</h3>
+            <p><strong>QuiVoteQuoi est un projet indépendant de vulgarisation à but strictement informatif.</strong> Les contenus proposés — quiz d'affinité, récapitulatif des votes et positions des candidats — sont établis à partir de sources officielles, mais ne constituent <strong>ni un conseil de vote</strong>, ni une recommandation, ni un soutien à un candidat ou à une formation politique, et ne se substituent en aucun cas à la recherche et à la lecture intégrale des programmes électoraux et des textes officiels.</p>
+            <p>L'application a pour seul objet de vous aider à <strong>y voir plus clair</strong> dans l'offre politique et à orienter votre propre réflexion. Les synthèses et scores présentés résultent d'un traitement simplifié d'informations publiques : ils ne reflètent pas l'exhaustivité ni la complexité des programmes et ne sauraient engager la responsabilité de leurs auteurs. En utilisant ce site, vous reconnaissez que vos choix électoraux relèvent de votre seule et entière responsabilité.</p>
           </div>
           <button className="retour" onClick={() => setEcran('backoffice')}>🛠️ Back-office (admin)</button>
           <button className="btn-principal btn-transparence" onClick={() => setEcran('transparence')}>🔍 Transparence : comment fonctionne ce site ?</button>

@@ -4,8 +4,8 @@ Site d'information électorale : un quiz d'affinité pour découvrir quel candid
 
 ## ✨ Fonctionnement
 
-1. **17 questions simples** sur les vraies propositions des candidats (économiques, retraite, immigration, écologie, institutions, Europe...).
-2. **3 réponses possibles** : d'accord, mitigé, pas d'accord.
+1. **100 questions** (10 thèmes × 10) sur les vraies propositions des candidats : économie, retraites, institutions, immigration, sécurité, écologie, éducation, Europe & politique internationale, numérique & IA, religion & laïcité.
+2. **3 réponses possibles** : d'accord, mitigé, pas d'accord — le nombre de questions (10 à 100) est choisi librement sur la page d'accueil.
 3. **Résultat** : score de compatibilité pour chaque candidat + détail des accords/désaccords, avec la position exacte extraite du programme officiel.
 
 ## 📚 Sources — 100 % officielles
@@ -60,6 +60,99 @@ npm run maj-scrutins # consolide une fois l'open data officielle des scrutins
 ```
 
 Au démarrage, l'API consolide l'open data si aucune donnée locale n'existe, puis rejoue la consolidation chaque nuit (03:30 par défaut, `HEURE_MAJ_SCRUTINS`).
+
+## 🚀 Mise en production
+
+### 1. Préparer le serveur
+
+- **Node.js 18+** et **npm** installés sur le serveur.
+- Un nom de domaine avec certificat HTTPS (obligatoire pour un site public).
+
+### 2. Récupérer le code et installer
+
+```bash
+git clone https://github.com/hk-groupe/WhoVoteWhat.git
+cd WhoVoteWhat
+npm ci
+```
+
+### 3. Configurer les variables d'environnement
+
+| Variable | Rôle | Valeur recommandée en production |
+|---|---|---|
+| `PORT` | Port d'écoute de l'API | `4000` (ou le port choisi) |
+| `CLE_SECRETE` | Clé de session du back-office | une chaîne aléatoire longue (obligatoire, sinon les sessions ne survivent pas à un redémarrage) |
+| `ORIGINE_AUTORISEE` | Origine CORS autorisée pour l'API | l'URL publique du site, ex. `https://quivotequoi.fr` (ne pas laisser `*` en production) |
+| `HEURE_MAJ_SCRUTINS` | Heure de la mise à jour quotidienne des scrutins | `03:30` par défaut |
+| `VITE_API_URL` | URL de l'API utilisée par le front (build/dev) | ex. `https://api.quivotequoi.fr` |
+
+Exemple :
+
+```bash
+export PORT=4000
+export CLE_SECRETE="$(openssl rand -hex 32)"
+export ORIGINE_AUTORISEE="https://quivotequoi.fr"
+```
+
+### 4. Construire le front
+
+```bash
+npm run build
+```
+
+Le site statique est généré dans `dist/` : servez-le avec Nginx, Caddy ou tout serveur statique.
+
+### 5. Démarrer l'API en service persistant
+
+L'API Node tourne sans dépendance externe. Utilisez un process manager pour qu'elle survive aux redémarrages :
+
+```bash
+# Exemple avec pm2
+npm install -g pm2
+pm2 start server/index.mjs --name quivotequoi-api
+pm2 save && pm2 startup
+```
+
+Au premier démarrage, l'API consolide l'open data des scrutins, puis rejoue la consolidation chaque nuit — aucune tâche planifiée à configurer.
+
+### 6. Exposer le site (reverse proxy)
+
+Exemple minimal Nginx : le front en statique sur le domaine public, l'API en proxy inverse sur `/api` :
+
+```nginx
+server {
+  listen 443 ssl;
+  server_name quivotequoi.fr;
+
+  root /srv/WhoVoteWhat/dist;
+  index index.html;
+
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+  location /api {
+    proxy_pass http://127.0.0.1:4000;
+    proxy_set_header Host $host;
+  }
+}
+```
+
+### 7. Vérifier la mise en production
+
+- Le site se charge et le quiz fonctionne.
+- La section « Récap des votes » affiche les scrutins (données consolidées depuis l'API).
+- Le back-office requiert une session (`CLE_SECRETE` configurée).
+- En cas d'API injoignable, le site reste consultable grâce aux données de repli embarquées.
+
+### 8. Mettre à jour
+
+```bash
+git pull
+npm ci
+npm run build
+pm2 restart quivotequoi-api
+```
 
 ## 🛠️ Stack
 

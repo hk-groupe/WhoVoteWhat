@@ -4,7 +4,7 @@
 import { CANDIDATS, THEMES, QUESTIONS, INFOS, RESULTATS_LEGEND } from '../data/programmes.mjs'
 import * as api from '../api/client.mjs'
 
-const CLE_SESSION = 'voteclair-session'
+const CLE_SESSION = 'quivotequoi-session'
 
 export const BASE = {
   candidats: CANDIDATS,
@@ -37,7 +37,7 @@ export function exporterJSON(donnees) {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = 'voteclair-donnees.json'
+  a.download = 'quivotequoi-donnees.json'
   a.click()
   URL.revokeObjectURL(url)
 }
