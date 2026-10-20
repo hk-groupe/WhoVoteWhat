@@ -45,6 +45,7 @@ export default function Candidats({ donnees, onOuvrir }) {
             </summary>
             <div className="contenu-candidat">
               <p className="synthese-candidat">{legendes[c.id]}</p>
+              <p className="source">Synthèse établie à partir du <a href={c.programme} target="_blank" rel="noreferrer">programme officiel — {c.sourceLabel} ↗</a></p>
               <a className="lien-programme" href={c.programme} target="_blank" rel="noreferrer">
                 📄 Lire le programme officiel complet ↗
               </a>
@@ -62,6 +63,7 @@ export default function Candidats({ donnees, onOuvrir }) {
                         {engagements.map(({ question, source }) => (
                           <li key={question.id} className="position-item">
                             {source}
+                            <em className="source">— <a href={c.programme} target="_blank" rel="noreferrer">source : {c.sourceLabel || `programme officiel de ${c.nom}`} ↗</a></em>
                           </li>
                         ))}
                       </ul>

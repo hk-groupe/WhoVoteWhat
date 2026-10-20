@@ -306,7 +306,7 @@ export default function App() {
                       <li key={c.id} className="position-item">
                         <span className="dot" style={{ background: c.couleur, display: 'inline-block', width: 12, height: 12, margin: '0 6px 0 0', verticalAlign: 'middle' }}></span>
                         <strong>{c.nom}</strong> — {p.position === 1 ? '✅ Pour' : p.position === -1 ? '❌ Contre' : '➖ Nuancé'}
-                        <em className="source">— {p.source}</em>
+                        <em className="source">— <a href={c.programme} target="_blank" rel="noreferrer">{p.source}</a> <span className="src-label">(source : {c.sourceLabel || c.parti})</span></em>
                       </li>
                     )
                   })}
@@ -412,7 +412,7 @@ export default function App() {
                       return (
                         <li key={q.id} className={accord ? 'accord' : 'desaccord'}>
                           <span>{accord ? '✅' : '❌'}</span> {q.texte}
-                          <em className="source">— Position : {q.positions[s.candidat.id].source}</em>
+                          <em className="source">— Position : {q.positions[s.candidat.id].source} · <a href={s.candidat.programme} target="_blank" rel="noreferrer">Source officielle : {s.candidat.sourceLabel || s.candidat.nom} ↗</a></em>
                         </li>
                       )
                     })}
