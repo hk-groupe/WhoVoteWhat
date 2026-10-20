@@ -1,44 +1,45 @@
 import React from 'react'
 
 // Résumé le plus exhaustif possible des programmes :
-// pour chaque candidat, la synthèse générale (issues des données du site)
-// puis toutes ses positions, thème par thème, avec la citation exacte de sa source officielle.
+// uniquement les propositions déclarées dans le programme du candidat.
+// Une position "pour" correspond à un engagement publié par le candidat lui-même ;
+// les étiquettes pour/contre du quiz ne sont volontairement pas affichées ici.
 export default function Candidats({ donnees, onOuvrir }) {
   const candidats = donnees.candidats ?? []
   const themes = donnees.themes ?? {}
   const legendes = donnees.legendes ?? {}
   const questions = donnees.questions ?? []
 
-  const positionsParCandidat = (candidat) => {
+  const engagementsParCandidat = (candidat) => {
     const parTheme = {}
     questions.forEach((q) => {
       const p = q.positions?.[candidat.id]
-      if (!p || p.position === undefined) return
+      if (!p || p.position !== 1 || !p.source) return
       if (!parTheme[q.theme]) parTheme[q.theme] = []
-      parTheme[q.theme].push({ question: q, position: p })
+      parTheme[q.theme].push({ question: q, source: p.source })
     })
     return parTheme
   }
-
-  const labelPosition = (pos) =>
-    pos === 1 ? '✅ Pour' : pos === -1 ? '❌ Contre' : '➖ Nuancé'
 
   return (
     <section className="candidats-page">
       <div className="bloc">
         <h2>👥 Les candidats</h2>
         <p>
-          Tous les candidats déclarés dans l'application, avec un résumé aussi exhaustif que possible de leur programme :
-          synthèse générale, puis <strong>toutes leurs positions thème par thème</strong>, chacune issue de leurs
-          publications officielles. Cliquez sur un candidat pour dérouler le détail complet.
+          Tous les candidats déclarés dans l'application, avec un résumé aussi exhaustif que possible de leur
+          programme : synthèse générale, puis <strong>leurs propositions, thème par thème</strong>. Chaque proposition
+          listée est <strong>directement issue de leur programme officiel</strong> — nous ne montrons ici que ce que le
+          candidat propose lui-même, sans étiquette « pour / contre ». Pour lire le détail complet, suivez le lien vers
+          son programme officiel.
         </p>
       </div>
       {candidats.map((c) => {
-        const parTheme = positionsParCandidat(c)
+        const parTheme = engagementsParCandidat(c)
+        const nbEngagements = Object.values(parTheme).reduce((n, l) => n + l.length, 0)
         return (
           <details key={c.id} className="details-candidat" style={{ borderColor: c.couleur }}>
             <summary className="resume-candidat">
-              <span className="dot" style={{ background: c.couleur, margin: 0 }}></span>
+              <span className="dot" style={{ background: c.couleur }}></span>
               <strong>{c.nom}</strong>
               <em>{c.parti}</em>
             </summary>
@@ -50,22 +51,34 @@ export default function Candidats({ donnees, onOuvrir }) {
               <a className="lien-programme" href={c.site} target="_blank" rel="noreferrer">
                 🌐 Site officiel du candidat ↗
               </a>
-              <div className="points">
-                {Object.entries(parTheme).map(([theme, positions]) => (
-                  <details key={theme} className="details-theme-candidat">
-                    <summary>{themes[theme]?.emoji} {themes[theme]?.label || theme} · {positions.length} propositions</summary>
-                    <ul className="positions-liste">
-                      {positions.map(({ question, position }) => (
-                        <li key={question.id} className="position-item">
-                          <span className="badge-position">{labelPosition(position.position)}</span>{' '}
-                          {question.texte}
-                          <em className="source">— {position.source}</em>
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                ))}
-              </div>
+              {nbEngagements === 0 ? (
+                <p>Aucune proposition issue de son programme n'est encore enregistrée pour ce candidat.</p>
+              ) : (
+                <div className="points">
+                  {Object.entries(parTheme).map(([theme, engagements]) => (
+                    <details key={theme} className="details-theme-candidat">
+                      <summary>{themes[theme]?.emoji} {themes[theme]?.label || theme} · {engagements.length} proposition{engagements.length > 1 ? 's' : ''}</summary>
+                      <ul className="positions-liste">
+                        {engagements.map(({ question, source }) => (
+                          <li key={question.id} className="position-item">
+                            {source}
+                            {question.info && (
+                              <a
+                                className="source"
+                                href={(Array.isArray(question.info) ? question.info[0] : question.info)?.url}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {' '}En savoir plus ↗
+                              </a>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  ))}
+                </div>
+              )}
               <button className="btn-principal" onClick={() => onOuvrir(c.nom)}>
                 🎯 Tester ma compatibilité avec ce quiz
               </button>
