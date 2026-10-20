@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto'
 import { CANDIDATS, THEMES, QUESTIONS, INFOS, RESULTATS_LEGEND } from '../src/data/programmes.mjs'
+import { fusionnerPositions, SOURCES_BASE } from '../src/data/positions-complements.mjs'
 import { mettreAJourScrutins, lireScrutins } from './scrutins.mjs'
 
 const PORT = Number(process.env.PORT || 4000)
@@ -13,9 +14,13 @@ const CONTENU_DEFAUT = {
   candidats: CANDIDATS,
   legendes: RESULTATS_LEGEND,
   themes: THEMES,
-  questions: QUESTIONS,
+  questions: fusionnerPositions(JSON.parse(JSON.stringify(QUESTIONS))),
   infos: INFOS,
+  sourcesBase: SOURCES_BASE,
 }
+
+const QUESTIONS_SOURCE = fusionnerPositions(JSON.parse(JSON.stringify(QUESTIONS)))
+const QUESTIONS_PAR_ID = new Map(QUESTIONS_SOURCE.map((q) => [q.id, q]))
 
 const CLE_SECRETE = process.env.CLE_SECRETE
 if (!CLE_SECRETE) {
@@ -39,9 +44,45 @@ function verifierMotDePasse(motDePasse, stocke) {
 
 async function chargerEtat() {
   try {
-    return JSON.parse(await readFile(FICHIER_CONTENU, 'utf8'))
+    const stocke = JSON.parse(await readFile(FICHIER_CONTENU, 'utf8'))
+    return { contenu: harmoniserContenu(stocke.contenu), comptes: stocke.comptes }
   } catch {
     return { contenu: CONTENU_DEFAUT, comptes: [creerCompteDefaut()] }
+  }
+}
+
+// Un contenu persisté avant l'ajout de nouveaux candidats dans le code ne doit pas
+// les masquer : on fusionne les candidats et positions manquants au chargement.
+// Les candidats existants (mêmes ids) ne sont PAS modifiés — les éditions du back-office sont préservées ;
+// seuls les nouveaux sont ajoutés, avec leurs positions issues du code source.
+function harmoniserContenu(contenu) {
+  if (!contenu || !Array.isArray(contenu.candidats)) return CONTENU_DEFAUT
+  const idsConnus = new Set(contenu.candidats.map((c) => c.id))
+  const candidatsFusionnes = [...contenu.candidats]
+  for (const c of CANDIDATS) {
+    if (!idsConnus.has(c.id)) candidatsFusionnes.push(JSON.parse(JSON.stringify(c)))
+  }
+  const questions = (contenu.questions ?? []).map((q) => {
+    const qSource = QUESTIONS_PAR_ID.get(q.id)
+    if (!qSource) return q
+    const positions = { ...(q.positions ?? {}) }
+    const positionsSource = qSource.positions ?? {}
+    let change = false
+    for (const [cid, p] of Object.entries(positionsSource)) {
+      if (positions[cid]) continue
+      positions[cid] = p
+      change = true
+    }
+    return change ? { ...q, positions } : q
+  })
+  return {
+    ...contenu,
+    candidats: candidatsFusionnes,
+    questions,
+    legendes: { ...RESULTATS_LEGEND, ...(contenu.legendes ?? {}) },
+    themes: { ...THEMES, ...(contenu.themes ?? {}) },
+    infos: { ...INFOS, ...(contenu.infos ?? {}) },
+    sourcesBase: { ...SOURCES_BASE, ...(contenu.sourcesBase ?? {}) },
   }
 }
 
@@ -118,7 +159,7 @@ function sessionValide(req) {
   return jeton && sessions.has(jeton) ? { jeton, ...sessions.get(jeton) } : null
 }
 
-const CHAMPS_CONTENU = ['candidats', 'legendes', 'themes', 'questions', 'infos']
+const CHAMPS_CONTENU = ['candidats', 'legendes', 'themes', 'questions', 'infos', 'sourcesBase']
 
 async function route(req, res) {
   const url = new URL(req.url, `http://${req.headers.host}`)

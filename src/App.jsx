@@ -290,6 +290,7 @@ export default function App() {
               ))}
             </ul>
             <p>La position de chaque candidat est accompagnée de la <strong>citation exacte de son programme</strong> — vous la retrouvez dans les résultats, question par question. Lorsqu'un candidat n'a pas pris position ou s'est exprimé avec nuance, il est classé « nuancé » plutôt que d'interpréter son silence.</p>
+            <p><strong>Candidats sans programme 2027 publié :</strong> pour les candidats qui n'ont pas encore publié leur programme de campagne 2027, les positions reposent sur <strong>leur ancien programme (principalement 2022) ou leurs prises de position publiques</strong> (discours, interviews, votes à l'Assemblée). C'est indiqué par un bandeau « ⚠️ » sur chaque fiche, la mention « ancien programme » ou « prise de position publique » à côté de chaque position, et le lien vers la source documentaire correspondante. Ces positions seront remplacées par le programme officiel dès sa publication.</p>
           </div>
 
           <div className="bloc">
@@ -306,7 +307,9 @@ export default function App() {
                       <li key={c.id} className="position-item">
                         <span className="dot" style={{ background: c.couleur, display: 'inline-block', width: 12, height: 12, margin: '0 6px 0 0', verticalAlign: 'middle' }}></span>
                         <strong>{c.nom}</strong> — {p.position === 1 ? '✅ Pour' : p.position === -1 ? '❌ Contre' : '➖ Nuancé'}
-                        <em className="source">— <a href={c.programme} target="_blank" rel="noreferrer">{p.source}</a> <span className="src-label">(source : {c.sourceLabel || c.parti})</span></em>
+                        {p.base === 'ancien_programme' && <span className="src-label"> · ancien programme</span>}
+                        {p.base === 'prise_de_parole' && <span className="src-label"> · prise de position publique</span>}
+                        <em className="source">— <a href={(p.base && (donnees.sourcesBase ?? {})[c.id]) ? donnees.sourcesBase[c.id].url : c.programme} target="_blank" rel="noreferrer">{p.source}</a> <span className="src-label">(source : {p.base && (donnees.sourcesBase ?? {})[c.id] ? donnees.sourcesBase[c.id].label : c.sourceLabel || c.parti})</span></em>
                       </li>
                     )
                   })}
@@ -383,19 +386,29 @@ export default function App() {
         const gagnant = scores[0]
         return (
           <section className="resultat">
+            {(donnees.sourcesBase ?? {})[gagnant.candidat.id] && (
+              <p className="avertissement-programme" role="note">
+                ⚠️ {gagnant.candidat.nom} n'a pas encore publié son programme de campagne 2027. Les positions
+                utilisées ici sont basées sur <strong>son ancien programme ou ses prises de position publiques</strong> :
+                <a href={donnees.sourcesBase[gagnant.candidat.id].url} target="_blank" rel="noreferrer"> {donnees.sourcesBase[gagnant.candidat.id].label} ↗</a>. Elles seront remplacées par son programme officiel dès sa publication.
+              </p>
+            )}
             <div className="carte-gagnant" style={{ background: gagnant.candidat.couleur }}>
               <span className="medaille">🏆</span>
               <h2>Votre candidat le plus proche :<br />{gagnant.candidat.nom}</h2>
               <p className="parti">{gagnant.candidat.parti}</p>
               <p className="score-gagnant">{gagnant.score} % de compatibilité</p>
               <p className="resume">{legendes[gagnant.candidat.id]}</p>
+              {gagnant.candidat.statut === 'conditionnelle' && (
+                <p className="resume">❓ Candidature conditionnelle : la participation de ce candidat à l'élection n'est pas encore confirmée.</p>
+              )}
             </div>
             <h3>📊 Tous vos scores</h3>
             <div className="classement">
               {scores.map((s, i) => (
                 <div key={s.candidat.id} className="ligne-score">
                   <span className="rang">#{i + 1}</span>
-                  <span className="nom">{s.candidat.nom}</span>
+                  <span className="nom">{s.candidat.nom}{s.candidat.statut === 'conditionnelle' ? ' ❓' : ''}</span>
                   <div className="jauge"><div style={{ width: `${s.score}%`, background: s.candidat.couleur }}></div></div>
                   <span className="pct">{s.score}%</span>
                 </div>
@@ -406,13 +419,22 @@ export default function App() {
               {scores.map((s) => (
                 <div key={s.candidat.id} className="explication-candidat">
                   <h4>{s.candidat.nom} · {s.nbAccords} accords</h4>
+                  {(donnees.sourcesBase ?? {})[s.candidat.id] && (
+                    <p className="avertissement-programme" role="note">
+                      ⚠️ Programme 2027 non publié : positions basées sur l'ancien programme ou des prises de position publiques — <a href={donnees.sourcesBase[s.candidat.id].url} target="_blank" rel="noreferrer">{donnees.sourcesBase[s.candidat.id].label} ↗</a>
+                    </p>
+                  )}
                   <ul>
                     {questions.filter(q => reponses[q.id] !== undefined && reponses[q.id] !== 0 && q.positions[s.candidat.id] && q.positions[s.candidat.id].position !== 0).map(q => {
-                      const accord = q.positions[s.candidat.id].position === reponses[q.id]
+                      const p = q.positions[s.candidat.id]
+                      const accord = p.position === reponses[q.id]
+                      const lienSource = (donnees.sourcesBase ?? {})[s.candidat.id] && p.base
+                        ? donnees.sourcesBase[s.candidat.id].url
+                        : s.candidat.programme
                       return (
                         <li key={q.id} className={accord ? 'accord' : 'desaccord'}>
                           <span>{accord ? '✅' : '❌'}</span> {q.texte}
-                          <em className="source">— Position : {q.positions[s.candidat.id].source} · <a href={s.candidat.programme} target="_blank" rel="noreferrer">Source officielle : {s.candidat.sourceLabel || s.candidat.nom} ↗</a></em>
+                          <em className="source">— Position : {p.source}{p.base === 'ancien_programme' ? ' (ancien programme)' : p.base === 'prise_de_parole' ? ' (prise de position publique)' : ''} · <a href={lienSource} target="_blank" rel="noreferrer">Source : {p.base && (donnees.sourcesBase ?? {})[s.candidat.id] ? donnees.sourcesBase[s.candidat.id].label : s.candidat.sourceLabel || s.candidat.nom} ↗</a></em>
                         </li>
                       )
                     })}

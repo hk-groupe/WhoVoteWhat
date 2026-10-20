@@ -2,6 +2,7 @@
 // Repli : si le backend n'est pas joignable, on retombe sur les données du code source
 // (programmes.mjs), exportables/importables en JSON comme avant.
 import { CANDIDATS, THEMES, QUESTIONS, INFOS, RESULTATS_LEGEND } from '../data/programmes.mjs'
+import { fusionnerPositions, SOURCES_BASE } from '../data/positions-complements.mjs'
 import * as api from '../api/client.mjs'
 
 const CLE_SESSION = 'quivotequoi-session'
@@ -10,8 +11,9 @@ export const BASE = {
   candidats: CANDIDATS,
   legendes: RESULTATS_LEGEND,
   themes: THEMES,
-  questions: QUESTIONS,
+  questions: fusionnerPositions(JSON.parse(JSON.stringify(QUESTIONS))),
   infos: INFOS,
+  sourcesBase: SOURCES_BASE,
 }
 
 export const donneesDefaut = () => JSON.parse(JSON.stringify(BASE))

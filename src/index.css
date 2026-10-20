@@ -527,7 +527,13 @@ body {
 .lien-nav.actif { background: linear-gradient(90deg, var(--violet), var(--rose)); color: #fff; }
 .aide-nav { font-size: 0.9rem; color: var(--violet); font-weight: 600; }
 
+/* ===== Avertissement programme non publié ===== */
+.avertissement-programme { background: #fff7e0; border: 2px solid #ffb703; border-radius: 12px; padding: 10px 14px; font-size: 0.92rem; color: #5a4500; }
+.avertissement-programme a { font-weight: 700; color: #b07500; }
+.src-label { color: #888; font-size: 0.82rem; }
+
 /* ===== Page candidats ===== */
+.badge-statut { font-weight: 700; font-size: 0.8rem; background: linear-gradient(90deg, var(--violet), var(--rose)); color: #fff !important; border-radius: 999px; padding: 3px 10px; }
 .candidats-page { display: grid; gap: 16px; }
 .details-candidat { background: #fff; border: 3px solid; border-radius: 20px; padding: 18px 22px; box-shadow: 0 8px 24px rgba(31,22,51,.08); }
 .details-candidat summary { cursor: pointer; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 1.15rem; }
