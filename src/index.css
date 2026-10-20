@@ -549,7 +549,7 @@ details summary::before {
   transform: translateY(-50%) rotate(90deg);
   transition: transform 0.2s;
 }
-details[open] summary::before {
+details[open] > summary::before {
   transform: translateY(-50%) rotate(-90deg);
   border-left-color: var(--rose);
 }
