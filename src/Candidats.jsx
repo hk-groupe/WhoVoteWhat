@@ -1,4 +1,5 @@
 import React from 'react'
+import { STATUTS } from './data/programmes.mjs'
 
 // Résumé le plus exhaustif possible des programmes :
 // uniquement les propositions déclarées dans le programme du candidat.
@@ -42,6 +43,9 @@ export default function Candidats({ donnees, onOuvrir }) {
               <span className="dot" style={{ background: c.couleur, margin: 0 }}></span>
               <strong>{c.nom}</strong>
               <em>{c.parti}</em>
+              {c.statut && c.statut !== 'declare' && STATUTS[c.statut] && (
+                <em className="badge-statut">{STATUTS[c.statut].emoji} {STATUTS[c.statut].label}</em>
+              )}
             </summary>
             <div className="contenu-candidat">
               <p className="synthese-candidat">{legendes[c.id]}</p>
@@ -53,7 +57,7 @@ export default function Candidats({ donnees, onOuvrir }) {
                 🌐 Site officiel du candidat ↗
               </a>
               {nbEngagements === 0 ? (
-                <p>Aucune proposition issue de son programme n'est encore enregistrée pour ce candidat.</p>
+                <p>Aucune proposition issue de son programme n'est encore enregistrée pour ce candidat. Les positions du quiz pour ce candidat seront ajoutées à mesure que son programme officiel est publié.</p>
               ) : (
                 <div className="points">
                   {Object.entries(parTheme).map(([theme, engagements]) => (

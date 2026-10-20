@@ -389,13 +389,16 @@ export default function App() {
               <p className="parti">{gagnant.candidat.parti}</p>
               <p className="score-gagnant">{gagnant.score} % de compatibilité</p>
               <p className="resume">{legendes[gagnant.candidat.id]}</p>
+              {gagnant.candidat.statut === 'conditionnelle' && (
+                <p className="resume">❓ Candidature conditionnelle : la participation de ce candidat à l'élection n'est pas encore confirmée.</p>
+              )}
             </div>
             <h3>📊 Tous vos scores</h3>
             <div className="classement">
               {scores.map((s, i) => (
                 <div key={s.candidat.id} className="ligne-score">
                   <span className="rang">#{i + 1}</span>
-                  <span className="nom">{s.candidat.nom}</span>
+                  <span className="nom">{s.candidat.nom}{s.candidat.statut === 'conditionnelle' ? ' ❓' : ''}</span>
                   <div className="jauge"><div style={{ width: `${s.score}%`, background: s.candidat.couleur }}></div></div>
                   <span className="pct">{s.score}%</span>
                 </div>

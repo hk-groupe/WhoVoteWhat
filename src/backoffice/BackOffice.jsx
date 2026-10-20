@@ -1,4 +1,5 @@
 import React from 'react'
+import { STATUTS } from '../data/programmes.mjs'
 import {
   chargerDonnees, sauvegarderDonnees, reinitialiserDonnees, exporterJSON, importerJSON,
   memoriserSession, sessionEnCours, oublieSession,
@@ -280,6 +281,17 @@ export default function BackOffice({ onFermer }) {
                   />
                 </label>
               ))}
+              <label>
+                statut
+                <select
+                  value={candidatEdite.statut || 'declare'}
+                  onChange={(e) => setCandidatEdite({ ...candidatEdite, statut: e.target.value })}
+                >
+                  {Object.entries(STATUTS).map(([id, s]) => (
+                    <option key={id} value={id}>{s.emoji} {s.label}</option>
+                  ))}
+                </select>
+              </label>
               <div className="bo-actions">
                 <button className="btn-principal" onClick={enregistrerCandidat}>Enregistrer</button>
                 <button className="btn-principal" onClick={() => setCandidatEdite(null)}>Annuler</button>
