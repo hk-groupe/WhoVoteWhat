@@ -313,7 +313,7 @@ export const QUESTIONS = [
   {
     id: 'impots',
     theme: 'economie',
-    texte: 'Il faut baisser les impôts des ménages et des entreprises, quitte à réduire les services publics.',
+    texte: 'Il faut baisser les impôts des ménages, quitte à réduire les services publics.',
     info: 'impotsRevenu',
     positions: {
       melenchon: { position: -1, source: 'Augmenter les recettes (ISF, taxe Zucman) pour financer les services publics ; pas de baisse d\'impôts' },
@@ -881,7 +881,7 @@ export const QUESTIONS = [
   {
     id: 'retraite_jeunes',
     theme: 'retraites',
-    texte: 'Les jeunes générations, en fin de carrière, doivent financer la retraite des générations précédentes.',
+    texte: 'Le système de retraites par répartition repose sur le travail des jeunes générations, qui cotisent pour financer les pensions des retraités : ce principe doit être maintenu tel quel.',
     info: 'retraitesHistoire',
     positions: {
       melenchon: { position: 0, source: 'Financer par le capital et les hauts revenus, pas par les jeunes' },
@@ -1284,7 +1284,7 @@ export const QUESTIONS = [
   {
     id: 'israel_palestine',
     theme: 'europe',
-    texte: 'La France doit reconnaître pleinement l\'État de Palestine pour contribuire à une paix juste et durable.',
+    texte: 'La France devrait reconnaître pleinement l\'État de Palestine.',
     info: 'ukraine',
     positions: {
       melenchon: { position: 1, source: 'Reconnaissance de la Palestine' },
@@ -1479,7 +1479,7 @@ export const QUESTIONS = [
   {
     id: 'religion_etranger',
     theme: 'religion',
-    texte: 'Les cultes étrangers qui menacent la laïcité doivent être interdits ou strictement contrôlés.',
+    texte: 'Un culte dont les pratiques contreviennent au principe de laïcité devrait être interdit ou strictement encadré.',
     info: 'religion1905',
     positions: {
       melenchon: { position: -1, source: 'Refus de cibler les religions, liberté de culte protégée' },
@@ -1505,7 +1505,7 @@ export const QUESTIONS = [
   {
     id: 'conscience_sante',
     theme: 'religion',
-    texte: 'Les professionnels de santé doivent être protégés : aucun refus de soins motivé par des convictions religieuses.',
+    texte: 'Un professionnel de santé ne devrait pas pouvoir refuser d\'accomplir un soin en raison de ses convictions religieuses personnelles.',
     info: 'cultes',
     positions: {
       melenchon: { position: 1, source: 'Refus de soins religieux interdit' },
