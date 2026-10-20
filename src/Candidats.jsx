@@ -38,7 +38,7 @@ export default function Candidats({ donnees, onOuvrir }) {
         return (
           <details key={c.id} className="details-candidat" style={{ borderColor: c.couleur }}>
             <summary className="resume-candidat">
-              <span className="dot" style={{ background: c.couleur }}></span>
+              <span className="dot" style={{ background: c.couleur, margin: 0 }}></span>
               <strong>{c.nom}</strong>
               <em>{c.parti}</em>
             </summary>

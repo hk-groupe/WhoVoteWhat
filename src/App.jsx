@@ -188,7 +188,10 @@ export default function App() {
           <h1>Qui Vote<span className="accent"> Quoi</span></h1>
           <Navigation ecran={ecran} naviguer={naviguer} />
         </div>
-        <p className="tagline">Trouvez le candidat 2027 qui vous ressemble, en quelques questions simples 🚀</p>
+
+        {ecran === 'quiz-config' && (
+          <p className="tagline">Trouvez le candidat 2027 qui vous ressemble, en quelques questions simples 🚀</p>
+        )}
       </header>
 
       {ecran === 'accueil' && (
@@ -205,16 +208,6 @@ export default function App() {
             </ul>
             <p className="aide-nav">Ouvrez le menu burger ☰ en haut de la page pour naviguer entre les sections.</p>
             <button className="btn-principal" onClick={() => naviguer('quiz-config')}>🚀 Commencer le quiz</button>
-          </div>
-          <div className="candidats-apercu">
-            {candidats.map((c) => (
-              <div key={c.id} className="carte-candidat" style={{ borderColor: c.couleur }}>
-                <span className="dot" style={{ background: c.couleur }}></span>
-                <strong>{c.nom}</strong>
-                <em>{c.parti}</em>
-                <a className="lien-programme" href={c.programme} target="_blank" rel="noreferrer">📄 Programme officiel ↗</a>
-              </div>
-            ))}
           </div>
           <div className="bloc disclaimer" role="note">
             <h3>⚠️ Avertissement</h3>
@@ -366,14 +359,14 @@ export default function App() {
               : (typeof question.info === 'string' && donnees.infos[question.info]) || []
             if (infosQuestion.length === 0) return null
             return (
-            <p className="en-savoir-plus">
-              <span className="en-savoir-plus-label">💡 En savoir plus :</span>{' '}
-              {infosQuestion.map((info) => (
-                <React.Fragment key={info.url}>
-                  <a href={info.url} target="_blank" rel="noreferrer">{info.titre} ↗</a>{' '}
-                </React.Fragment>
-              ))}
-            </p>
+              <p className="en-savoir-plus">
+                <span className="en-savoir-plus-label">💡 En savoir plus :</span>{' '}
+                {infosQuestion.map((info) => (
+                  <React.Fragment key={info.url}>
+                    <a href={info.url} target="_blank" rel="noreferrer">{info.titre} ↗</a>{' '}
+                  </React.Fragment>
+                ))}
+              </p>
             )
           })()}
           <div className="choix">

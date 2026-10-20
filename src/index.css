@@ -546,11 +546,11 @@ details summary::before {
   border-left: 8px solid var(--violet);
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
-  transform: translateY(-50%);
+  transform: translateY(-50%) rotate(90deg);
   transition: transform 0.2s;
 }
 details[open] summary::before {
-  transform: translateY(-50%) rotate(90deg);
+  transform: translateY(-50%) rotate(-90deg);
   border-left-color: var(--rose);
 }
 details summary.listmarker-off, details summary.no-triangle { padding-left: 0; }
