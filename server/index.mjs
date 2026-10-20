@@ -19,6 +19,9 @@ const CONTENU_DEFAUT = {
   sourcesBase: SOURCES_BASE,
 }
 
+const QUESTIONS_SOURCE = fusionnerPositions(JSON.parse(JSON.stringify(QUESTIONS)))
+const QUESTIONS_PAR_ID = new Map(QUESTIONS_SOURCE.map((q) => [q.id, q]))
+
 const CLE_SECRETE = process.env.CLE_SECRETE
 if (!CLE_SECRETE) {
   console.warn('⚠️  CLE_SECRETE absente — les sessions ne survivront pas à un redémarrage.')
@@ -41,9 +44,46 @@ function verifierMotDePasse(motDePasse, stocke) {
 
 async function chargerEtat() {
   try {
-    return JSON.parse(await readFile(FICHIER_CONTENU, 'utf8'))
+    const stocke = JSON.parse(await readFile(FICHIER_CONTENU, 'utf8'))
+    return { contenu: harmoniserContenu(stocke.contenu), comptes: stocke.comptes }
   } catch {
     return { contenu: CONTENU_DEFAUT, comptes: [creerCompteDefaut()] }
+  }
+}
+
+// Un contenu persisté avant l'ajout de nouveaux candidats dans le code ne doit pas
+// les masquer : on fusionne les candidats et positions manquants au chargement.
+// Les candidats existants (mêmes ids) ne sont PAS modifiés — les éditions du back-office sont préservées ;
+// seuls les nouveaux sont ajoutés, avec leurs positions issues du code source.
+function harmoniserContenu(contenu) {
+  if (!contenu || !Array.isArray(contenu.candidats)) return CONTENU_DEFAUT
+  const idsConnus = new Set(contenu.candidats.map((c) => c.id))
+  const idsSource = new Map(CANDIDATS.map((c) => [c.id, c]))
+  const candidatsFusionnes = [...contenu.candidats]
+  for (const c of CANDIDATS) {
+    if (!idsConnus.has(c.id)) candidatsFusionnes.push(JSON.parse(JSON.stringify(c)))
+  }
+  const questions = (contenu.questions ?? []).map((q) => {
+    const qSource = QUESTIONS_PAR_ID.get(q.id)
+    if (!qSource) return q
+    const positions = { ...(q.positions ?? {}) }
+    const positionsSource = qSource.positions ?? {}
+    let change = false
+    for (const [cid, p] of Object.entries(positionsSource)) {
+      if (positions[cid]) continue
+      positions[cid] = p
+      change = true
+    }
+    return change ? { ...q, positions } : q
+  })
+  return {
+    ...contenu,
+    candidats: candidatsFusionnes,
+    questions,
+    legendes: { ...RESULTATS_LEGEND, ...(contenu.legendes ?? {}) },
+    themes: { ...THEMES, ...(contenu.themes ?? {}) },
+    infos: { ...INFOS, ...(contenu.infos ?? {}) },
+    sourcesBase: { ...SOURCES_BASE, ...(contenu.sourcesBase ?? {}) },
   }
 }
 
