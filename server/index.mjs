@@ -58,7 +58,6 @@ async function chargerEtat() {
 function harmoniserContenu(contenu) {
   if (!contenu || !Array.isArray(contenu.candidats)) return CONTENU_DEFAUT
   const idsConnus = new Set(contenu.candidats.map((c) => c.id))
-  const idsSource = new Map(CANDIDATS.map((c) => [c.id, c]))
   const candidatsFusionnes = [...contenu.candidats]
   for (const c of CANDIDATS) {
     if (!idsConnus.has(c.id)) candidatsFusionnes.push(JSON.parse(JSON.stringify(c)))
