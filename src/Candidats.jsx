@@ -11,13 +11,15 @@ export default function Candidats({ donnees, onOuvrir }) {
   const legendes = donnees.legendes ?? {}
   const questions = donnees.questions ?? []
 
+  const sourcesBase = donnees.sourcesBase ?? {}
+
   const engagementsParCandidat = (candidat) => {
     const parTheme = {}
     questions.forEach((q) => {
       const p = q.positions?.[candidat.id]
       if (!p || p.position !== 1 || !p.source) return
       if (!parTheme[q.theme]) parTheme[q.theme] = []
-      parTheme[q.theme].push({ question: q, source: p.source })
+      parTheme[q.theme].push({ question: q, position: p })
     })
     return parTheme
   }
@@ -49,6 +51,14 @@ export default function Candidats({ donnees, onOuvrir }) {
             </summary>
             <div className="contenu-candidat">
               <p className="synthese-candidat">{legendes[c.id]}</p>
+              {sourcesBase[c.id] && (
+                <p className="avertissement-programme" role="note">
+                  ⚠️ {c.nom} n'a pas encore publié son programme de campagne 2027. Les propositions ci-dessous sont
+                  basées sur <strong>son ancien programme ou ses prises de position publiques</strong>, toujours avec
+                  source : <a href={sourcesBase[c.id].url} target="_blank" rel="noreferrer">{sourcesBase[c.id].label} ↗</a>.
+                  Elles seront remplacées par son programme officiel dès sa publication.
+                </p>
+              )}
               <p className="source">Synthèse établie à partir du <a href={c.programme} target="_blank" rel="noreferrer">programme officiel — {c.sourceLabel} ↗</a></p>
               <a className="lien-programme" href={c.programme} target="_blank" rel="noreferrer">
                 📄 Lire le programme officiel complet ↗
@@ -57,19 +67,25 @@ export default function Candidats({ donnees, onOuvrir }) {
                 🌐 Site officiel du candidat ↗
               </a>
               {nbEngagements === 0 ? (
-                <p>Aucune proposition issue de son programme n'est encore enregistrée pour ce candidat. Les positions du quiz pour ce candidat seront ajoutées à mesure que son programme officiel est publié.</p>
+                <p>Aucune proposition issue de son programme n'est encore enregistrée pour ce candidat. {sourcesBase[c.id] ? 'Ses positions publiques seront ajoutées dès que possible, en attendant son programme 2027.' : 'Les positions du quiz pour ce candidat seront ajoutées à mesure que son programme officiel est publié.'}</p>
               ) : (
                 <div className="points">
                   {Object.entries(parTheme).map(([theme, engagements]) => (
                     <details key={theme} className="details-theme-candidat">
                       <summary>{themes[theme]?.emoji} {themes[theme]?.label || theme} · {engagements.length} proposition{engagements.length > 1 ? 's' : ''}</summary>
                       <ul className="positions-liste">
-                        {engagements.map(({ question, source }) => (
-                          <li key={question.id} className="position-item">
-                            {source}
-                            <em className="source">— <a href={c.programme} target="_blank" rel="noreferrer">source : {c.sourceLabel || `programme officiel de ${c.nom}`} ↗</a></em>
-                          </li>
-                        ))}
+                        {engagements.map(({ question, position }) => {
+                          const lien = position.base && sourcesBase[c.id] ? sourcesBase[c.id].url : c.programme
+                          const labelSource = position.base && sourcesBase[c.id] ? sourcesBase[c.id].label : (c.sourceLabel || `programme officiel de ${c.nom}`)
+                          return (
+                            <li key={question.id} className="position-item">
+                              {position.source}
+                              {position.base === 'ancien_programme' && <em className="src-label"> · ancien programme</em>}
+                              {position.base === 'prise_de_parole' && <em className="src-label"> · prise de position publique</em>}
+                              <em className="source">— <a href={lien} target="_blank" rel="noreferrer">source : {labelSource} ↗</a></em>
+                            </li>
+                          )
+                        })}
                       </ul>
                     </details>
                   ))}

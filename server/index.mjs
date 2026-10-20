@@ -3,6 +3,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto'
 import { CANDIDATS, THEMES, QUESTIONS, INFOS, RESULTATS_LEGEND } from '../src/data/programmes.mjs'
+import { fusionnerPositions, SOURCES_BASE } from '../src/data/positions-complements.mjs'
 import { mettreAJourScrutins, lireScrutins } from './scrutins.mjs'
 
 const PORT = Number(process.env.PORT || 4000)
@@ -13,8 +14,9 @@ const CONTENU_DEFAUT = {
   candidats: CANDIDATS,
   legendes: RESULTATS_LEGEND,
   themes: THEMES,
-  questions: QUESTIONS,
+  questions: fusionnerPositions(JSON.parse(JSON.stringify(QUESTIONS))),
   infos: INFOS,
+  sourcesBase: SOURCES_BASE,
 }
 
 const CLE_SECRETE = process.env.CLE_SECRETE
@@ -118,7 +120,7 @@ function sessionValide(req) {
   return jeton && sessions.has(jeton) ? { jeton, ...sessions.get(jeton) } : null
 }
 
-const CHAMPS_CONTENU = ['candidats', 'legendes', 'themes', 'questions', 'infos']
+const CHAMPS_CONTENU = ['candidats', 'legendes', 'themes', 'questions', 'infos', 'sourcesBase']
 
 async function route(req, res) {
   const url = new URL(req.url, `http://${req.headers.host}`)
