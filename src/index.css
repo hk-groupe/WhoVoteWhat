@@ -567,3 +567,4 @@ details[open] > summary::before {
 }
 details summary.listmarker-off, details summary.no-triangle { padding-left: 0; }
 details summary.listmarker-off::before, details summary.no-triangle::before { content: none; }
+.statut-election { font-size: 0.88rem; color: #666; font-style: italic; margin: 2px 0 0; }
