@@ -489,3 +489,50 @@ body {
   .rv-ligne-theme .rv-jauge { grid-column: 1 / -1; }
   .rv-ligne-theme .rv-position-groupe { text-align: left; }
 }
+
+/* ===== Navigation burger ===== */
+.barre-titre { display: flex; align-items: center; justify-content: center; gap: 16px; position: relative; flex-wrap: wrap; }
+.nav { position: absolute; right: 0; top: 0; }
+.burger {
+  width: 48px; height: 48px; border: none; border-radius: 14px; cursor: pointer;
+  background: #fff; box-shadow: 0 6px 18px rgba(123, 47, 247, 0.2);
+  display: grid; place-items: center; gap: 5px; padding: 0;
+}
+.burger span { display: block; width: 22px; height: 3px; border-radius: 2px; background: var(--violet); transition: transform 0.2s, opacity 0.2s; }
+.burger.ouvert span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.burger.ouvert span:nth-child(2) { opacity: 0; }
+.burger.ouvert span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+.menu-nav {
+  position: absolute; right: 0; top: 56px; z-index: 50; list-style: none; min-width: 250px;
+  background: #fff; border-radius: 18px; padding: 10px; margin: 0;
+  box-shadow: 0 14px 40px rgba(31, 22, 51, 0.18); display: grid; gap: 6px;
+}
+.lien-nav {
+  width: 100%; text-align: left; border: 2px solid transparent; background: transparent;
+  border-radius: 12px; padding: 10px 14px; font: inherit; font-weight: 700; cursor: pointer; color: var(--texte);
+}
+.lien-nav:hover { background: linear-gradient(90deg, rgba(123,47,247,.08), rgba(255,46,136,.08)); border-color: var(--violet); }
+.lien-nav.actif { background: linear-gradient(90deg, var(--violet), var(--rose)); color: #fff; }
+.aide-nav { font-size: 0.9rem; color: var(--violet); font-weight: 600; }
+
+/* ===== Page candidats ===== */
+.candidats-page { display: grid; gap: 16px; }
+.details-candidat { background: #fff; border: 3px solid; border-radius: 20px; padding: 18px 22px; box-shadow: 0 8px 24px rgba(31,22,51,.08); }
+.details-candidat summary { cursor: pointer; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 1.15rem; }
+.details-candidat summary em { color: #666; font-style: normal; font-size: 0.95rem; }
+.contenu-candidat { margin-top: 16px; display: grid; gap: 14px; }
+.synthese-candidat { font-weight: 600; background: #f6f1ff; border-radius: 12px; padding: 12px 16px; }
+.details-theme-candidat { border: 2px solid #eee; border-radius: 14px; padding: 10px 14px; }
+.details-theme-candidat summary { font-weight: 700; color: var(--violet); cursor: pointer; }
+.badge-position { font-weight: 700; white-space: nowrap; }
+.positions-liste { list-style: none; margin-top: 10px; display: grid; gap: 8px; }
+.position-item { line-height: 1.5; }
+.position-item .source { display: block; color: #666; font-size: 0.85rem; }
+
+/* ===== Page calendrier ===== */
+.calendrier-page { display: grid; gap: 16px; }
+.carte-election { background: #fff; border-left: 8px solid var(--cyan); border-radius: 18px; padding: 20px 24px; box-shadow: 0 8px 24px rgba(31,22,51,.08); display: grid; gap: 8px; }
+.entete-election { display: flex; align-items: center; gap: 12px; }
+.emoji-election { font-size: 32px; }
+.carte-election h3 { color: var(--violet); }
+.meta-election { font-weight: 700; color: var(--rose); }

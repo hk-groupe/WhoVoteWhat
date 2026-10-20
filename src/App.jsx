@@ -2,6 +2,47 @@ import React from 'react'
 import { chargerDonnees } from './backoffice/store.mjs'
 import BackOffice from './backoffice/BackOffice.jsx'
 import RecapVotes from './RecapVotes.jsx'
+import Candidats from './Candidats.jsx'
+import Calendrier from './Calendrier.jsx'
+
+const NAV = [
+  { id: 'accueil', label: 'Accueil', emoji: '🏠' },
+  { id: 'quiz-config', label: 'Le quiz', emoji: '🎯' },
+  { id: 'recap-votes', label: 'Que votent-ils ?', emoji: '🗳️' },
+  { id: 'candidats', label: 'Les candidats', emoji: '👥' },
+  { id: 'calendrier', label: 'Le calendrier', emoji: '📅' },
+  { id: 'transparence', label: 'Notre transparence', emoji: '🔍' },
+]
+
+function Navigation({ ecran, naviguer }) {
+  const [ouvert, setOuvert] = React.useState(false)
+  return (
+    <nav className="nav" aria-label="Navigation principale">
+      <button
+        className={ouvert ? 'burger ouvert' : 'burger'}
+        aria-expanded={ouvert}
+        aria-label="Menu"
+        onClick={() => setOuvert(!ouvert)}
+      >
+        <span></span><span></span><span></span>
+      </button>
+      {ouvert && (
+        <ul className="menu-nav">
+          {NAV.map((item) => (
+            <li key={item.id}>
+              <button
+                className={ecran === item.id ? 'lien-nav actif' : 'lien-nav'}
+                onClick={() => { setOuvert(false); naviguer(item.id) }}
+              >
+                {item.emoji} {item.label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </nav>
+  )
+}
 
 const NB_MIN = 10
 const NB_MAX = 100
@@ -82,7 +123,11 @@ export default function App() {
   function recommencer() {
     setReponses({})
     setQIndex(0)
-    setEcran('accueil')
+    setEcran('quiz-config')
+  }
+
+  function naviguer(cible) {
+    setEcran(cible)
   }
 
   function calculerScores() {
@@ -138,12 +183,48 @@ export default function App() {
   return (
     <div className="app">
       <header className="header">
-        <span className="logo">🗳️</span>
-        <h1>Qui Vote<span className="accent"> Quoi</span></h1>
+        <div className="barre-titre">
+          <span className="logo">🗳️</span>
+          <h1>Qui Vote<span className="accent"> Quoi</span></h1>
+          <Navigation ecran={ecran} naviguer={naviguer} />
+        </div>
         <p className="tagline">Trouvez le candidat 2027 qui vous ressemble, en quelques questions simples 🚀</p>
       </header>
 
       {ecran === 'accueil' && (
+        <section className="accueil">
+          <div className="bloc">
+            <h2>Bienvenue 👋</h2>
+            <p>Découvrez les sections du site pour mieux comprendre les programmes et les votes de vos élus :</p>
+            <ul className="points">
+              <li>🎯 <strong>Le quiz</strong> — configurez et lancez votre quiz pour trouver le candidat qui vous ressemble</li>
+              <li>🗳️ <strong>Que votent-ils ?</strong> — le récap des votes : qui a voté quoi à l'Assemblée</li>
+              <li>👥 <strong>Les candidats</strong> — la liste des candidats déclarés avec le résumé de leur programme</li>
+              <li>📅 <strong>Le calendrier</strong> — toutes les élections à venir, en France et en Europe</li>
+              <li>🔍 <strong>Notre transparence</strong> — comment ce site fonctionne, sources et méthode</li>
+            </ul>
+            <p className="aide-nav">Ouvrez le menu burger ☰ en haut de la page pour naviguer entre les sections.</p>
+            <button className="btn-principal" onClick={() => naviguer('quiz-config')}>🚀 Commencer le quiz</button>
+          </div>
+          <div className="candidats-apercu">
+            {candidats.map((c) => (
+              <div key={c.id} className="carte-candidat" style={{ borderColor: c.couleur }}>
+                <span className="dot" style={{ background: c.couleur }}></span>
+                <strong>{c.nom}</strong>
+                <em>{c.parti}</em>
+                <a className="lien-programme" href={c.programme} target="_blank" rel="noreferrer">📄 Programme officiel ↗</a>
+              </div>
+            ))}
+          </div>
+          <div className="bloc disclaimer" role="note">
+            <h3>⚠️ Avertissement</h3>
+            <p><strong>QuiVoteQuoi est un projet indépendant de vulgarisation à but strictement informatif.</strong> Les contenus proposés — quiz d'affinité, récapitulatif des votes et positions des candidats — sont établis à partir de sources officielles, mais ne constituent <strong>ni un conseil de vote</strong>, ni une recommandation, ni un soutien à un candidat ou à une formation politique, et ne se substituent en aucun cas à la recherche et à la lecture intégrale des programmes électoraux et des textes officiels.</p>
+            <p>L'application a pour seul objet de vous aider à <strong>y voir plus clair</strong> dans l'offre politique et à orienter votre propre réflexion. Les synthèses et scores présentés résultent d'un traitement simplifié d'informations publiques : ils ne reflètent pas l'exhaustivité ni la complexité des programmes et ne sauraient engager la responsabilité de leurs auteurs. En utilisant ce site, vous reconnaissez que vos choix électoraux relèvent de votre seule et entière responsabilité.</p>
+          </div>
+          <button className="retour" onClick={() => setEcran('backoffice')}>🛠️ Back-office (admin)</button>
+        </section>
+      )}
+      {ecran === 'quiz-config' && (
         <section className="accueil">
           <div className="bloc">
             <h2>Ce sont vos idées qui comptent 🎯</h2>
@@ -173,27 +254,12 @@ export default function App() {
             </div>
             <button className="btn-principal" onClick={demarrer}>C'est parti ! 🔥</button>
           </div>
-          <div className="candidats-apercu">
-            {candidats.map((c) => (
-              <div key={c.id} className="carte-candidat" style={{ borderColor: c.couleur }}>
-                <span className="dot" style={{ background: c.couleur }}></span>
-                <strong>{c.nom}</strong>
-                <em>{c.parti}</em>
-                <a className="lien-programme" href={c.programme} target="_blank" rel="noreferrer">📄 Programme officiel ↗</a>
-              </div>
-            ))}
-          </div>
-          <div className="bloc disclaimer" role="note">
-            <h3>⚠️ Avertissement</h3>
-            <p><strong>QuiVoteQuoi est un projet indépendant de vulgarisation à but strictement informatif.</strong> Les contenus proposés — quiz d'affinité, récapitulatif des votes et positions des candidats — sont établis à partir de sources officielles, mais ne constituent <strong>ni un conseil de vote</strong>, ni une recommandation, ni un soutien à un candidat ou à une formation politique, et ne se substituent en aucun cas à la recherche et à la lecture intégrale des programmes électoraux et des textes officiels.</p>
-            <p>L'application a pour seul objet de vous aider à <strong>y voir plus clair</strong> dans l'offre politique et à orienter votre propre réflexion. Les synthèses et scores présentés résultent d'un traitement simplifié d'informations publiques : ils ne reflètent pas l'exhaustivité ni la complexité des programmes et ne sauraient engager la responsabilité de leurs auteurs. En utilisant ce site, vous reconnaissez que vos choix électoraux relèvent de votre seule et entière responsabilité.</p>
-          </div>
-          <button className="retour" onClick={() => setEcran('backoffice')}>🛠️ Back-office (admin)</button>
-          <button className="btn-principal btn-transparence" onClick={() => setEcran('transparence')}>🔍 Transparence : comment fonctionne ce site ?</button>
-          <button className="btn-principal btn-recap-votes" onClick={() => setEcran('recap-votes')}>🗳️ Récap des votes : qui a voté quoi à l'Assemblée ?</button>
+          <button className="retour" onClick={() => setEcran('accueil')}>← Retour à l'accueil</button>
         </section>
       )}
       {ecran === 'recap-votes' && <RecapVotes onRetour={() => setEcran('accueil')} />}
+      {ecran === 'candidats' && <Candidats donnees={donnees} onOuvrir={() => naviguer('quiz-config')} />}
+      {ecran === 'calendrier' && <Calendrier />}
       {ecran === 'transparence' && (
         <section className="transparence">
           <div className="bloc">
