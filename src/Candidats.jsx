@@ -62,16 +62,6 @@ export default function Candidats({ donnees, onOuvrir }) {
                         {engagements.map(({ question, source }) => (
                           <li key={question.id} className="position-item">
                             {source}
-                            {question.info && (
-                              <a
-                                className="source"
-                                href={(Array.isArray(question.info) ? question.info[0] : question.info)?.url}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                {' '}En savoir plus ↗
-                              </a>
-                            )}
                           </li>
                         ))}
                       </ul>
