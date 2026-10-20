@@ -153,9 +153,9 @@ npm run build
 pm2 restart quivotequoi-api
 ```
 
-### Méthode B — Déploiement via FTP (sans Git sur le serveur)
+### Méthode B — Déploiement via FTP / SFTP (glisser-déposer depuis votre PC)
 
-Adaptée à un hébergement mutualisé avec Node.js activé (sinon voir la variante « front seul » plus bas).
+Adaptée à un serveur accessible en FTP/SFTP (VPS, hébergement mutualisé avec Node.js). Le backend n'ayant **aucune dépendance externe** (modules Node natifs uniquement), rien n'est à installer sur le serveur : vous déposez simplement les fichiers.
 
 #### 1. Construire en local
 
@@ -164,44 +164,51 @@ npm ci
 npm run build          # génère dist/
 ```
 
-#### 2. Préparer le paquet à uploader
+#### 2. Glisser-déposer sur le serveur
 
-Il vous faut : `dist/`, `server/`, `public/`, `package.json`, `package-lock.json`.
+Avec FileZilla, WinSCP ou lftp, transférez **uniquement** ces éléments (par exemple vers `/srv/WhoVoteWhat/`) :
 
-```bash
-mkdir -p upload
-cp -r dist server public package.json package-lock.json upload/
-```
+- `dist/` — le site statique
+- `server/` — le backend (⚠️ ne pas écraser `server/data/` s'il existe : il contient vos données back-office)
+- `public/` — assets servis par le backend
+- `package.json` et `package-lock.json`
 
-#### 3. Transférer en FTP
+**N'uploadez pas** `node_modules/` (inutile sur le serveur : le backend tourne sans rien installer) ni `src/`, `scripts/`, fichiers de config (utiles uniquement pour rebuild en local).
 
-Avec FileZilla, WinSCP ou `lftp` :
-
-```bash
-# Exemple avec lftp
-lftp ftp://utilisateur:motdepasse@ftp.monhebergeur.fr
-mirror -R upload/ /chemin/vers/quivotequoi
-```
-
-⚠️ **En FTP, `node_modules` ne s'upload pas** : il faut l'installer sur le serveur :
+Exemple SFTP avec lftp (VPS OVH) :
 
 ```bash
-# Sur le serveur, via SSH ou le terminal de l'hébergeur
-cd /chemin/vers/quivotequoi
-npm ci --omit=dev
+lftp sftp://ubuntu@vps-c8527c7e.vps.ovh.net
+mirror -R dist/ /srv/WhoVoteWhat/dist/
+mirror -R server/ /srv/WhoVoteWhat/server/ -x data/
+mirror -R public/ /srv/WhoVoteWhat/public/
+put package.json -o /srv/WhoVoteWhat/package.json
+put package-lock.json -o /srv/WhoVoteWhat/package-lock.json
 ```
 
-> Si votre hébergement ne propose **ni SSH ni terminal**, l'API Node ne peut pas être installée : utilisez la variante « front seul » ci-dessous.
+#### 3. Configurer et démarrer
 
-#### 4. Configurer et démarrer
+Sur le serveur (SSH), même configuration que la méthode A :
 
-Comme pour la méthode A : définissez `PORT`, `CLE_SECRETE`, `ORIGINE_AUTORISEE`, puis démarrez `server/index.mjs` (pm2, service systemd, ou le gestionnaire de processus de l'hébergeur).
+```bash
+cd /srv/WhoVoteWhat
+export PORT=4000
+export CLE_SECRETE="$(openssl rand -hex 32)"
+export ORIGINE_AUTORISEE="https://quivotequoi.fr"
 
-#### 5. Mettre à jour (routine)
+# service persistant
+sudo npm install -g pm2
+pm2 start server/index.mjs --name quivotequoi-api
+pm2 save && pm2 startup
+```
+
+> 💡 Sur un VPS, la **méthode A (Git)** reste la plus simple au quotidien ; la méthode B convient si vous préférez FileZilla ou ne voulez pas de Git sur le serveur.
+
+#### 4. Mettre à jour (routine)
 
 1. En local : `git pull && npm ci && npm run build`
-2. Re-transférer `dist/` et `server/` en FTP (écraser)
-3. Redémarrer le processus Node
+2. Re-transférer `dist/` et `server/` (écraser, sauf `server/data/`)
+3. Sur le serveur : `pm2 restart quivotequoi-api`
 
 #### Variante « front seul » (hébergement 100 % statique, sans Node)
 
