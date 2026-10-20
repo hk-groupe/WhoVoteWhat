@@ -63,12 +63,21 @@ Au démarrage, l'API consolide l'open data si aucune donnée locale n'existe, pu
 
 ## 🚀 Mise en production
 
-### 1. Préparer le serveur
+Le site a deux composants à déployer :
 
-- **Node.js 18+** et **npm** installés sur le serveur.
-- Un nom de domaine avec certificat HTTPS (obligatoire pour un site public).
+- **Front** : site statique généré dans `dist/` — à servir derrière Nginx/Apache ou un hébergeur statique.
+- **API Node** (`server/index.mjs`) : contenu partagé (back-office) + consolidation quotidienne des scrutins. Elle doit tourner sur un serveur Node (pas d'hébergement statique pur).
 
-### 2. Récupérer le code et installer
+> 💡 **Contenu persisté** : si un `server/data/contenu.json` existe déjà (créé par une sauvegarde back-office), l'API **fusionne automatiquement** au démarrage les candidats et positions manquants du code source. Vos éditions du back-office restent intactes. Aucune suppression manuelle n'est nécessaire.
+
+### Méthode A — Déploiement via Git (recommandée)
+
+#### 1. Préparer le serveur
+
+- **Node.js 18+** et **npm** installés.
+- Un nom de domaine avec certificat HTTPS.
+
+#### 2. Récupérer le code et installer
 
 ```bash
 git clone https://github.com/hk-groupe/WhoVoteWhat.git
@@ -76,7 +85,7 @@ cd WhoVoteWhat
 npm ci
 ```
 
-### 3. Configurer les variables d'environnement
+#### 3. Configurer les variables d'environnement
 
 | Variable | Rôle | Valeur recommandée en production |
 |---|---|---|
@@ -84,7 +93,7 @@ npm ci
 | `CLE_SECRETE` | Clé de session du back-office | une chaîne aléatoire longue (obligatoire, sinon les sessions ne survivent pas à un redémarrage) |
 | `ORIGINE_AUTORISEE` | Origine CORS autorisée pour l'API | l'URL publique du site, ex. `https://quivotequoi.fr` (ne pas laisser `*` en production) |
 | `HEURE_MAJ_SCRUTINS` | Heure de la mise à jour quotidienne des scrutins | `03:30` par défaut |
-| `VITE_API_URL` | URL de l'API utilisée par le front (build/dev) | ex. `https://api.quivotequoi.fr` |
+| `VITE_API_URL` | URL de l'API intégrée au build du front | ex. `https://api.quivotequoi.fr` (si l'API est sur un autre domaine) |
 
 Exemple :
 
@@ -94,20 +103,17 @@ export CLE_SECRETE="$(openssl rand -hex 32)"
 export ORIGINE_AUTORISEE="https://quivotequoi.fr"
 ```
 
-### 4. Construire le front
+#### 4. Construire le front
 
 ```bash
 npm run build
 ```
 
-Le site statique est généré dans `dist/` : servez-le avec Nginx, Caddy ou tout serveur statique.
+Le site statique est généré dans `dist/`.
 
-### 5. Démarrer l'API en service persistant
-
-L'API Node tourne sans dépendance externe. Utilisez un process manager pour qu'elle survive aux redémarrages :
+#### 5. Démarrer l'API en service persistant
 
 ```bash
-# Exemple avec pm2
 npm install -g pm2
 pm2 start server/index.mjs --name quivotequoi-api
 pm2 save && pm2 startup
@@ -115,15 +121,14 @@ pm2 save && pm2 startup
 
 Au premier démarrage, l'API consolide l'open data des scrutins, puis rejoue la consolidation chaque nuit — aucune tâche planifiée à configurer.
 
-### 6. Exposer le site (reverse proxy)
+#### 6. Exposer le site (reverse proxy)
 
-Exemple minimal Nginx : le front en statique sur le domaine public, l'API en proxy inverse sur `/api` :
+Exemple minimal Nginx — front statique sur le domaine public, API en proxy inverse sur `/api` :
 
 ```nginx
 server {
   listen 443 ssl;
   server_name quivotequoi.fr;
-
   root /srv/WhoVoteWhat/dist;
   index index.html;
 
@@ -138,21 +143,93 @@ server {
 }
 ```
 
-### 7. Vérifier la mise en production
-
-- Le site se charge et le quiz fonctionne.
-- La section « Récap des votes » affiche les scrutins (données consolidées depuis l'API).
-- Le back-office requiert une session (`CLE_SECRETE` configurée).
-- En cas d'API injoignable, le site reste consultable grâce aux données de repli embarquées.
-
-### 8. Mettre à jour
+#### 7. Mettre à jour (routine)
 
 ```bash
+cd /srv/WhoVoteWhat
 git pull
 npm ci
 npm run build
 pm2 restart quivotequoi-api
 ```
+
+### Méthode B — Déploiement via FTP / SFTP (glisser-déposer depuis votre PC)
+
+Adaptée à un serveur accessible en FTP/SFTP (VPS, hébergement mutualisé avec Node.js). Le backend n'ayant **aucune dépendance externe** (modules Node natifs uniquement), rien n'est à installer sur le serveur : vous déposez simplement les fichiers.
+
+#### 1. Construire en local
+
+```bash
+npm ci
+npm run build          # génère dist/
+```
+
+#### 2. Glisser-déposer sur le serveur
+
+Avec FileZilla, WinSCP ou lftp, transférez **uniquement** ces éléments (par exemple vers `/srv/WhoVoteWhat/`) :
+
+- `dist/` — le site statique
+- `server/` — le backend (⚠️ ne pas écraser `server/data/` s'il existe : il contient vos données back-office)
+- `public/` — assets servis par le backend
+- `package.json` et `package-lock.json`
+
+**N'uploadez pas** `node_modules/` (inutile sur le serveur : le backend tourne sans rien installer) ni `src/`, `scripts/`, fichiers de config (utiles uniquement pour rebuild en local).
+
+Exemple SFTP avec lftp (VPS OVH) :
+
+```bash
+lftp sftp://ubuntu@vps-c8527c7e.vps.ovh.net
+mirror -R dist/ /srv/WhoVoteWhat/dist/
+mirror -R server/ /srv/WhoVoteWhat/server/ -x data/
+mirror -R public/ /srv/WhoVoteWhat/public/
+put package.json -o /srv/WhoVoteWhat/package.json
+put package-lock.json -o /srv/WhoVoteWhat/package-lock.json
+```
+
+#### 3. Configurer et démarrer
+
+Sur le serveur (SSH), même configuration que la méthode A :
+
+```bash
+cd /srv/WhoVoteWhat
+export PORT=4000
+export CLE_SECRETE="$(openssl rand -hex 32)"
+export ORIGINE_AUTORISEE="https://quivotequoi.fr"
+
+# service persistant
+sudo npm install -g pm2
+pm2 start server/index.mjs --name quivotequoi-api
+pm2 save && pm2 startup
+```
+
+> 💡 Sur un VPS, la **méthode A (Git)** reste la plus simple au quotidien ; la méthode B convient si vous préférez FileZilla ou ne voulez pas de Git sur le serveur.
+
+#### 4. Mettre à jour (routine)
+
+1. En local : `git pull && npm ci && npm run build`
+2. Re-transférer `dist/` et `server/` (écraser, sauf `server/data/`)
+3. Sur le serveur : `pm2 restart quivotequoi-api`
+
+#### Variante « front seul » (hébergement 100 % statique, sans Node)
+
+Si votre hébergement ne propose pas Node, seul le front peut être déployé. Le site reste **totalement fonctionnel en lecture** grâce au repli sur les données du code source (candidats, questions, positions — y compris les compléments « ancien programme / prises de position publiques »).
+
+Limites : le back-office en ligne et la mise à jour quotidienne des scrutins ne fonctionnent pas ; le contenu est figé à la version buildée.
+
+```bash
+npm ci
+npm run build
+# puis uploader uniquement le contenu de dist/ à la racine du site
+```
+
+### ✅ Vérifier la mise en production
+
+- Le site se charge : page « 👥 Les candidats » affiche **19 candidats** (18 déclarés + Marine Tondelier, conditionnelle).
+- Bandeaux « ⚠️ » visibles sur les fiches des 14 candidats sans programme 2027 publié.
+- Le quiz fonctionne et classe les 19 candidats.
+- La section « 🗳️ Récap des votes » affiche les scrutins (données consolidées depuis l'API).
+- Le back-office requiert une session (`CLE_SECRETE` configurée).
+- En cas d'API injoignable, le site reste consultable grâce aux données de repli embarquées.
 
 ## 🛠️ Stack
 
