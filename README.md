@@ -188,7 +188,34 @@ sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u $USER --hp $HOME
 
 Au premier démarrage, l'API consolide l'open data des scrutins, puis rejoue la consolidation chaque nuit — aucune tâche planifiée à configurer.
 
-#### 7. Exposer le site (reverse proxy Nginx + HTTPS)
+#### 7. Exposer le site (reverse proxy + HTTPS automatique)
+
+Deux variantes selon le serveur web installé.
+
+**Variante Caddy (recommandée — HTTPS entièrement automatique, aucun certificat à gérer)** :
+
+```bash
+sudo tee /etc/caddy/Caddyfile >/dev/null <<'EOF'
+timerush.hk-groupe.fr {
+    root * /home/ubuntu/WhoVoteWhat/dist
+    encode gzip
+
+    handle /api/* {
+        reverse_proxy 127.0.0.1:4000
+    }
+
+    handle {
+        try_files {path} /index.html
+        file_server
+    }
+}
+EOF
+sudo systemctl reload caddy
+```
+
+Caddy obtient et renouvelle le certificat HTTPS tout seul, redirige le HTTP vers HTTPS, sert le front depuis `dist/` et proxifie l'API sur `/api`. Adapter le chemin `root` à l'emplacement du clone. Si Nginx est aussi installé, le désactiver pour libérer le port 80 : `sudo systemctl disable --now nginx`.
+
+**Variante Nginx + Certbot** :
 
 ```bash
 sudo apt install nginx certbot python3-certbot-nginx
