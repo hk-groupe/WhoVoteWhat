@@ -70,65 +70,119 @@ Le site a deux composants à déployer :
 
 > 💡 **Contenu persisté** : si un `server/data/contenu.json` existe déjà (créé par une sauvegarde back-office), l'API **fusionne automatiquement** au démarrage les candidats et positions manquants du code source. Vos éditions du back-office restent intactes. Aucune suppression manuelle n'est nécessaire.
 
-### Méthode A — Déploiement via Git (recommandée)
+Le site est en production sur **https://timerush.hk-groupe.fr/** — l'application **et** le back-office sont servis sur ce domaine unique (le back-office est accessible depuis le menu du site, l'API étant proxifiée sur `/api`).
+
+### Méthode A — Déploiement via Git avec clé SSH (recommandée)
+
+Le serveur tire le code directement depuis GitHub (`git pull`) en s'authentifiant avec une **clé de déploiement** (deploy key) dédiée — aucun mot de passe, aucun token.
 
 #### 1. Préparer le serveur
 
 - **Node.js 18+** et **npm** installés.
-- Un nom de domaine avec certificat HTTPS.
+- Le domaine `timerush.hk-groupe.fr` pointe (enregistrement A/AAAA) vers l'IP du serveur.
+- Un certificat HTTPS (voir étape 7, Certbot).
+- Accès SSH au serveur (ex. `ssh ubuntu@vps-c8527c7e.vps.ovh.net`).
 
-#### 2. Récupérer le code et installer
+#### 2. Créer la clé de déploiement SSH
+
+Sur le serveur, générer une paire de clés dédiée au déploiement (sans phrase de passe, pour permettre `git pull` non interactif) :
 
 ```bash
-git clone https://github.com/hk-groupe/WhoVoteWhat.git
-cd WhoVoteWhat
+ssh-keygen -t ed25519 -C "deploy-timerush" -f ~/.ssh/id_ed25519_deploy -N ""
+cat ~/.ssh/id_ed25519_deploy.pub
+```
+
+Déclarer la clé publique sur GitHub : repo `hk-groupe/WhoVoteWhat` → **Settings → Deploy keys → Add deploy key**, coller la clé publique, titre `deploy-timerush`, **Read only** suffit (pas besoin d'accès en écriture).
+
+Configurer SSH pour utiliser cette clé avec GitHub (`~/.ssh/config`) :
+
+```
+Host github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_deploy
+  IdentitiesOnly yes
+```
+
+Vérifier :
+
+```bash
+ssh -T git@github.com
+# attendu : "Hi hk-groupe/WhoVoteWhat! You've successfully authenticated..."
+```
+
+#### 3. Récupérer le code et installer
+
+```bash
+sudo mkdir -p /srv && sudo chown $USER /srv
+git clone git@github.com:hk-groupe/WhoVoteWhat.git /srv/WhoVoteWhat
+cd /srv/WhoVoteWhat
 npm ci
 ```
 
-#### 3. Configurer les variables d'environnement
+#### 4. Configurer les variables d'environnement
 
 | Variable | Rôle | Valeur recommandée en production |
 |---|---|---|
 | `PORT` | Port d'écoute de l'API | `4000` (ou le port choisi) |
 | `CLE_SECRETE` | Clé de session du back-office | une chaîne aléatoire longue (obligatoire, sinon les sessions ne survivent pas à un redémarrage) |
-| `ORIGINE_AUTORISEE` | Origine CORS autorisée pour l'API | l'URL publique du site, ex. `https://quivotequoi.fr` (ne pas laisser `*` en production) |
+| `ORIGINE_AUTORISEE` | Origine CORS autorisée pour l'API | `https://timerush.hk-groupe.fr` (ne pas laisser `*` en production) |
 | `HEURE_MAJ_SCRUTINS` | Heure de la mise à jour quotidienne des scrutins | `03:30` par défaut |
-| `VITE_API_URL` | URL de l'API intégrée au build du front | ex. `https://api.quivotequoi.fr` (si l'API est sur un autre domaine) |
+| `VITE_API_URL` | URL de l'API intégrée au build du front | laisser vide — l'API est proxifiée sur `/api` du même domaine (renseigner uniquement si l'API est sur un autre domaine) |
 
 Exemple :
 
 ```bash
 export PORT=4000
 export CLE_SECRETE="$(openssl rand -hex 32)"
-export ORIGINE_AUTORISEE="https://quivotequoi.fr"
+export ORIGINE_AUTORISEE="https://timerush.hk-groupe.fr"
 ```
 
-#### 4. Construire le front
+Rendre la configuration persistante, par exemple dans un fichier PM2 chargé au démarrage :
+
+```bash
+cat > /srv/WhoVoteWhat/ecosystem.config.cjs <<'EOF'
+module.exports = {
+  apps: [{
+    name: 'quivotequoi-api',
+    script: 'server/index.mjs',
+    cwd: '/srv/WhoVoteWhat',
+    env: {
+      PORT: 4000,
+      CLE_SECRETE: '<chaîne aléatoire longue — openssl rand -hex 32>',
+      ORIGINE_AUTORISEE: 'https://timerush.hk-groupe.fr'
+    }
+  }]
+}
+EOF
+chmod 600 /srv/WhoVoteWhat/ecosystem.config.cjs
+```
+
+#### 5. Construire le front
 
 ```bash
 npm run build
 ```
 
-Le site statique est généré dans `dist/`.
+Le site statique (application + back-office) est généré dans `dist/`.
 
-#### 5. Démarrer l'API en service persistant
+#### 6. Démarrer l'API en service persistant
 
 ```bash
 npm install -g pm2
-pm2 start server/index.mjs --name quivotequoi-api
+pm2 start ecosystem.config.cjs
 pm2 save && pm2 startup
 ```
 
 Au premier démarrage, l'API consolide l'open data des scrutins, puis rejoue la consolidation chaque nuit — aucune tâche planifiée à configurer.
 
-#### 6. Exposer le site (reverse proxy)
+#### 7. Exposer le site (reverse proxy Nginx + HTTPS)
 
-Exemple minimal Nginx — front statique sur le domaine public, API en proxy inverse sur `/api` :
-
-```nginx
+```bash
+sudo apt install nginx certbot python3-certbot-nginx
+sudo tee /etc/nginx/sites-available/timerush.hk-groupe.fr >/dev/null <<'EOF'
 server {
-  listen 443 ssl;
-  server_name quivotequoi.fr;
+  listen 80;
+  server_name timerush.hk-groupe.fr;
   root /srv/WhoVoteWhat/dist;
   index index.html;
 
@@ -139,11 +193,21 @@ server {
   location /api {
     proxy_pass http://127.0.0.1:4000;
     proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
   }
 }
+EOF
+sudo ln -sf /etc/nginx/sites-available/timerush.hk-groupe.fr /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+sudo certbot --nginx -d timerush.hk-groupe.fr
 ```
 
-#### 7. Mettre à jour (routine)
+Le site (et le back-office, via le bouton « 🛠️ Back-office (admin) » du menu) est alors servi sur **https://timerush.hk-groupe.fr/** ; l'API répond sur `https://timerush.hk-groupe.fr/api/...`.
+
+#### 8. Mettre à jour (routine)
+
+Après un push sur `main`, depuis le serveur (la clé de déploiement s'authentifie automatiquement, sans mot de passe) :
 
 ```bash
 cd /srv/WhoVoteWhat
@@ -194,7 +258,7 @@ Sur le serveur (SSH), même configuration que la méthode A :
 cd /srv/WhoVoteWhat
 export PORT=4000
 export CLE_SECRETE="$(openssl rand -hex 32)"
-export ORIGINE_AUTORISEE="https://quivotequoi.fr"
+export ORIGINE_AUTORISEE="https://timerush.hk-groupe.fr"
 
 # service persistant
 sudo npm install -g pm2
@@ -228,7 +292,8 @@ npm run build
 - Bandeaux « ⚠️ » visibles sur les fiches des 14 candidats sans programme 2027 publié.
 - Le quiz fonctionne et classe les 19 candidats.
 - La section « 🗳️ Récap des votes » affiche les scrutins (données consolidées depuis l'API).
-- Le back-office requiert une session (`CLE_SECRETE` configurée).
+- **https://timerush.hk-groupe.fr/** se charge, et le back-office est accessible depuis le menu (connexion requise, `CLE_SECRETE` configurée).
+- `https://timerush.hk-groupe.fr/api/contenu` répond en JSON (API proxifiée et lancée).
 - En cas d'API injoignable, le site reste consultable grâce aux données de repli embarquées.
 
 ## 🛠️ Stack
