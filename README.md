@@ -146,24 +146,23 @@ export CLE_SECRETE="$(openssl rand -hex 32)"
 export ORIGINE_AUTORISEE="https://timerush.hk-groupe.fr"
 ```
 
-Rendre la configuration persistante, par exemple dans un fichier PM2 chargé au démarrage :
+Rendre la configuration persistante, par exemple dans un fichier PM2 chargé au démarrage — à créer **à la racine du projet** (remplacer `/srv/WhoVoteWhat` par votre chemin réel si différent, ex. `/home/ubuntu/WhoVoteWhat`) :
 
 ```bash
-cat > /srv/WhoVoteWhat/ecosystem.config.cjs <<'EOF'
+cat > ecosystem.config.cjs <<'EOF'
 module.exports = {
   apps: [{
     name: 'quivotequoi-api',
     script: 'server/index.mjs',
-    cwd: '/srv/WhoVoteWhat',
     env: {
       PORT: 4000,
-      CLE_SECRETE: '<chaîne aléatoire longue — openssl rand -hex 32>',
+      CLE_SECRETE: '<coller ici le résultat de la commande openssl rand -hex 32>',
       ORIGINE_AUTORISEE: 'https://timerush.hk-groupe.fr'
     }
   }]
 }
 EOF
-chmod 600 /srv/WhoVoteWhat/ecosystem.config.cjs
+chmod 600 ecosystem.config.cjs
 ```
 
 #### 5. Construire le front
@@ -176,11 +175,16 @@ Le site statique (application + back-office) est généré dans `dist/`.
 
 #### 6. Démarrer l'API en service persistant
 
+L'installation globale de PM2 écrit dans `/usr/lib/node_modules` : elle nécessite `sudo` (l'erreur npm `EACCES` apparaît sans lui).
+
 ```bash
-npm install -g pm2
+sudo npm install -g pm2
 pm2 start ecosystem.config.cjs
-pm2 save && pm2 startup
+pm2 save
+sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u $USER --hp $HOME
 ```
+
+> ⚠️ `pm2 startup` affiche lui-même la commande exacte à exécuter (avec `sudo env PATH=...`) : la copier telle quelle. Après le `pm2 save`, l'API redémarre automatiquement au reboot du serveur.
 
 Au premier démarrage, l'API consolide l'open data des scrutins, puis rejoue la consolidation chaque nuit — aucune tâche planifiée à configurer.
 
@@ -213,6 +217,8 @@ sudo certbot --nginx -d timerush.hk-groupe.fr
 ```
 
 Le site (et le back-office, via le bouton « 🛠️ Back-office (admin) » du menu) est alors servi sur **https://timerush.hk-groupe.fr/** ; l'API répond sur `https://timerush.hk-groupe.fr/api/...`.
+
+Le front statique étant servi par Nginx depuis `dist/`, le chemin du projet dans `root` doit correspondre à l'emplacement du clone (adapter `/srv/WhoVoteWhat/dist` si le projet est ailleurs, ex. `root /home/ubuntu/WhoVoteWhat/dist;`).
 
 #### 8. Mettre à jour (routine)
 
