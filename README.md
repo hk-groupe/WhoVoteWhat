@@ -94,14 +94,23 @@ cat ~/.ssh/id_ed25519_deploy.pub
 
 Déclarer la clé publique sur GitHub : repo `hk-groupe/WhoVoteWhat` → **Settings → Deploy keys → Add deploy key**, coller la clé publique, titre `deploy-timerush`, **Read only** suffit (pas besoin d'accès en écriture).
 
-Configurer SSH pour utiliser cette clé avec GitHub (`~/.ssh/config`) :
+Configurer SSH pour utiliser cette clé avec GitHub. Le fichier `~/.ssh/config` indique au client SSH quelle clé présenter quand on parle à `github.com` ; s'il n'existe pas encore, la commande `cat >>` le crée :
 
-```
+```bash
+mkdir -p ~/.ssh && chmod 700 ~/.ssh
+cat >> ~/.ssh/config <<'EOF'
 Host github.com
   User git
   IdentityFile ~/.ssh/id_ed25519_deploy
   IdentitiesOnly yes
+EOF
+chmod 600 ~/.ssh/config
 ```
+
+- `Host github.com` : les lignes suivantes s'appliquent dès qu'une connexion vise `github.com` (c'est le cas de `git@github.com:hk-groupe/WhoVoteWhat.git`).
+- `User git` : utilisateur SSH imposé par GitHub pour Git.
+- `IdentityFile` : chemin de la **clé privée** de déploiement créée à l'étape précédente (le fichier sans `.pub`).
+- `IdentitiesOnly yes` : n'essaie que cette clé, sans parcourir les autres clés de l'agent — évite d'être rejeté pour trop de tentatives.
 
 Vérifier :
 
