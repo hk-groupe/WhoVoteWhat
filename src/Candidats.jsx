@@ -36,6 +36,35 @@ export default function Candidats({ donnees, onOuvrir }) {
           son programme officiel.
         </p>
       </div>
+      <div className="bloc legende-statuts">
+        <h3>🔑 Légende des labels</h3>
+        <ul>
+          {Object.values(STATUTS).map((s) => (
+            <li key={s.label}>
+              <span className="infobulle" tabIndex={0}>
+                <em className="badge-statut" style={{ background: s.couleur }}>{s.emoji} {s.label}</em>
+                <span className="infobulle-texte" role="tooltip" style={{ background: s.couleur }}>{s.aide}</span>
+              </span>
+            </li>
+          ))}
+          <li>
+            <span className="infobulle" tabIndex={0}>
+              <em className="badge-statut" style={{ background: '#0096c7' }}>📄 Programme publié</em>
+              <span className="infobulle-texte" role="tooltip" style={{ background: '#0096c7' }}>
+                Le candidat a publié son programme de campagne : les propositions affichées sont directement issues de son programme officiel.
+              </span>
+            </span>
+          </li>
+          <li>
+            <span className="infobulle" tabIndex={0}>
+              <em className="badge-statut" style={{ background: '#d00000' }}>📄 Programme non publié</em>
+              <span className="infobulle-texte" role="tooltip" style={{ background: '#d00000' }}>
+                Le candidat n'a pas encore publié son programme de campagne 2027. Les propositions affichées s'appuient sur son ancien programme ou ses prises de position publiques.
+              </span>
+            </span>
+          </li>
+        </ul>
+      </div>
       {candidats.map((c) => {
         const parTheme = engagementsParCandidat(c)
         const nbEngagements = Object.values(parTheme).reduce((n, l) => n + l.length, 0)
