@@ -142,8 +142,17 @@ export default function ComposeProgramme({ donnees, onRetour }) {
             <button className="retour" onClick={onRetour}>← Retour à l'accueil</button>
           </div>
           <div className="compose-compteur" role="status">
-            <strong>{nbChoisies}</strong> proposition{nbChoisies > 1 ? 's' : ''} sélectionnée{nbChoisies > 1 ? 's' : ''}
-            <span className="compose-compteur-repere">· moyenne des programmes : {budget}</span>
+            <span className="compose-compteur-texte">
+              <strong>{nbChoisies}</strong> proposition{nbChoisies > 1 ? 's' : ''} sélectionnée{nbChoisies > 1 ? 's' : ''}
+              <span className="compose-compteur-repere">· moyenne : {budget}</span>
+            </span>
+            <button
+              className="compose-compteur-btn"
+              disabled={nbChoisies === 0}
+              onClick={() => setEcran('comparatif')}
+            >
+              ✅ Valider mon programme
+            </button>
           </div>
         </>
       )}
