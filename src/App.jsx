@@ -4,12 +4,14 @@ import BackOffice from './backoffice/BackOffice.jsx'
 import RecapVotes from './RecapVotes.jsx'
 import Candidats from './Candidats.jsx'
 import Calendrier from './Calendrier.jsx'
+import ComposeProgramme from './ComposeProgramme.jsx'
 import { BadgeStatut, BadgeProgramme } from './Badges.jsx'
 import { NomInformel } from './NomInformel.jsx'
 
 const NAV = [
   { id: 'accueil', label: 'Accueil', emoji: '🏠' },
   { id: 'quiz-config', label: 'Le quiz', emoji: '🎯' },
+  { id: 'compose-programme', label: 'Compose ton programme', emoji: '✍️' },
   { id: 'recap-votes', label: 'Que votent-ils ?', emoji: '🗳️' },
   { id: 'candidats', label: 'Les candidats', emoji: '👥' },
   { id: 'calendrier', label: 'Le calendrier', emoji: '📅' },
@@ -203,6 +205,7 @@ export default function App() {
             <p>Découvrez les sections du site pour mieux comprendre les programmes et les votes de vos élus :</p>
             <ul className="points">
               <li>🎯 <strong>Le quiz</strong> — configurez et lancez votre quiz pour trouver le candidat qui vous ressemble</li>
+              <li>✍️ <strong>Compose ton programme</strong> — piochez parmi toutes les propositions des programmes 2027, puis comparez votre programme à celui des candidats : points communs et divergences</li>
               <li>🗳️ <strong>Que votent-ils ?</strong> — le récap des votes : qui a voté quoi à l'Assemblée</li>
               <li>👥 <strong>Les candidats</strong> — la liste des candidats déclarés avec le résumé de leur programme</li>
               <li>📅 <strong>Le calendrier</strong> — toutes les élections à venir, en France et en Europe</li>
@@ -253,6 +256,7 @@ export default function App() {
         </section>
       )}
       {ecran === 'recap-votes' && <RecapVotes onRetour={() => setEcran('accueil')} />}
+      {ecran === 'compose-programme' && donnees && <ComposeProgramme donnees={donnees} onRetour={() => setEcran('accueil')} />}
       {ecran === 'candidats' && <Candidats donnees={donnees} onOuvrir={() => naviguer('quiz-config')} />}
       {ecran === 'calendrier' && <Calendrier />}
       {ecran === 'transparence' && (

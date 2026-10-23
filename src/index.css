@@ -538,6 +538,28 @@ body {
 .avertissement-programme a { font-weight: 700; color: #b07500; }
 .src-label { color: #888; font-size: 0.82rem; }
 
+/* ===== Compose ton programme ===== */
+.compose-programme { display: grid; gap: 16px; }
+.compose-filtres { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.filtre-theme { border: 2px solid #eee; background: #fff; border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 700; cursor: pointer; color: var(--texte); }
+.filtre-theme.actif { background: linear-gradient(90deg, var(--violet), var(--rose)); color: #fff; border-color: transparent; }
+.compose-liste { display: grid; gap: 10px; }
+.compose-item { background: #fff; border: 2px solid #eee; border-radius: 14px; padding: 12px 16px; display: grid; grid-template-columns: auto auto 1fr; gap: 12px; align-items: start; cursor: pointer; box-shadow: 0 4px 12px rgba(31,22,51,.05); }
+.compose-item:hover { border-color: var(--violet); }
+.compose-item:has(input:checked) { border-color: var(--violet); background: #f6f1ff; }
+.compose-item.bloque { opacity: .45; cursor: not-allowed; }
+.compose-item input { margin-top: 4px; width: 18px; height: 18px; accent-color: var(--violet); }
+.compose-theme { font-weight: 700; font-size: 0.8rem; color: var(--violet); white-space: nowrap; }
+.compose-texte { line-height: 1.5; }
+.compose-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.compose-score { font-weight: 800; font-size: 0.9rem; background: linear-gradient(90deg, var(--violet), var(--rose)); color: #fff; border-radius: 999px; padding: 3px 12px; }
+.compose-resume { font-weight: 600; background: #f6f1ff; border-radius: 12px; padding: 10px 14px; }
+.restant { color: #1b9aaa; }
+.complet { color: #2a9d3a; }
+.depasse { color: #d00000; }
+.position-item.accord span { color: #2a9d3a; }
+.position-item.desaccord span { color: #d00000; }
+
 /* ===== Page candidats ===== */
 .badge-statut { font-weight: 700; font-size: 0.8rem; background: linear-gradient(90deg, var(--violet), var(--rose)); color: #fff !important; border-radius: 999px; padding: 3px 10px; }
 .infobulle { position: relative; display: inline-flex; cursor: help; }
