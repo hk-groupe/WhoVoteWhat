@@ -31,6 +31,15 @@ export default function ComposeProgramme({ donnees, onRetour }) {
 
   const parCandidat = (cid) => propositions.filter((p) => p.origine === cid)
 
+  // Couleur du badge de score : vert pour les plus hauts, rouge pour les plus bas,
+  // dégradé arbitraire : >=60% vert, 40-59% vert-cyan, 25-39% ambre, <25% rouge.
+  const couleurScore = (score) => {
+    if (score >= 60) return '#2a9d3a'
+    if (score >= 40) return '#0ea5a5'
+    if (score >= 25) return '#e58a00'
+    return '#d00000'
+  }
+
   const candidatsAvecProgramme = Object.keys(PROPOSITIONS_PROGRAMMES)
   const tailles = candidatsAvecProgramme.map((cid) => parCandidat(cid).length)
   const budget = tailles.length
@@ -167,15 +176,15 @@ export default function ComposeProgramme({ donnees, onRetour }) {
               programme qui <strong>figurent aussi dans le sien</strong>, et celles qui en sont absentes.
             </p>
           </div>
-          {comparatif().map(({ candidat, communes, absentes, tailleProgramme, pourcentage, aProgramme }) => (
+          {comparatif().filter((r) => r.aProgramme).map(({ candidat, communes, absentes, tailleProgramme, pourcentage }) => (
             <details key={candidat.id} className="details-candidat" style={{ borderColor: candidat.couleur }}>
               <summary className="resume-candidat">
+                <span className="compose-score" style={{ background: couleurScore(pourcentage) }}>{pourcentage}% en commun</span>
                 <span className="dot" style={{ background: candidat.couleur, margin: 0 }}></span>
                 <strong>{candidat.parti}</strong>
                 <em>{candidat.nom}</em>
                 <BadgeStatut statut={candidat.statut} />
                 <BadgeProgramme publie={!sourcesBase[candidat.id]} nom={candidat.nom} />
-                <span className="compose-score">{pourcentage}% en commun</span>
               </summary>
               <div className="contenu-candidat">
                 <p className="synthese-candidat">{legendes[candidat.id]}</p>
@@ -219,6 +228,14 @@ export default function ComposeProgramme({ donnees, onRetour }) {
               </div>
             </details>
           ))}
+          {comparatif().some((r) => !r.aProgramme) && (
+            <p className="avertissement-programme" role="note">
+              ℹ️ Seuls les candidats dont le <strong>programme 2027 est publié et extractible en ligne</strong> sont
+              affichés dans ce comparatif. Les autres candidats ne figurent pas ici car leur programme n'est pas encore
+              publié au format consultable : la comparaison serait incomplète ou injuste. Ils apparaîtront
+              automatiquement dès publication.
+            </p>
+          )}
           <div className="compose-actions">
             <button className="btn-principal" onClick={() => setEcran('selection')}>✍️ Modifier mon programme</button>
             <button className="retour" onClick={onRetour}>← Retour à l'accueil</button>
