@@ -212,7 +212,10 @@ export default function App() {
               <li>🔍 <strong>Notre transparence</strong> — comment ce site fonctionne, sources et méthode</li>
             </ul>
             <p className="aide-nav">Ouvrez le menu burger ☰ en haut de la page pour naviguer entre les sections.</p>
-            <button className="btn-principal" onClick={() => naviguer('quiz-config')}>🚀 Commencer le quiz</button>
+            <div className="accueil-actions">
+              <button className="btn-principal" onClick={() => naviguer('quiz-config')}>🚀 Commencer le quiz</button>
+              <button className="btn-principal btn-secondaire" onClick={() => naviguer('compose-programme')}>✍️ Compose ton programme</button>
+            </div>
           </div>
           <div className="bloc disclaimer" role="note">
             <h3>⚠️ Avertissement</h3>
