@@ -1,8 +1,26 @@
 // statut : 'declare' = candidat déclaré, 'conditionnelle' = candidature conditionnelle
 // (liste au 12 octobre 2026, source : electionpresidentielle2027.com/candidats-presidentielle-2027/)
 export const STATUTS = {
-  declare: { label: 'Candidat déclaré', emoji: '✅' },
-  conditionnelle: { label: 'Candidature conditionnelle', emoji: '❓' },
+  declare: {
+    label: 'Candidat déclaré',
+    emoji: '✅',
+    aide: "Candidature déclarée publiquement, mais pas encore officielle : les parrainages n'ont pas été validés par le Conseil constitutionnel.",
+  },
+  conditionnelle: {
+    label: 'Candidature conditionnelle',
+    emoji: '❓',
+    aide: "Candidature déclarée publiquement, mais pas encore officielle : les parrainages n'ont pas été validés par le Conseil constitutionnel.",
+  },
+  officiel: {
+    label: 'Candidature officielle',
+    emoji: '🏛️',
+    aide: 'Candidature officielle : parrainages validés par le Conseil constitutionnel.',
+  },
+  potentiel: {
+    label: 'Candidat potentiel',
+    emoji: '🔎',
+    aide: "Candidat potentiel : pas de candidature déclarée, mais présence remarquée lors des dernières élections. Aucun programme de campagne n'est publié à ce jour.",
+  },
 }
 
 export const CANDIDATS = [

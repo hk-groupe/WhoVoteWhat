@@ -45,9 +45,18 @@ export default function Candidats({ donnees, onOuvrir }) {
               <span className="dot" style={{ background: c.couleur, margin: 0 }}></span>
               <strong>{c.nom}</strong>
               <em>{c.parti}</em>
-              {c.statut && c.statut !== 'declare' && STATUTS[c.statut] && (
+              <span className="infobulle" tabIndex={0}>
                 <em className="badge-statut">{STATUTS[c.statut].emoji} {STATUTS[c.statut].label}</em>
-              )}
+                <span className="infobulle-texte" role="tooltip">{STATUTS[c.statut].aide}</span>
+              </span>
+              <span className="infobulle" tabIndex={0}>
+                <em className="badge-statut badge-statut-neutre">{sourcesBase[c.id] ? '📄 Programme non publié' : '📄 Programme publié'}</em>
+                <span className="infobulle-texte" role="tooltip">
+                  {sourcesBase[c.id]
+                    ? `${c.nom} n'a pas encore publié son programme de campagne 2027. Les propositions affichées s'appuient sur son ancien programme ou ses prises de position publiques.`
+                    : `${c.nom} a publié son programme de campagne : les propositions affichées sont directement issues de son programme officiel.`}
+                </span>
+              </span>
             </summary>
             <div className="contenu-candidat">
               <p className="synthese-candidat">{legendes[c.id]}</p>
