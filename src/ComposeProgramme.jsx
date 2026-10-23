@@ -189,6 +189,13 @@ export default function ComposeProgramme({ donnees, onRetour }) {
               </summary>
               <div className="contenu-candidat">
                 <p className="synthese-candidat">{legendes[candidat.id]}</p>
+                <p className="source">🔗 Programme de référence :{' '}
+                  {sourcesBase[candidat.id] ? (
+                    <a href={sourcesBase[candidat.id].url} target="_blank" rel="noreferrer">{sourcesBase[candidat.id].label} ↗</a>
+                  ) : (
+                    <a href={candidat.programme} target="_blank" rel="noreferrer">{candidat.sourceLabel} ↗</a>
+                  )}
+                </p>
                 <p className="compose-resume">
                   Sur vos {nbChoisies} propositions : <strong>{communs.length} en commun</strong> ·{' '}
                   {divergents.length} divergente{divergents.length > 1 ? 's' : ''} · son programme compte{' '}
@@ -200,10 +207,14 @@ export default function ComposeProgramme({ donnees, onRetour }) {
                     <ul className="positions-liste">
                       {communs.map((id) => {
                         const p = propositionParId(id)
+                        const positionCandidat = questions.find((q) => q.id === id).positions[candidat.id]
+                        const lien = positionCandidat?.base && sourcesBase[candidat.id] ? sourcesBase[candidat.id].url : candidat.programme
                         return (
                           <li key={id} className="position-item accord">
                             <span>✅</span> {p.texte}
-                            <em className="source">— proposition présente dans son programme</em>
+                            <em className="source">— engagement de campagne : {positionCandidat?.source} ·{' '}
+                              <a href={lien} target="_blank" rel="noreferrer">source : programme officiel ↗</a>
+                            </em>
                           </li>
                         )
                       })}
@@ -216,14 +227,19 @@ export default function ComposeProgramme({ donnees, onRetour }) {
                     <ul className="positions-liste">
                       {divergents.map((id) => {
                         const p = propositionParId(id)
+                        const positionCandidat = questions.find((q) => q.id === id).positions[candidat.id]
                         const nuance = p.nuance.includes(candidat.id)
+                        const lien = positionCandidat?.base && sourcesBase[candidat.id] ? sourcesBase[candidat.id].url : candidat.programme
                         return (
                           <li key={id} className={nuance ? 'position-item' : 'position-item desaccord'}>
                             <span>{nuance ? '➖' : '❌'}</span> {p.texte}
                             <em className="source">
                               — {nuance
-                                ? `position nuancée (${questions.find((q) => q.id === id).positions[candidat.id].source})`
-                                : `absente de son programme (${questions.find((q) => q.id === id).positions[candidat.id]?.source ?? 'pas de position publiée'})`}
+                                ? `position nuancée : ${positionCandidat?.source}`
+                                : `absente de son programme${positionCandidat ? ` (${positionCandidat.source})` : ' (pas de position publiée)'}`}{' '}
+                              {positionCandidat && (
+                                <>· <a href={lien} target="_blank" rel="noreferrer">source ↗</a></>
+                              )}
                             </em>
                           </li>
                         )
