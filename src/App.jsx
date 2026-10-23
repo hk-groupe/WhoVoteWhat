@@ -7,6 +7,7 @@ import Calendrier from './Calendrier.jsx'
 import ComposeProgramme from './ComposeProgramme.jsx'
 import { BadgeStatut, BadgeProgramme } from './Badges.jsx'
 import { NomInformel } from './NomInformel.jsx'
+import LegendeLabels from './LegendeLabels.jsx'
 
 const NAV = [
   { id: 'accueil', label: 'Accueil', emoji: '🏠' },
@@ -427,6 +428,7 @@ export default function App() {
               )}
             </div>
             <h3>📊 Tous vos scores</h3>
+            <LegendeLabels />
             {CATEGORIES.map((cat) => {
               const scoresCat = scores.filter((s) => categorie(s.candidat) === cat.id)
               if (scoresCat.length === 0) return null

@@ -1,6 +1,6 @@
 import React from 'react'
-import { STATUTS } from './data/programmes.mjs'
 import { BadgeStatut, BadgeProgramme } from './Badges.jsx'
+import LegendeLabels from './LegendeLabels.jsx'
 
 // Résumé le plus exhaustif possible des programmes :
 // uniquement les propositions déclarées dans le programme du candidat.
@@ -37,21 +37,7 @@ export default function Candidats({ donnees, onOuvrir }) {
           son programme officiel.
         </p>
       </div>
-      <div className="bloc legende-statuts">
-        <h3>🔑 Légende des labels</h3>
-        <ul>
-          {Object.values(STATUTS).map((s) => (
-            <li key={s.label}>
-              <span className="infobulle" tabIndex={0}>
-                <em className="badge-statut" style={{ background: s.couleur }}>{s.emoji} {s.label}</em>
-                <span className="infobulle-texte" role="tooltip" style={{ background: s.couleur }}>{s.aide}</span>
-              </span>
-            </li>
-          ))}
-          <li><BadgeProgramme publie nom="Le candidat" /></li>
-          <li><BadgeProgramme publie={false} nom="Le candidat" /></li>
-        </ul>
-      </div>
+      <LegendeLabels />
       {candidats.map((c) => {
         const parTheme = engagementsParCandidat(c)
         const nbEngagements = Object.values(parTheme).reduce((n, l) => n + l.length, 0)

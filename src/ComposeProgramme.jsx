@@ -1,5 +1,6 @@
 import React from 'react'
 import { BadgeStatut } from './Badges.jsx'
+import LegendeLabels from './LegendeLabels.jsx'
 import { PROPOSITIONS_PROGRAMMES, SOURCES_PROGRAMMES } from './data/propositions-programmes.mjs'
 
 // « Compose ton programme » :
@@ -175,6 +176,7 @@ export default function ComposeProgramme({ donnees, onRetour }) {
               programme qui <strong>figurent aussi dans le sien</strong>, et celles qui en sont absentes.
             </p>
           </div>
+          <LegendeLabels />
           {comparatif().filter((r) => r.aProgramme).map(({ candidat, communes, absentes, tailleProgramme, pourcentage, aProgramme }) => (
             <details key={candidat.id} className="details-candidat" style={{ borderColor: candidat.couleur }}>
               <summary className="resume-candidat">

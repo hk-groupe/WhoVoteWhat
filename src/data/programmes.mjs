@@ -3,8 +3,8 @@
 export const STATUTS = {
   declare: {
     label: 'Candidat déclaré',
-    emoji: '✅',
-    couleur: '#f77f00',
+    emoji: '⚠️',
+    couleur: '#8700f7',
     aide: "Candidature déclarée publiquement, mais pas encore officielle : les parrainages n'ont pas été validés par le Conseil constitutionnel.",
   },
   conditionnelle: {
