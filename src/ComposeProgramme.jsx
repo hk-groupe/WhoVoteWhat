@@ -53,7 +53,7 @@ export default function ComposeProgramme({ donnees, onRetour }) {
 
   const basculer = (id) => {
     setChoisies((precedent) =>
-      precedent.includes(id) ? precedent.filter((x) => x !== id) : precedent
+      precedent.includes(id) ? precedent.filter((x) => x !== id) : [...precedent, id]
     )
   }
 
