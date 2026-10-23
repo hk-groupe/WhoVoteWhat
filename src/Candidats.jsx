@@ -46,12 +46,12 @@ export default function Candidats({ donnees, onOuvrir }) {
               <strong>{c.nom}</strong>
               <em>{c.parti}</em>
               <span className="infobulle" tabIndex={0}>
-                <em className="badge-statut">{STATUTS[c.statut].emoji} {STATUTS[c.statut].label}</em>
-                <span className="infobulle-texte" role="tooltip">{STATUTS[c.statut].aide}</span>
+                <em className="badge-statut" style={{ background: STATUTS[c.statut].couleur }}>{STATUTS[c.statut].emoji} {STATUTS[c.statut].label}</em>
+                <span className="infobulle-texte" role="tooltip" style={{ background: STATUTS[c.statut].couleur }}>{STATUTS[c.statut].aide}</span>
               </span>
               <span className="infobulle" tabIndex={0}>
-                <em className="badge-statut badge-statut-neutre">{sourcesBase[c.id] ? '📄 Programme non publié' : '📄 Programme publié'}</em>
-                <span className="infobulle-texte" role="tooltip">
+                <em className="badge-statut" style={{ background: sourcesBase[c.id] ? '#d00000' : '#0096c7' }}>{sourcesBase[c.id] ? '📄 Programme non publié' : '📄 Programme publié'}</em>
+                <span className="infobulle-texte" role="tooltip" style={{ background: sourcesBase[c.id] ? '#d00000' : '#0096c7' }}>
                   {sourcesBase[c.id]
                     ? `${c.nom} n'a pas encore publié son programme de campagne 2027. Les propositions affichées s'appuient sur son ancien programme ou ses prises de position publiques.`
                     : `${c.nom} a publié son programme de campagne : les propositions affichées sont directement issues de son programme officiel.`}

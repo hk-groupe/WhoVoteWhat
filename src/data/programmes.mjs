@@ -4,21 +4,25 @@ export const STATUTS = {
   declare: {
     label: 'Candidat déclaré',
     emoji: '✅',
+    couleur: '#f77f00',
     aide: "Candidature déclarée publiquement, mais pas encore officielle : les parrainages n'ont pas été validés par le Conseil constitutionnel.",
   },
   conditionnelle: {
     label: 'Candidature conditionnelle',
     emoji: '❓',
+    couleur: '#ffb703',
     aide: "Candidature déclarée publiquement, mais pas encore officielle : les parrainages n'ont pas été validés par le Conseil constitutionnel.",
   },
   officiel: {
     label: 'Candidature officielle',
     emoji: '🏛️',
+    couleur: '#2a9d3a',
     aide: 'Candidature officielle : parrainages validés par le Conseil constitutionnel.',
   },
   potentiel: {
     label: 'Candidat potentiel',
     emoji: '🔎',
+    couleur: '#6c757d',
     aide: "Candidat potentiel : pas de candidature déclarée, mais présence remarquée lors des dernières élections. Aucun programme de campagne n'est publié à ce jour.",
   },
 }
