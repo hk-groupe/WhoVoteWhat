@@ -553,9 +553,9 @@ body {
 .nom-informel { display: inline-flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 .parti-dabord { font-weight: 800; }
 .nom-informel .sep { color: #999; }
-.nom-informel .candidat-informel { font-weight: 600; color: #555; font-variant: all-small-caps; letter-spacing: .02em; }
+.nom-informel .candidat-informel { font-weight: 600; color: #555; }
 .carte-gagnant .parti-gagnant strong { font-size: 1.5rem; font-weight: 900; }
-.carte-gagnant .candidat-informel-gagnant { font-size: 1.1rem; opacity: .9; font-variant: all-small-caps; letter-spacing: .02em; }
+.carte-gagnant .candidat-informel-gagnant { font-size: 1.25rem; font-weight: 800; opacity: .95; }
 .categorie-classement { margin: 14px 0; }
 .categorie-classement h4 { margin: 0 0 10px; color: var(--violet); }
 .candidats-page { display: grid; gap: 16px; }

@@ -410,9 +410,9 @@ export default function App() {
             )}
             <div className="carte-gagnant" style={{ background: gagnant.candidat.couleur }}>
               <span className="medaille">🏆</span>
-              <h2>Votre candidat le plus proche :</h2>
+              <h2>Le programme le plus proche de vos idées :</h2>
               <p className="parti-gagnant"><strong>{gagnant.candidat.parti}</strong></p>
-              <p className="candidat-informel-gagnant">{gagnant.candidat.nom.split(' ')[0]} {gagnant.candidat.nom.split(' ').slice(1).join(' ').charAt(0).toUpperCase()}.</p>
+              <p className="candidat-informel-gagnant">{gagnant.candidat.nom}</p>
               <p className="score-gagnant">{gagnant.score} % de compatibilité</p>
               <p className="resume">{legendes[gagnant.candidat.id]}</p>
               {gagnant.candidat.statut === 'conditionnelle' && (
