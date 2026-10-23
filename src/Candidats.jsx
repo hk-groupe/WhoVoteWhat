@@ -59,8 +59,8 @@ export default function Candidats({ donnees, onOuvrir }) {
           <details key={c.id} className="details-candidat" style={{ borderColor: c.couleur }}>
             <summary className="resume-candidat">
               <span className="dot" style={{ background: c.couleur, margin: 0 }}></span>
-              <strong>{c.nom}</strong>
-              <em>{c.parti}</em>
+              <strong>{c.parti}</strong>
+              <em>{c.nom}</em>
               <BadgeStatut statut={c.statut} />
               <BadgeProgramme publie={!sourcesBase[c.id]} nom={c.nom} />
             </summary>

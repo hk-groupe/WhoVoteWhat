@@ -566,6 +566,7 @@ body {
 .details-candidat { background: #fff; border: 3px solid; border-radius: 20px; padding: 18px 22px; box-shadow: 0 8px 24px rgba(31,22,51,.08); }
 .details-candidat summary { cursor: pointer; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 1.15rem; }
 .details-candidat summary em { color: #666; font-style: normal; font-size: 0.95rem; }
+.details-candidat summary strong { font-weight: 800; }
 .contenu-candidat { margin-top: 16px; display: grid; gap: 14px; }
 .synthese-candidat { font-weight: 600; background: #f6f1ff; border-radius: 12px; padding: 12px 16px; }
 .details-theme-candidat { border: 2px solid #eee; border-radius: 14px; padding: 10px 14px; }
