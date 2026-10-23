@@ -1,51 +1,44 @@
 import React from 'react'
 import { BadgeStatut, BadgeProgramme } from './Badges.jsx'
+import { PROPOSITIONS_PROGRAMMES, SOURCES_PROGRAMMES } from './data/propositions-programmes.mjs'
 
 // « Compose ton programme » :
-// 1. Toutes les propositions issues des programmes 2027, sans distinction de candidat,
-//    regroupées par thématique.
+// 1. L'intégralité des propositions extraites directement des programmes officiels
+//    2027 des candidats (intitulés exacts, duplicatas conservés, lien direct vers
+//    la proposition dans le programme quand une ancre existe).
 // 2. L'utilisateur compose son programme en respectant un budget de propositions
-//    calé sur la taille moyenne des programmes officiels publiés.
-// 3. Comparatif : points communs et divergences avec chaque programme de candidat.
+//    calé sur la taille moyenne des programmes.
+// 3. Comparatif : quelles propositions de son programme se retrouvent dans quel
+//    programme de candidat, et lesquelles n'y figurent pas.
 
 export default function ComposeProgramme({ donnees, onRetour }) {
   const candidats = donnees.candidats ?? []
-  const themes = donnees.themes ?? {}
-  const questions = donnees.questions ?? []
   const sourcesBase = donnees.sourcesBase ?? {}
   const legendes = donnees.legendes ?? {}
 
-  // Toutes les propositions « pour » (position === 1) issues des programmes,
-  // sans distinction de candidat : une proposition = un texte de question unique.
-  // Les questions étant neutres, elles servent d'intitulé de proposition.
-  const propositions = questions
-    .filter((q) => Object.values(q.positions ?? {}).some((p) => p.position === 1))
-    .map((q) => ({
-      id: q.id,
-      theme: q.theme,
-      texte: q.texte,
-      // Quels candidats proposent exactement cette mesure (pour comparatif)
-      pour: Object.entries(q.positions ?? {})
-        .filter(([, p]) => p.position === 1)
-        .map(([cid]) => cid),
-      nuance: Object.entries(q.positions ?? {})
-        .filter(([, p]) => p.position === 0)
-        .map(([cid]) => cid),
+  // Propositions : une entrée par (candidat, proposition du programme officiel).
+  // L'intitulé est celui du programme — deux candidats peuvent formuler
+  // différemment une même idée : les deux intitulés restent listés.
+  const propositions = Object.entries(PROPOSITIONS_PROGRAMMES).flatMap(([cid, props]) =>
+    props.map((p, i) => ({
+      id: `${cid}-${i}`,
+      candidat: cid,
+      texte: p.texte,
+      url: p.url,
     }))
-
-  // Budget : moyenne du nombre de propositions par programme officiel publié.
-  // Les programmes « non publiés » (sourcesBase) sont exclus du calcul de référence.
-  const candidatsProgrammePublie = candidats.filter((c) => !sourcesBase[c.id])
-  const taillesProgrammes = candidatsProgrammePublie.map(
-    (c) => questions.filter((q) => q.positions?.[c.id]?.position === 1).length
   )
-  const budget = taillesProgrammes.length
-    ? Math.max(5, Math.round(taillesProgrammes.reduce((a, b) => a + b, 0) / taillesProgrammes.length))
+
+  const parCandidat = (cid) => propositions.filter((p) => p.candidat === cid)
+
+  const candidatsAvecProgramme = Object.keys(PROPOSITIONS_PROGRAMMES)
+  const tailles = candidatsAvecProgramme.map((cid) => parCandidat(cid).length)
+  const budget = tailles.length
+    ? Math.max(5, Math.round(tailles.reduce((a, b) => a + b, 0) / tailles.length))
     : 20
 
   const [choisies, setChoisies] = React.useState([])
   const [ecran, setEcran] = React.useState('selection')
-  const [filtreTheme, setFiltreTheme] = React.useState('tous')
+  const [filtre, setFiltre] = React.useState('tous')
 
   const nbChoisies = choisies.length
   const restant = budget - nbChoisies
@@ -57,37 +50,26 @@ export default function ComposeProgramme({ donnees, onRetour }) {
     )
   }
 
-  const propositionsFiltrees = filtreTheme === 'tous'
+  const propositionsFiltrees = filtre === 'tous'
     ? propositions
-    : propositions.filter((p) => p.theme === filtreTheme)
+    : propositions.filter((p) => p.candidat === filtre)
 
-  const propositionsParTheme = Object.entries(themes).map(([id, t]) => ({
-    id,
-    ...t,
-    items: propositions.filter((p) => p.theme === id),
-  }))
-
-  // Comparatif avec chaque candidat
+  // Comparatif : pour chaque candidat, les propositions choisies par l'utilisateur
+  // qui figurent dans son programme (texte exact), et celles qui n'y figurent pas.
   const comparatif = () => {
     if (nbChoisies === 0) return []
-    return candidats
-      .map((c) => {
-        const communs = choisies.filter((id) => {
-          const p = propositions.find((x) => x.id === id)
-          return p && p.pour.includes(c.id)
-        })
-        const divergents = choisies.filter((id) => {
-          const p = propositions.find((x) => x.id === id)
-          return p && !p.pour.includes(c.id)
-        })
-        const programmeCandidat = questions.filter((q) => q.positions?.[c.id]?.position === 1).length
-        const pourcentage = nbChoisies > 0 ? Math.round((communs.length / nbChoisies) * 100) : 0
-        return { candidat: c, communs, divergents, programmeCandidat, pourcentage }
-      })
-      .sort((a, b) => b.pourcentage - a.pourcentage)
+    return candidats.map((c) => {
+      const propsCandidat = parCandidat(c.id)
+      const textesProgramme = new Set(propsCandidat.map((p) => p.texte))
+      const choisiesDetails = choisies
+        .map((id) => propositions.find((p) => p.id === id))
+        .filter(Boolean)
+      const communes = choisiesDetails.filter((p) => textesProgramme.has(p.texte))
+      const absentes = choisiesDetails.filter((p) => !textesProgramme.has(p.texte))
+      const pourcentage = nbChoisies > 0 ? Math.round((communes.length / nbChoisies) * 100) : 0
+      return { candidat: c, communes, absentes, tailleProgramme: propsCandidat.length, pourcentage, aProgramme: propsCandidat.length > 0 }
+    }).sort((a, b) => b.pourcentage - a.pourcentage)
   }
-
-  const propositionParId = (id) => propositions.find((p) => p.id === id)
 
   return (
     <section className="compose-programme">
@@ -96,9 +78,10 @@ export default function ComposeProgramme({ donnees, onRetour }) {
           <div className="bloc">
             <h2>✍️ Compose ton programme</h2>
             <p>
-              Voici <strong>toutes les propositions issues des programmes officiels pour 2027</strong>, sans
-              distinction de parti ou de candidat, regroupées par thématique. Composez votre propre programme en
-              choisissant vos mesures, puis comparez-le aux programmes des candidats.
+              Voici <strong>l'intégralité des propositions extraites des programmes officiels 2027</strong>{' '}
+              des candidats, avec les intitulés exacts tels qu'ils figurent dans chaque programme.
+              Composez votre propre programme en choisissant vos mesures, puis comparez-le
+              aux programmes des candidats. Chaque proposition renvoie directement à sa source dans le programme.
             </p>
             <p className="aide-nav">
               🎯 Budget : <strong>{nbChoisies} / {budget} propositions</strong>{' '}
@@ -108,22 +91,22 @@ export default function ComposeProgramme({ donnees, onRetour }) {
                   ? <span className="complet">— budget atteint</span>
                   : <span className="restant">— il vous reste {restant} proposition{restant > 1 ? 's' : ''}</span>}
               <br />
-              <em>Le budget correspond à la moyenne du nombre de propositions des programmes officiels publiés.</em>
+              <em>Le budget correspond à la taille moyenne des programmes officiels publiés.</em>
             </p>
             <div className="compose-filtres">
               <button
-                className={filtreTheme === 'tous' ? 'filtre-theme actif' : 'filtre-theme'}
-                onClick={() => setFiltreTheme('tous')}
+                className={filtre === 'tous' ? 'filtre-theme actif' : 'filtre-theme'}
+                onClick={() => setFiltre('tous')}
               >
-                Tous les thèmes ({propositions.length})
+                Tous les programmes ({propositions.length})
               </button>
-              {propositionsParTheme.filter((t) => t.items.length > 0).map((t) => (
+              {candidatsAvecProgramme.map((cid) => (
                 <button
-                  key={t.id}
-                  className={filtreTheme === t.id ? 'filtre-theme actif' : 'filtre-theme'}
-                  onClick={() => setFiltreTheme(t.id)}
+                  key={cid}
+                  className={filtre === cid ? 'filtre-theme actif' : 'filtre-theme'}
+                  onClick={() => setFiltre(cid)}
                 >
-                  {t.emoji} {t.label} ({t.items.length})
+                  {SOURCES_PROGRAMMES[cid]?.nom ?? cid} ({parCandidat(cid).length})
                 </button>
               ))}
             </div>
@@ -148,8 +131,20 @@ export default function ComposeProgramme({ donnees, onRetour }) {
                   }}
                 >
                   <span className="compose-coche">{estChoisie ? '☑' : '☐'}</span>
-                  <span className="compose-theme">{themes[p.theme]?.emoji} {themes[p.theme]?.label}</span>
+                  <span className="compose-source-candidat">{SOURCES_PROGRAMMES[p.candidat]?.nom ?? p.candidat}</span>
                   <span className="compose-texte">{p.texte}</span>
+                  {p.url && (
+                    <a
+                      className="compose-lien-source"
+                      href={p.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      title="Voir cette proposition dans le programme officiel"
+                    >
+                      ↗
+                    </a>
+                  )}
                 </div>
               )
             })}
@@ -172,12 +167,12 @@ export default function ComposeProgramme({ donnees, onRetour }) {
           <div className="bloc">
             <h2>📊 Votre programme face aux candidats</h2>
             <p>
-              Votre programme compte <strong>{nbChoisies} propositions</strong> (budget moyen : {budget}).
-              Voici, pour chaque candidat, les <strong>points communs</strong> et les{' '}
-              <strong>divergences</strong> entre votre programme et le sien.
+              Votre programme compte <strong>{nbChoisies} propositions</strong> (taille moyenne des
+              programmes : {budget}). Voici, pour chaque candidat, les propositions de votre
+              programme qui <strong>figurent aussi dans le sien</strong>, et celles qui en sont absentes.
             </p>
           </div>
-          {comparatif().map(({ candidat, communs, divergents, programmeCandidat, pourcentage }) => (
+          {comparatif().map(({ candidat, communes, absentes, tailleProgramme, pourcentage, aProgramme }) => (
             <details key={candidat.id} className="details-candidat" style={{ borderColor: candidat.couleur }}>
               <summary className="resume-candidat">
                 <span className="dot" style={{ background: candidat.couleur, margin: 0 }}></span>
@@ -189,61 +184,40 @@ export default function ComposeProgramme({ donnees, onRetour }) {
               </summary>
               <div className="contenu-candidat">
                 <p className="synthese-candidat">{legendes[candidat.id]}</p>
-                <p className="source">🔗 Programme de référence :{' '}
-                  {sourcesBase[candidat.id] ? (
-                    <a href={sourcesBase[candidat.id].url} target="_blank" rel="noreferrer">{sourcesBase[candidat.id].label} ↗</a>
+                <p className="compose-resume">
+                  {aProgramme ? (
+                    <>Sur vos {nbChoisies} propositions : <strong>{communes.length} figurent aussi dans son programme</strong> · {absentes.length} absente{absentes.length > 1 ? 's' : ''} · son programme extrait compte {tailleProgramme} proposition{tailleProgramme > 1 ? 's' : ''}</>
                   ) : (
-                    <a href={candidat.programme} target="_blank" rel="noreferrer">{candidat.sourceLabel} ↗</a>
+                    <>Son programme 2027 n'est pas encore extractible en ligne — comparaison non disponible pour l'instant.</>
                   )}
                 </p>
-                <p className="compose-resume">
-                  Sur vos {nbChoisies} propositions : <strong>{communs.length} en commun</strong> ·{' '}
-                  {divergents.length} divergente{divergents.length > 1 ? 's' : ''} · son programme compte{' '}
-                  {programmeCandidat} proposition{programmeCandidat > 1 ? 's' : ''}
-                </p>
-                {communs.length > 0 && (
+                {aProgramme && communes.length > 0 && (
                   <details className="details-theme-candidat" open>
-                    <summary>🤝 Points communs · {communs.length}</summary>
+                    <summary>🤝 Propositions communes · {communes.length}</summary>
                     <ul className="positions-liste">
-                      {communs.map((id) => {
-                        const p = propositionParId(id)
-                        const positionCandidat = questions.find((q) => q.id === id).positions[candidat.id]
-                        const lien = positionCandidat?.base && sourcesBase[candidat.id] ? sourcesBase[candidat.id].url : candidat.programme
-                        return (
-                          <li key={id} className="position-item accord">
-                            <span>✅</span> {p.texte}
-                            <em className="source">— engagement de campagne : {positionCandidat?.source} ·{' '}
-                              <a href={lien} target="_blank" rel="noreferrer">source : programme officiel ↗</a>
-                            </em>
-                          </li>
-                        )
-                      })}
+                      {communes.map((p) => (
+                        <li key={p.id} className="position-item accord">
+                          <span>✅</span> {p.texte}
+                          <em className="source">— présente dans son programme{' '}
+                            {p.url && <a href={p.url} target="_blank" rel="noreferrer">voir dans le programme ↗</a>}
+                          </em>
+                        </li>
+                      ))}
                     </ul>
                   </details>
                 )}
-                {divergents.length > 0 && (
+                {aProgramme && absentes.length > 0 && (
                   <details className="details-theme-candidat">
-                    <summary>⚠️ Divergences · {divergents.length}</summary>
+                    <summary>⚠️ Absentes de son programme · {absentes.length}</summary>
                     <ul className="positions-liste">
-                      {divergents.map((id) => {
-                        const p = propositionParId(id)
-                        const positionCandidat = questions.find((q) => q.id === id).positions[candidat.id]
-                        const nuance = p.nuance.includes(candidat.id)
-                        const lien = positionCandidat?.base && sourcesBase[candidat.id] ? sourcesBase[candidat.id].url : candidat.programme
-                        return (
-                          <li key={id} className={nuance ? 'position-item' : 'position-item desaccord'}>
-                            <span>{nuance ? '➖' : '❌'}</span> {p.texte}
-                            <em className="source">
-                              — {nuance
-                                ? `position nuancée : ${positionCandidat?.source}`
-                                : `absente de son programme${positionCandidat ? ` (${positionCandidat.source})` : ' (pas de position publiée)'}`}{' '}
-                              {positionCandidat && (
-                                <>· <a href={lien} target="_blank" rel="noreferrer">source ↗</a></>
-                              )}
-                            </em>
-                          </li>
-                        )
-                      })}
+                      {absentes.map((p) => (
+                        <li key={p.id} className="position-item desaccord">
+                          <span>➖</span> {p.texte}
+                          <em className="source">— proposition issue du programme de {SOURCES_PROGRAMMES[p.candidat]?.nom ?? p.candidat}{' '}
+                            {p.url && <a href={p.url} target="_blank" rel="noreferrer">voir la source ↗</a>}
+                          </em>
+                        </li>
+                      ))}
                     </ul>
                   </details>
                 )}
