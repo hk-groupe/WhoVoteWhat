@@ -4,8 +4,7 @@ import { PROPOSITIONS_PROGRAMMES, SOURCES_PROGRAMMES } from './data/propositions
 
 // « Compose ton programme » :
 // 1. L'intégralité des propositions extraites directement des programmes officiels
-//    2027 des candidats (intitulés exacts, duplicatas conservés, lien direct vers
-//    la proposition dans le programme quand une ancre existe).
+//    2027, affichées de manière ANONYME (sans candidat) et regroupées par thématique.
 // 2. L'utilisateur compose librement son programme (aucune limite de sélection) ;
 //    la taille moyenne des programmes officiels est donnée à titre de repère.
 // 3. Comparatif : quelles propositions de son programme se retrouvent dans quel
@@ -13,22 +12,24 @@ import { PROPOSITIONS_PROGRAMMES, SOURCES_PROGRAMMES } from './data/propositions
 
 export default function ComposeProgramme({ donnees, onRetour }) {
   const candidats = donnees.candidats ?? []
+  const themes = donnees.themes ?? {}
   const sourcesBase = donnees.sourcesBase ?? {}
   const legendes = donnees.legendes ?? {}
 
-  // Propositions : une entrée par (candidat, proposition du programme officiel).
-  // L'intitulé est celui du programme — deux candidats peuvent formuler
-  // différemment une même idée : les deux intitulés restent listés.
+  // Propositions anonymes : aucune mention de candidat dans la liste.
+  // Chaque entrée garde son intitulé exact (celui du programme d'origine),
+  // son thème et son lien source — mais la liste ne révèle pas qui la propose.
   const propositions = Object.entries(PROPOSITIONS_PROGRAMMES).flatMap(([cid, props]) =>
     props.map((p, i) => ({
       id: `${cid}-${i}`,
-      candidat: cid,
+      origine: cid,
+      theme: p.theme,
       texte: p.texte,
       url: p.url,
     }))
   )
 
-  const parCandidat = (cid) => propositions.filter((p) => p.candidat === cid)
+  const parCandidat = (cid) => propositions.filter((p) => p.origine === cid)
 
   const candidatsAvecProgramme = Object.keys(PROPOSITIONS_PROGRAMMES)
   const tailles = candidatsAvecProgramme.map((cid) => parCandidat(cid).length)
@@ -40,6 +41,10 @@ export default function ComposeProgramme({ donnees, onRetour }) {
   const [ecran, setEcran] = React.useState('selection')
   const [filtre, setFiltre] = React.useState('tous')
 
+  const themesDisponibles = ['tous', ...Object.keys(themes), 'autres']
+    .filter((th, i, arr) => arr.indexOf(th) === i)
+    .filter((th) => th === 'tous' || th === 'autres' || propositions.some((p) => p.theme === th))
+
   const nbChoisies = choisies.length
 
   const basculer = (id) => {
@@ -50,7 +55,7 @@ export default function ComposeProgramme({ donnees, onRetour }) {
 
   const propositionsFiltrees = filtre === 'tous'
     ? propositions
-    : propositions.filter((p) => p.candidat === filtre)
+    : propositions.filter((p) => p.theme === filtre)
 
   // Comparatif : pour chaque candidat, les propositions choisies par l'utilisateur
   // qui figurent dans son programme (texte exact), et celles qui n'y figurent pas.
@@ -86,21 +91,19 @@ export default function ComposeProgramme({ donnees, onRetour }) {
               Vous pouvez sélectionner autant de propositions que vous voulez — le repère n'est pas une limite.
             </p>
             <div className="compose-filtres">
-              <button
-                className={filtre === 'tous' ? 'filtre-theme actif' : 'filtre-theme'}
-                onClick={() => setFiltre('tous')}
-              >
-                Tous les programmes ({propositions.length})
-              </button>
-              {candidatsAvecProgramme.map((cid) => (
-                <button
-                  key={cid}
-                  className={filtre === cid ? 'filtre-theme actif' : 'filtre-theme'}
-                  onClick={() => setFiltre(cid)}
-                >
-                  {SOURCES_PROGRAMMES[cid]?.nom ?? cid} ({parCandidat(cid).length})
-                </button>
-              ))}
+              {themesDisponibles.map((th) => {
+                const nb = th === 'tous' ? propositions.length : propositions.filter((p) => p.theme === th).length
+                const libelle = th === 'tous' ? 'Tous les thèmes' : th === 'autres' ? '🗂️ Autres' : `${themes[th]?.emoji ?? ''} ${themes[th]?.label ?? th}`
+                return (
+                  <button
+                    key={th}
+                    className={filtre === th ? 'filtre-theme actif' : 'filtre-theme'}
+                    onClick={() => setFiltre(th)}
+                  >
+                    {libelle} ({nb})
+                  </button>
+                )
+              })}
             </div>
           </div>
           <div className="compose-liste">
@@ -122,20 +125,8 @@ export default function ComposeProgramme({ donnees, onRetour }) {
                   }}
                 >
                   <span className="compose-coche">{estChoisie ? '☑' : '☐'}</span>
-                  <span className="compose-source-candidat">{SOURCES_PROGRAMMES[p.candidat]?.nom ?? p.candidat}</span>
+                  <span className="compose-theme">{p.theme === 'autres' ? '🗂️ Autre' : `${themes[p.theme]?.emoji ?? ''} ${themes[p.theme]?.label ?? ''}`}</span>
                   <span className="compose-texte">{p.texte}</span>
-                  {p.url && (
-                    <a
-                      className="compose-lien-source"
-                      href={p.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      title="Voir cette proposition dans le programme officiel"
-                    >
-                      ↗
-                    </a>
-                  )}
                 </div>
               )
             })}
@@ -208,7 +199,7 @@ export default function ComposeProgramme({ donnees, onRetour }) {
                       {absentes.map((p) => (
                         <li key={p.id} className="position-item desaccord">
                           <span>➖</span> {p.texte}
-                          <em className="source">— proposition issue du programme de {SOURCES_PROGRAMMES[p.candidat]?.nom ?? p.candidat}{' '}
+                          <em className="source">— proposition issue du programme de {SOURCES_PROGRAMMES[p.origine]?.nom ?? p.origine}{' '}
                             {p.url && <a href={p.url} target="_blank" rel="noreferrer">voir la source ↗</a>}
                           </em>
                         </li>

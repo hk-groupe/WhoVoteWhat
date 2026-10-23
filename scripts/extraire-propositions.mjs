@@ -16,6 +16,55 @@ async function html(url) {
   return res.text()
 }
 
+const THEMES_MOTS_CLES = [
+  ['retraite', 'retraites'], ['pension', 'retraites'], ['cotisation', 'retraites'],
+  ['smic', 'economie'], ['salaire', 'economie'], ['impot', 'economie'], ['imposition', 'economie'],
+  ['fiscal', 'economie'], ['taxe', 'economie'], ['entreprise', 'economie'], ['chomage', 'economie'],
+  ['travail', 'economie'], ['emploi', 'economie'], ['economie', 'economie'], ['pme', 'economie'],
+  ['budget', 'economie'], ['dette', 'economie'], ['deficit', 'economie'], ['charge', 'economie'],
+  ['constitution', 'institutions'], ['institution', 'institutions'], ['parlement', 'institutions'],
+  ['depute', 'institutions'], ['senateur', 'institutions'], ['senat', 'institutions'],
+  ['referendum', 'institutions'], ['vote', 'institutions'], ['election', 'institutions'],
+  ['president', 'institutions'], ['democratie', 'institutions'], ['maire', 'institutions'],
+  ['commune', 'institutions'], ['metropole', 'institutions'], ['prefet', 'institutions'],
+  ['elu', 'institutions'], ['collectivite', 'institutions'], ['service public', 'institutions'],
+  ['immigration', 'immigration'], ['etranger', 'immigration'], ['asile', 'immigration'],
+  ['sejour', 'immigration'], ['nationalite', 'immigration'], ['frontiere', 'immigration'],
+  ['securite', 'securite'], ['justice', 'securite'], ['penal', 'securite'], ['police', 'securite'],
+  ['prison', 'securite'], ['juge', 'securite'], ['magistrat', 'securite'], ['crime', 'securite'],
+  ['delit', 'securite'], ['narco', 'securite'], ['condamn', 'securite'], ['peine', 'securite'],
+  ['armee', 'securite'], ['defense', 'securite'], ['militaire', 'securite'],
+  ['climat', 'ecologie'], ['ecologie', 'ecologie'], ['energie', 'ecologie'], ['nucleaire', 'ecologie'],
+  ['eolien', 'ecologie'], ['biodiversite', 'ecologie'], ['agriculture', 'ecologie'], ['agricole', 'ecologie'],
+  ['pesticide', 'ecologie'], ['eau', 'ecologie'], ['foret', 'ecologie'], ['carbone', 'ecologie'],
+  ['emission', 'ecologie'], ['renov', 'ecologie'], ['logement', 'ecologie'], ['pollu', 'ecologie'],
+  ['dechet', 'ecologie'], ['rechauffement', 'ecologie'],
+  ['ecole', 'education'], ['education', 'education'], ['eleve', 'education'], ['enseignant', 'education'],
+  ['enseignement', 'education'], ['universite', 'education'], ['etudiant', 'education'],
+  ['college', 'education'], ['lycee', 'education'], ['parcoursup', 'education'],
+  ['jeune', 'education'], ['enfant', 'education'], ['stage', 'education'], ['formation', 'education'],
+  ['creche', 'education'], ['famille', 'education'],
+  ['europe', 'europe'], ['europeen', 'europe'], ['bruxelles', 'europe'], ['union europeenne', 'europe'],
+  ['ue ', 'europe'], ['international', 'europe'], ['diplomat', 'europe'], ['ukraine', 'europe'],
+  ['otan', 'europe'], ['mondial', 'europe'],
+  ['numerique', 'numerique'], ['intelligence artificielle', 'numerique'], [' ia ', 'numerique'],
+  ['donnee', 'numerique'], ['digital', 'numerique'], ['reseau social', 'numerique'],
+  ['plateforme', 'numerique'], ['cyber', 'numerique'], ['internet', 'numerique'], ['tech', 'numerique'],
+  ['religion', 'religion'], ['religieux', 'religion'], ['laique', 'religion'], ['laicite', 'religion'],
+  ['culte', 'religion'], ['islam', 'religion'], ['imam', 'religion'], ['signe religieux', 'religion'],
+]
+
+const normaliser = (s) =>
+  String(s ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+
+function classifierTheme(texte) {
+  const t = ' ' + normaliser(texte) + ' '
+  for (const [mot, theme] of THEMES_MOTS_CLES) {
+    if (t.includes(' ' + mot + ' ') || t.includes(mot)) return theme
+  }
+  return 'autres'
+}
+
 const sansBalises = (s) =>
   s.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '')
     .replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&#8217;|&rsquo;/g, "'")
@@ -32,6 +81,7 @@ async function glucksmann() {
       if (data.itemListElement?.length && data.name?.includes('Engagements')) {
         return data.itemListElement.map((e) => ({
           texte: sansBalises(e.name),
+          theme: classifierTheme(e.name),
           url: e.url,
         }))
       }
@@ -57,7 +107,7 @@ async function attal() {
     for (const [, id, titre] of titres) {
       const texte = sansBalises(titre)
       if (texte.length > 10 && !/chantier-voisins|rejoindre-app|pied-/i.test(id)) {
-        propositions.push({ texte, url: `https://attalpresident.fr/programme/${slug}#${id}` })
+        propositions.push({ texte, theme: classifierTheme(texte), url: `https://attalpresident.fr/programme/${slug}#${id}` })
       }
     }
   }
@@ -78,7 +128,7 @@ async function philippe() {
     const lis = [...t.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi)]
       .map((m) => sansBalises(m[1]))
       .filter((s) => s.length > 40 && s.length < 400 && /[a-zà-ÿ]/.test(s.slice(0, 20)))
-    for (const texte of lis) propositions.push({ texte, url: `https://www.edouardphilippe.fr/priorites/${slug}` })
+    for (const texte of lis) propositions.push({ texte, theme: classifierTheme(texte), url: `https://www.edouardphilippe.fr/priorites/${slug}` })
   }
   return propositions
 }
@@ -96,7 +146,7 @@ async function melenchon() {
     const lis = [...t.matchAll(/<li[^>]*>([\s\S]*?)<\/li>/gi)]
       .map((m) => sansBalises(m[1]))
       .filter((s) => s.length > 40 && s.length < 350 && !/Mélenchon 2027|Aller au contenu|Programme Fermer/i.test(s))
-    for (const texte of lis) propositions.push({ texte, url })
+    for (const texte of lis) propositions.push({ texte, theme: classifierTheme(texte), url })
   }
   return propositions
 }
