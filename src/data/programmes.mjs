@@ -894,7 +894,7 @@ export const QUESTIONS = [
     info: 'retraite2023',
     positions: {
       melenchon: { position: 1, source: 'Indexation légale des retraites sur l\'inflation' },
-      glucksmann: { position: 1, source: 'Indexer les petites retraites sur l\'inflation' },
+      glucksmann: { position: 0, source: 'Indexer les petites retraites sur l\'inflation' },
       attal: { position: 0, source: 'Revalorisation au cas par cas, sous réserve budgétaire' },
       philippe: { position: -1, source: 'Revalorisation conditionnée à la croissance, pas d\'indexation automatique' },
       lepen: { position: 1, source: 'Indexation sur l\'inflation garantie' }
