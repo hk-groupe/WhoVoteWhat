@@ -4,6 +4,7 @@ import BackOffice from './backoffice/BackOffice.jsx'
 import RecapVotes from './RecapVotes.jsx'
 import Candidats from './Candidats.jsx'
 import Calendrier from './Calendrier.jsx'
+import { BadgeStatut, BadgeProgramme } from './Badges.jsx'
 
 const NAV = [
   { id: 'accueil', label: 'Accueil', emoji: '🏠' },
@@ -384,6 +385,19 @@ export default function App() {
       {ecran === 'resultat' && (() => {
         const scores = calculerScores()
         const gagnant = scores[0]
+        const sourcesBase = donnees.sourcesBase ?? {}
+        const categorie = (c) => {
+          if (c.statut === 'officiel') return sourcesBase[c.id] ? 'officiel-programme-non-publie' : 'officiel-programme-publie'
+          if (c.statut === 'declare' || c.statut === 'conditionnelle') return 'declare-non-officiel'
+          return 'autres'
+        }
+        const CATEGORIES = [
+          { id: 'officiel-programme-publie', titre: 'Candidats officiellement déclarés · programme diffusé' },
+          { id: 'officiel-programme-non-publie', titre: 'Candidats officiellement déclarés · programme non diffusé' },
+          { id: 'declare-non-officiel', titre: 'Candidats déclarés mais pas encore officiels · programme diffusé ou non' },
+          { id: 'autres', titre: 'Les autres candidats' },
+        ]
+        const rangGlobal = new Map(scores.map((s, i) => [s.candidat.id, i + 1]))
         return (
           <section className="resultat">
             {(donnees.sourcesBase ?? {})[gagnant.candidat.id] && (
@@ -404,16 +418,27 @@ export default function App() {
               )}
             </div>
             <h3>📊 Tous vos scores</h3>
-            <div className="classement">
-              {scores.map((s, i) => (
-                <div key={s.candidat.id} className="ligne-score">
-                  <span className="rang">#{i + 1}</span>
-                  <span className="nom">{s.candidat.nom}{s.candidat.statut === 'conditionnelle' ? ' ❓' : ''}</span>
-                  <div className="jauge"><div style={{ width: `${s.score}%`, background: s.candidat.couleur }}></div></div>
-                  <span className="pct">{s.score}%</span>
+            {CATEGORIES.map((cat) => {
+              const scoresCat = scores.filter((s) => categorie(s.candidat) === cat.id)
+              if (scoresCat.length === 0) return null
+              return (
+                <div key={cat.id} className="categorie-classement">
+                  <h4>{cat.titre}</h4>
+                  <div className="classement">
+                    {scoresCat.map((s) => (
+                      <div key={s.candidat.id} className="ligne-score">
+                        <span className="rang">#{rangGlobal.get(s.candidat.id)}</span>
+                        <span className="nom">{s.candidat.nom}</span>
+                        <BadgeStatut statut={s.candidat.statut} />
+                        <BadgeProgramme publie={!sourcesBase[s.candidat.id]} nom={s.candidat.nom} />
+                        <div className="jauge"><div style={{ width: `${s.score}%`, background: s.candidat.couleur }}></div></div>
+                        <span className="pct">{s.score}%</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
+              )
+            })}
             <details className="explications">
               <summary>🔍 Voir les accords / désaccords par candidat</summary>
               {scores.map((s) => (

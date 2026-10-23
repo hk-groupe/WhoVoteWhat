@@ -1,5 +1,6 @@
 import React from 'react'
 import { STATUTS } from './data/programmes.mjs'
+import { BadgeStatut, BadgeProgramme } from './Badges.jsx'
 
 // Résumé le plus exhaustif possible des programmes :
 // uniquement les propositions déclarées dans le programme du candidat.
@@ -47,22 +48,8 @@ export default function Candidats({ donnees, onOuvrir }) {
               </span>
             </li>
           ))}
-          <li>
-            <span className="infobulle" tabIndex={0}>
-              <em className="badge-statut" style={{ background: '#0096c7' }}>📄 Programme publié</em>
-              <span className="infobulle-texte" role="tooltip" style={{ background: '#0096c7' }}>
-                Le candidat a publié son programme de campagne : les propositions affichées sont directement issues de son programme officiel.
-              </span>
-            </span>
-          </li>
-          <li>
-            <span className="infobulle" tabIndex={0}>
-              <em className="badge-statut" style={{ background: '#d00000' }}>📄 Programme non publié</em>
-              <span className="infobulle-texte" role="tooltip" style={{ background: '#d00000' }}>
-                Le candidat n'a pas encore publié son programme de campagne 2027. Les propositions affichées s'appuient sur son ancien programme ou ses prises de position publiques.
-              </span>
-            </span>
-          </li>
+          <li><BadgeProgramme publie nom="Le candidat" /></li>
+          <li><BadgeProgramme publie={false} nom="Le candidat" /></li>
         </ul>
       </div>
       {candidats.map((c) => {
@@ -74,18 +61,8 @@ export default function Candidats({ donnees, onOuvrir }) {
               <span className="dot" style={{ background: c.couleur, margin: 0 }}></span>
               <strong>{c.nom}</strong>
               <em>{c.parti}</em>
-              <span className="infobulle" tabIndex={0}>
-                <em className="badge-statut" style={{ background: STATUTS[c.statut].couleur }}>{STATUTS[c.statut].emoji} {STATUTS[c.statut].label}</em>
-                <span className="infobulle-texte" role="tooltip" style={{ background: STATUTS[c.statut].couleur }}>{STATUTS[c.statut].aide}</span>
-              </span>
-              <span className="infobulle" tabIndex={0}>
-                <em className="badge-statut" style={{ background: sourcesBase[c.id] ? '#d00000' : '#0096c7' }}>{sourcesBase[c.id] ? '📄 Programme non publié' : '📄 Programme publié'}</em>
-                <span className="infobulle-texte" role="tooltip" style={{ background: sourcesBase[c.id] ? '#d00000' : '#0096c7' }}>
-                  {sourcesBase[c.id]
-                    ? `${c.nom} n'a pas encore publié son programme de campagne 2027. Les propositions affichées s'appuient sur son ancien programme ou ses prises de position publiques.`
-                    : `${c.nom} a publié son programme de campagne : les propositions affichées sont directement issues de son programme officiel.`}
-                </span>
-              </span>
+              <BadgeStatut statut={c.statut} />
+              <BadgeProgramme publie={!sourcesBase[c.id]} nom={c.nom} />
             </summary>
             <div className="contenu-candidat">
               <p className="synthese-candidat">{legendes[c.id]}</p>
