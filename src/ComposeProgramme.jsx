@@ -176,7 +176,7 @@ export default function ComposeProgramme({ donnees, onRetour }) {
               programme qui <strong>figurent aussi dans le sien</strong>, et celles qui en sont absentes.
             </p>
           </div>
-          {comparatif().filter((r) => r.aProgramme).map(({ candidat, communes, absentes, tailleProgramme, pourcentage }) => (
+          {comparatif().filter((r) => r.aProgramme).map(({ candidat, communes, absentes, tailleProgramme, pourcentage, aProgramme }) => (
             <details key={candidat.id} className="details-candidat" style={{ borderColor: candidat.couleur }}>
               <summary className="resume-candidat">
                 <span className="compose-score" style={{ background: couleurScore(pourcentage) }}>{pourcentage}% en commun</span>
