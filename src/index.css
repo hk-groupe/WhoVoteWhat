@@ -194,7 +194,7 @@ body {
 }
 .explications summary { cursor: pointer; font-weight: 700; font-size: 1.05rem; }
 .explication-candidat { margin-top: 18px; border-top: 2px dashed #e5dff5; padding-top: 12px; }
-.explication-candidat h4 { margin-bottom: 8px; }
+.explication-candidat h4 { margin-bottom: 8px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 .explication-candidat ul { list-style: none; display: grid; gap: 8px; }
 .explication-candidat li { line-height: 1.45; font-size: 0.92rem; }
 .source { display: block; color: #777; font-size: 0.85rem; }

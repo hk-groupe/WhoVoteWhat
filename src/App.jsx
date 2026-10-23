@@ -445,7 +445,13 @@ export default function App() {
               <summary>🔍 Voir les accords / désaccords par candidat</summary>
               {scores.map((s) => (
                 <div key={s.candidat.id} className="explication-candidat">
-                  <h4>{s.candidat.nom} · {s.nbAccords} accords</h4>
+                  <h4>
+                    {s.candidat.nom} · {s.nbAccords} accords
+                    <span className="badges-ligne">
+                      <BadgeStatut statut={s.candidat.statut} />
+                      <BadgeProgramme publie={!sourcesBase[s.candidat.id]} nom={s.candidat.nom} />
+                    </span>
+                  </h4>
                   {(donnees.sourcesBase ?? {})[s.candidat.id] && (
                     <p className="avertissement-programme" role="note">
                       ⚠️ Programme 2027 non publié : positions basées sur l'ancien programme ou des prises de position publiques — <a href={donnees.sourcesBase[s.candidat.id].url} target="_blank" rel="noreferrer">{donnees.sourcesBase[s.candidat.id].label} ↗</a>
