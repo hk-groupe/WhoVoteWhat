@@ -1,5 +1,5 @@
 import React from 'react'
-import { BadgeStatut, BadgeProgramme } from './Badges.jsx'
+import { BadgeStatut } from './Badges.jsx'
 import { PROPOSITIONS_PROGRAMMES, SOURCES_PROGRAMMES } from './data/propositions-programmes.mjs'
 
 // « Compose ton programme » :
@@ -13,7 +13,6 @@ import { PROPOSITIONS_PROGRAMMES, SOURCES_PROGRAMMES } from './data/propositions
 export default function ComposeProgramme({ donnees, onRetour }) {
   const candidats = donnees.candidats ?? []
   const themes = donnees.themes ?? {}
-  const sourcesBase = donnees.sourcesBase ?? {}
   const legendes = donnees.legendes ?? {}
 
   // Propositions anonymes : aucune mention de candidat dans la liste.
@@ -184,7 +183,6 @@ export default function ComposeProgramme({ donnees, onRetour }) {
                 <strong>{candidat.parti}</strong>
                 <em>{candidat.nom}</em>
                 <BadgeStatut statut={candidat.statut} />
-                <BadgeProgramme publie={!sourcesBase[candidat.id]} nom={candidat.nom} />
               </summary>
               <div className="contenu-candidat">
                 <p className="synthese-candidat">{legendes[candidat.id]}</p>
