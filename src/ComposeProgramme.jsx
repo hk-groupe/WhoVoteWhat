@@ -129,18 +129,30 @@ export default function ComposeProgramme({ donnees, onRetour }) {
             </div>
           </div>
           <div className="compose-liste">
-            {propositionsFiltrees.map((p) => (
-              <label key={p.id} className={depasse && !choisies.includes(p.id) ? 'compose-item bloque' : 'compose-item'}>
-                <input
-                  type="checkbox"
-                  checked={choisies.includes(p.id)}
-                  onChange={() => basculer(p.id)}
-                  disabled={depasse && !choisies.includes(p.id)}
-                />
-                <span className="compose-theme">{themes[p.theme]?.emoji} {themes[p.theme]?.label}</span>
-                <span className="compose-texte">{p.texte}</span>
-              </label>
-            ))}
+            {propositionsFiltrees.map((p) => {
+              const estChoisie = choisies.includes(p.id)
+              const estBloquee = depasse && !estChoisie
+              return (
+                <div
+                  key={p.id}
+                  className={estBloquee ? 'compose-item bloque' : estChoisie ? 'compose-item coche' : 'compose-item'}
+                  onClick={() => !estBloquee && basculer(p.id)}
+                  role="checkbox"
+                  aria-checked={estChoisie}
+                  tabIndex={estBloquee ? -1 : 0}
+                  onKeyDown={(e) => {
+                    if (!estBloquee && (e.key === 'Enter' || e.key === ' ')) {
+                      e.preventDefault()
+                      basculer(p.id)
+                    }
+                  }}
+                >
+                  <span className="compose-coche">{estChoisie ? '☑' : '☐'}</span>
+                  <span className="compose-theme">{themes[p.theme]?.emoji} {themes[p.theme]?.label}</span>
+                  <span className="compose-texte">{p.texte}</span>
+                </div>
+              )
+            })}
           </div>
           <div className="compose-actions">
             <button
