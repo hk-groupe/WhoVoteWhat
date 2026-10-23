@@ -6,8 +6,8 @@ import { PROPOSITIONS_PROGRAMMES, SOURCES_PROGRAMMES } from './data/propositions
 // 1. L'intégralité des propositions extraites directement des programmes officiels
 //    2027 des candidats (intitulés exacts, duplicatas conservés, lien direct vers
 //    la proposition dans le programme quand une ancre existe).
-// 2. L'utilisateur compose son programme en respectant un budget de propositions
-//    calé sur la taille moyenne des programmes.
+// 2. L'utilisateur compose librement son programme (aucune limite de sélection) ;
+//    la taille moyenne des programmes officiels est donnée à titre de repère.
 // 3. Comparatif : quelles propositions de son programme se retrouvent dans quel
 //    programme de candidat, et lesquelles n'y figurent pas.
 
@@ -41,8 +41,6 @@ export default function ComposeProgramme({ donnees, onRetour }) {
   const [filtre, setFiltre] = React.useState('tous')
 
   const nbChoisies = choisies.length
-  const restant = budget - nbChoisies
-  const depasse = restant < 0
 
   const basculer = (id) => {
     setChoisies((precedent) =>
@@ -84,14 +82,8 @@ export default function ComposeProgramme({ donnees, onRetour }) {
               aux programmes des candidats. Chaque proposition renvoie directement à sa source dans le programme.
             </p>
             <p className="aide-nav">
-              🎯 Budget : <strong>{nbChoisies} / {budget} propositions</strong>{' '}
-              {depasse
-                ? <span className="depasse">— vous avez dépassé le budget !</span>
-                : restant === 0
-                  ? <span className="complet">— budget atteint</span>
-                  : <span className="restant">— il vous reste {restant} proposition{restant > 1 ? 's' : ''}</span>}
-              <br />
-              <em>Le budget correspond à la taille moyenne des programmes officiels publiés.</em>
+              📏 Repère : les programmes officiels comptent en moyenne <strong>{budget} propositions</strong>.
+              Vous pouvez sélectionner autant de propositions que vous voulez — le repère n'est pas une limite.
             </p>
             <div className="compose-filtres">
               <button
@@ -114,17 +106,16 @@ export default function ComposeProgramme({ donnees, onRetour }) {
           <div className="compose-liste">
             {propositionsFiltrees.map((p) => {
               const estChoisie = choisies.includes(p.id)
-              const estBloquee = depasse && !estChoisie
               return (
                 <div
                   key={p.id}
-                  className={estBloquee ? 'compose-item bloque' : estChoisie ? 'compose-item coche' : 'compose-item'}
-                  onClick={() => !estBloquee && basculer(p.id)}
+                  className={estChoisie ? 'compose-item coche' : 'compose-item'}
+                  onClick={() => basculer(p.id)}
                   role="checkbox"
                   aria-checked={estChoisie}
-                  tabIndex={estBloquee ? -1 : 0}
+                  tabIndex={0}
                   onKeyDown={(e) => {
-                    if (!estBloquee && (e.key === 'Enter' || e.key === ' ')) {
+                    if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault()
                       basculer(p.id)
                     }
@@ -158,6 +149,10 @@ export default function ComposeProgramme({ donnees, onRetour }) {
               🔄 Comparer aux programmes des candidats
             </button>
             <button className="retour" onClick={onRetour}>← Retour à l'accueil</button>
+          </div>
+          <div className="compose-compteur" role="status">
+            <strong>{nbChoisies}</strong> proposition{nbChoisies > 1 ? 's' : ''} sélectionnée{nbChoisies > 1 ? 's' : ''}
+            <span className="compose-compteur-repere">· moyenne des programmes : {budget}</span>
           </div>
         </>
       )}

@@ -556,6 +556,14 @@ body {
 .compose-theme { flex: 0 0 auto; font-weight: 700; font-size: 0.8rem; color: var(--violet); }
 .compose-texte { flex: 1 1 auto; line-height: 1.5; }
 .compose-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.compose-compteur {
+  position: fixed; right: 20px; bottom: 20px; z-index: 40;
+  background: linear-gradient(90deg, var(--violet), var(--rose)); color: #fff;
+  border-radius: 999px; padding: 10px 18px; font-size: 0.95rem; font-weight: 700;
+  box-shadow: 0 8px 24px rgba(31,22,51,.3);
+}
+.compose-compteur strong { font-size: 1.15rem; }
+.compose-compteur-repere { font-weight: 500; font-size: 0.8rem; opacity: .85; margin-left: 6px; }
 .compose-score { font-weight: 800; font-size: 0.9rem; background: linear-gradient(90deg, var(--violet), var(--rose)); color: #fff; border-radius: 999px; padding: 3px 12px; }
 .compose-resume { font-weight: 600; background: #f6f1ff; border-radius: 12px; padding: 10px 14px; }
 .restant { color: #1b9aaa; }
