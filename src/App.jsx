@@ -5,6 +5,7 @@ import RecapVotes from './RecapVotes.jsx'
 import Candidats from './Candidats.jsx'
 import Calendrier from './Calendrier.jsx'
 import { BadgeStatut, BadgeProgramme } from './Badges.jsx'
+import { NomInformel } from './NomInformel.jsx'
 
 const NAV = [
   { id: 'accueil', label: 'Accueil', emoji: '🏠' },
@@ -409,8 +410,9 @@ export default function App() {
             )}
             <div className="carte-gagnant" style={{ background: gagnant.candidat.couleur }}>
               <span className="medaille">🏆</span>
-              <h2>Votre candidat le plus proche :<br />{gagnant.candidat.nom}</h2>
-              <p className="parti">{gagnant.candidat.parti}</p>
+              <h2>Votre candidat le plus proche :</h2>
+              <p className="parti-gagnant"><strong>{gagnant.candidat.parti}</strong></p>
+              <p className="candidat-informel-gagnant">{gagnant.candidat.nom.split(' ')[0]} {gagnant.candidat.nom.split(' ').slice(1).join(' ').charAt(0).toUpperCase()}.</p>
               <p className="score-gagnant">{gagnant.score} % de compatibilité</p>
               <p className="resume">{legendes[gagnant.candidat.id]}</p>
               {gagnant.candidat.statut === 'conditionnelle' && (
@@ -428,7 +430,7 @@ export default function App() {
                     {scoresCat.map((s) => (
                       <div key={s.candidat.id} className="ligne-score">
                         <span className="rang">#{rangGlobal.get(s.candidat.id)}</span>
-                        <span className="nom">{s.candidat.nom}</span>
+                        <span className="nom"><NomInformel candidat={s.candidat} /></span>
                         <span className="badges-ligne">
                           <BadgeStatut statut={s.candidat.statut} />
                           <BadgeProgramme publie={!sourcesBase[s.candidat.id]} nom={s.candidat.nom} />
@@ -446,7 +448,7 @@ export default function App() {
               {scores.map((s) => (
                 <div key={s.candidat.id} className="explication-candidat">
                   <h4>
-                    {s.candidat.nom} · {s.nbAccords} accords
+                    <NomInformel candidat={s.candidat} /> · {s.nbAccords} accords
                     <span className="badges-ligne">
                       <BadgeStatut statut={s.candidat.statut} />
                       <BadgeProgramme publie={!sourcesBase[s.candidat.id]} nom={s.candidat.nom} />
