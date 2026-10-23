@@ -176,7 +176,8 @@ body {
 }
 .ligne-score .rang { grid-area: rang; }
 .ligne-score .nom { grid-area: nom; }
-.ligne-score .infobulle { grid-area: badges; }
+.ligne-score .badges-ligne { grid-area: badges; display: flex; flex-wrap: wrap; gap: 8px; }
+.ligne-score .infobulle { position: relative; }
 .ligne-score .infobulle .infobulle-texte { top: calc(100% + 10px); }
 .ligne-score .jauge { grid-area: jauge; }
 .rang { font-weight: 800; color: #999; }

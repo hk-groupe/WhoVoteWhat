@@ -429,8 +429,10 @@ export default function App() {
                       <div key={s.candidat.id} className="ligne-score">
                         <span className="rang">#{rangGlobal.get(s.candidat.id)}</span>
                         <span className="nom">{s.candidat.nom}</span>
-                        <BadgeStatut statut={s.candidat.statut} />
-                        <BadgeProgramme publie={!sourcesBase[s.candidat.id]} nom={s.candidat.nom} />
+                        <span className="badges-ligne">
+                          <BadgeStatut statut={s.candidat.statut} />
+                          <BadgeProgramme publie={!sourcesBase[s.candidat.id]} nom={s.candidat.nom} />
+                        </span>
                         <div className="jauge"><div style={{ width: `${s.score}%`, background: s.candidat.couleur }}></div></div>
                         <span className="pct">{s.score}%</span>
                       </div>
