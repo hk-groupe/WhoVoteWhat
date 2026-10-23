@@ -165,11 +165,20 @@ body {
   border-radius: 14px;
   padding: 12px 16px;
   display: grid;
-  grid-template-columns: 40px 1fr 2fr 60px;
+  grid-template-columns: 40px auto 1fr 60px;
+  grid-template-areas:
+    'rang nom nom pct'
+    'rang badges badges badges'
+    'rang jauge jauge jauge';
   align-items: center;
-  gap: 12px;
+  gap: 6px 12px;
   box-shadow: 0 4px 12px rgba(31, 22, 51, 0.06);
 }
+.ligne-score .rang { grid-area: rang; }
+.ligne-score .nom { grid-area: nom; }
+.ligne-score .infobulle { grid-area: badges; }
+.ligne-score .infobulle .infobulle-texte { top: calc(100% + 10px); }
+.ligne-score .jauge { grid-area: jauge; }
 .rang { font-weight: 800; color: #999; }
 .nom { font-weight: 700; }
 .jauge { height: 14px; background: #f0ecf8; border-radius: 999px; overflow: hidden; }
@@ -205,11 +214,6 @@ body {
   font-size: 0.82rem;
   color: #888;
   line-height: 1.5;
-}
-
-@media (max-width: 600px) {
-  .ligne-score { grid-template-columns: 30px 1fr 60px; }
-  .ligne-score .jauge { grid-column: 1 / -1; }
 }
 
 /* ── Choix du nombre de questions ── */
