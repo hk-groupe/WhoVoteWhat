@@ -14,7 +14,7 @@ export const SOURCES_BASE = {
   ruffin: { url: 'https://www.assemblee-nationale.fr/dyn/deputes/PA722142/positions-de-vote', label: 'Votes et prises de position à l\'Assemblée nationale' },
   cazeneuve: { url: 'https://bc2027.fr/', label: 'Bernard Cazeneuve 2027 (bc2027.fr, La Convention)' },
   bouamrane: { url: 'https://lafrancehumaineetforte.fr/', label: 'La France humaine et forte (lafrancehumaineetforte.fr, mouvement de Karim Bouamrane)' },
-  batho: { url: 'https://alice-ecologie.fr/', label: 'Alice écologie (alice-ecologie.fr)' },
+  batho: { url: 'https://www.generationecologie.fr/', label: 'Génération Écologie (generationecologie.fr)' },
   arthaud: { url: 'https://www.lutte-ouvriere.org/', label: 'Programme Lutte ouvrière (lutte-ouvriere.org)' },
   dupontaignan: { url: 'https://www.debout-la-france.fr/', label: 'Debout la France (debout-la-france.fr)' },
   philippot: { url: 'https://les-patriotes.com/', label: 'Les Patriotes (les-patriotes.com)' },

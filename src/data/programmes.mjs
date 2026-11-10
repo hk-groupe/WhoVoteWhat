@@ -163,9 +163,9 @@ export const CANDIDATS = [
     nom: 'Delphine Batho',
     parti: 'Génération Écologie',
     couleur: '#43aa8b',
-    site: 'https://alice-ecologie.fr/',
-    programme: 'https://alice-ecologie.fr/',
-    sourceLabel: 'alice-ecologie.fr',
+    site: 'https://www.generationecologie.fr/',
+    programme: 'https://www.generationecologie.fr/',
+    sourceLabel: 'generationecologie.fr',
     statut: 'declare',
   },
   {
