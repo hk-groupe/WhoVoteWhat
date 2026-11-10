@@ -1,4 +1,4 @@
-# 🗳️ QuiVoteQuoi — Présidentielle 2027
+# 🗳️ Votons.app — Présidentielle 2027
 
 Site d'information électorale : un quiz d'affinité pour découvrir quel candidat à l'élection présidentielle française de 2027 se rapproche le plus de vos idées.
 
@@ -152,7 +152,7 @@ Rendre la configuration persistante, par exemple dans un fichier PM2 chargé au 
 cat > ecosystem.config.cjs <<'EOF'
 module.exports = {
   apps: [{
-    name: 'quivotequoi-api',
+    name: 'votons-api',
     script: 'server/index.mjs',
     env: {
       PORT: 4000,
@@ -256,7 +256,7 @@ cd /srv/WhoVoteWhat
 git pull
 npm ci
 npm run build
-pm2 restart quivotequoi-api
+pm2 restart votons-api
 ```
 
 ### Méthode B — Déploiement via FTP / SFTP (glisser-déposer depuis votre PC)
@@ -304,7 +304,7 @@ export ORIGINE_AUTORISEE="https://timerush.hk-groupe.fr"
 
 # service persistant
 sudo npm install -g pm2
-pm2 start server/index.mjs --name quivotequoi-api
+pm2 start server/index.mjs --name votons-api
 pm2 save && pm2 startup
 ```
 
@@ -314,7 +314,7 @@ pm2 save && pm2 startup
 
 1. En local : `git pull && npm ci && npm run build`
 2. Re-transférer `dist/` et `server/` (écraser, sauf `server/data/`)
-3. Sur le serveur : `pm2 restart quivotequoi-api`
+3. Sur le serveur : `pm2 restart votons-api`
 
 #### Variante « front seul » (hébergement 100 % statique, sans Node)
 

@@ -158,7 +158,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Votons<span className="accent">.app</span></h1>
+          <h1>Votons<span className="accent"> Quoi</span></h1>
           <p className="tagline">Chargement…</p>
         </header>
       </div>
@@ -174,7 +174,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Votons<span className="accent">.app</span></h1>
+          <h1>Votons<span className="accent"> Quoi</span></h1>
           <p className="tagline">Back-office de gestion du contenu 🛠️</p>
         </header>
         <BackOffice onFermer={() => setEcran('accueil')} />
@@ -190,7 +190,7 @@ export default function App() {
       <header className="header">
         <div className="barre-titre">
           <span className="logo">🗳️</span>
-          <h1>Votons<span className="accent">.app</span></h1>
+          <h1>Votons<span className="accent"> Quoi</span></h1>
           <Navigation ecran={ecran} naviguer={naviguer} />
         </div>
 
@@ -201,6 +201,11 @@ export default function App() {
 
       {ecran === 'accueil' && (
         <section className="accueil">
+          <div className="bloc disclaimer" role="note">
+            <h3>⚠️ Avertissement</h3>
+            <p><strong>Votons.app est un projet indépendant de vulgarisation à but strictement informatif.</strong> Les contenus proposés — quiz d'affinité, composition de son programme, récapitulatif des votes et positions des candidats — sont établis à partir de sources officielles, mais ne constituent <strong>ni un conseil de vote, ni une recommandation, ni un soutien à un candidat ou à une formation politique, et ne se substituent en aucun cas à la recherche et à la lecture intégrale des programmes électoraux et des textes officiels.</strong></p>
+            <p>L'application a pour seul objet de vous aider à <strong>y voir plus clair dans l'offre politique et à orienter votre propre réflexion</strong>. Les <strong>synthèses et scores</strong> présentés résultent d'un traitement simplifié d'informations publiques : <strong>ils ne reflètent pas l'exhaustivité ni la complexité des programmes et ne sauraient</strong> engager la responsabilité de leurs auteurs. En utilisant ce site, vous reconnaissez que <strong>vos choix électoraux relèvent de votre seule et entière responsabilité</strong>.</p>
+          </div>
           <div className="bloc">
             <h2>Bienvenue 👋</h2>
             <p>Découvrez les sections du site pour mieux comprendre les programmes et les votes de vos élus :</p>
@@ -217,11 +222,6 @@ export default function App() {
               <button className="btn-principal" onClick={() => naviguer('quiz-config')}>🚀 Commencer le quiz</button>
               <button className="btn-principal btn-secondaire" onClick={() => naviguer('compose-programme')}>✍️ Compose ton programme</button>
             </div>
-          </div>
-          <div className="bloc disclaimer" role="note">
-            <h3>⚠️ Avertissement</h3>
-            <p><strong>Votons.app est un projet indépendant de vulgarisation à but strictement informatif.</strong> Les contenus proposés — quiz d'affinité, récapitulatif des votes et positions des candidats — sont établis à partir de sources officielles, mais ne constituent <strong>ni un conseil de vote</strong>, ni une recommandation, ni un soutien à un candidat ou à une formation politique, et ne se substituent en aucun cas à la recherche et à la lecture intégrale des programmes électoraux et des textes officiels.</p>
-            <p>L'application a pour seul objet de vous aider à <strong>y voir plus clair</strong> dans l'offre politique et à orienter votre propre réflexion. Les synthèses et scores présentés résultent d'un traitement simplifié d'informations publiques : ils ne reflètent pas l'exhaustivité ni la complexité des programmes et ne sauraient engager la responsabilité de leurs auteurs. En utilisant ce site, vous reconnaissez que vos choix électoraux relèvent de votre seule et entière responsabilité.</p>
           </div>
           <button className="retour" onClick={() => setEcran('backoffice')}>🛠️ Back-office (admin)</button>
         </section>
