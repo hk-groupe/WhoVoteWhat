@@ -496,8 +496,7 @@ export default function App() {
       })()}
 
       <footer className="footer">
-        <p>Site indépendant, non partisan. Positions extraites des programmes officiels des candidats à l'élection présidentielle 2027.</p>
-        <p>Références : programme-candidats.interieur.gouv.fr · melenchon2027.fr · edouardphilippe.fr · attalpresident.fr · rassemblementnational.fr · place-publique.eu</p>
+        <p>Site indépendant, non partisan.</p>
       </footer>
     </div>
   )
