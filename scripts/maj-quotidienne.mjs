@@ -72,12 +72,15 @@ section('Vérification des URLs des programmes')
 try {
   const { CANDIDATS } = await import(pathToFileURL(path.join(RACINE, 'src/data/programmes.mjs')).href)
   const { SOURCES_BASE } = await import(pathToFileURL(path.join(RACINE, 'src/data/positions-complements.mjs')).href)
+  // Une même URL n'est vérifiée qu'une fois (programme et source base
+  // pointent souvent vers le même site pour les candidats sans programme 2027)
   const urls = new Map()
   for (const c of CANDIDATS) {
-    if (c.programme) urls.set(`${c.nom} (programme)`, c.programme)
-    if (SOURCES_BASE[c.id]?.url) urls.set(`${c.nom} (source base)`, SOURCES_BASE[c.id].url)
+    for (const u of [c.programme, SOURCES_BASE[c.id]?.url]) {
+      if (u && !urls.has(u)) urls.set(u, c.nom)
+    }
   }
-  for (const [label, url] of urls) {
+  for (const [url, label] of urls) {
     try {
       const res = await fetch(url, {
         redirect: 'follow',

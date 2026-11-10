@@ -7,15 +7,15 @@
 
 export const SOURCES_BASE = {
   retailleau: { url: 'https://www.senat.fr/senateur/retailleau_bruno04033b.html', label: 'Fiche officielle de Bruno Retailleau au Sénat (travaux parlementaires)' },
-  zemmour: { url: 'https://www.hatvp.fr/pages_nominatives/zemmour-eric.html', label: 'Prises de position publiques d\'Éric Zemmour (HATVP, déclarations officielles)' },
+  zemmour: { url: 'https://www.hatvp.fr/fiche-nominative/?declarant=zemmour-eric', label: 'Prises de position publiques d\'Éric Zemmour (HATVP, déclarations officielles)' },
   bertrand: { url: 'https://www.nous-france.fr/', label: 'nous-france.fr (programme et engagements publics)' },
   lisnard: { url: 'https://www.unenouvelleenergie.fr/', label: 'Nouvelle Énergie (unenouvelleenergie.fr, projet de David Lisnard)' },
   roussel: { url: 'https://www.fabienroussel2027.fr/', label: 'Campagne 2027 de Fabien Roussel (fabienroussel2027.fr, PCF)' },
   ruffin: { url: 'https://www.assemblee-nationale.fr/dyn/deputes/PA722142/positions-de-vote', label: 'Votes et prises de position à l\'Assemblée nationale' },
   cazeneuve: { url: 'https://bc2027.fr/', label: 'Bernard Cazeneuve 2027 (bc2027.fr, La Convention)' },
   bouamrane: { url: 'https://lafrancehumaineetforte.fr/', label: 'La France humaine et forte (lafrancehumaineetforte.fr, mouvement de Karim Bouamrane)' },
-  batho: { url: 'https://www.generation-ecologie.fr/', label: 'Génération Écologie (generation-ecologie.fr)' },
-  arthaud: { url: 'https://www.lutte-ouvriere.fr/', label: 'Programme Lutte ouvrière 2022 (lutte-ouvriere.fr)' },
+  batho: { url: 'https://alice-ecologie.fr/', label: 'Alice écologie (alice-ecologie.fr)' },
+  arthaud: { url: 'https://www.lutte-ouvriere.org/', label: 'Programme Lutte ouvrière (lutte-ouvriere.org)' },
   dupontaignan: { url: 'https://www.debout-la-france.fr/', label: 'Debout la France (debout-la-france.fr)' },
   philippot: { url: 'https://les-patriotes.com/', label: 'Les Patriotes (les-patriotes.com)' },
   asselineau: { url: 'https://www.upr.fr/', label: 'UPR (upr.fr)' },
