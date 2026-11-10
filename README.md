@@ -55,11 +55,33 @@ npm run build
 Backend (API de contenu partagée + mise à jour quotidienne des scrutins) :
 
 ```bash
-npm run api          # démarre l'API sur le port 4000 (PORT, CLE_SECRETE, ORIGINE_AUTORISEE configurables)
-npm run maj-scrutins # consolide une fois l'open data officielle des scrutins
+npm run api             # démarre l'API sur le port 4000 (PORT, CLE_SECRETE, ORIGINE_AUTORISEE configurables)
+npm run maj-scrutins    # consolide une fois l'open data officielle des scrutins
+npm run maj-quotidienne # met à jour TOUTES les données (voir ci-dessous)
 ```
 
 Au démarrage, l'API consolide l'open data si aucune donnée locale n'existe, puis rejoue la consolidation chaque nuit (03:30 par défaut, `HEURE_MAJ_SCRUTINS`).
+
+### 🔄 Mise à jour quotidienne complète (cron)
+
+`npm run maj-quotidienne` orchestre toutes les mises à jour automatiques :
+
+1. **Scrutins** — open data de l'Assemblée nationale → `server/data/`
+2. **Propositions des programmes officiels** — extraction des sites de campagne → `src/data/propositions-programmes.mjs`
+3. **Vérification des URLs** des programmes et sources des candidats (404, redirections vers un autre domaine)
+4. **Cohérence** candidats du code vs contenu persisté (`server/data/contenu.json`)
+
+Un rapport complet est écrit dans `server/data/rapport-maj.json`. Le script sort en code 1 si une étape échoue (cron enverra la sortie par e-mail si un MTA est configuré). L'option `--commit` commite automatiquement les fichiers régénérés s'ils ont changé.
+
+**Ce qui reste éditorial** (pas d'API publique fiable) : statuts des candidatures (déclaré / officiel / conditionnel), positions sur les questions, prises de parole — le script les signale dans le rapport, la mise à jour se fait via le back-office.
+
+Exemple de cron (chaque jour à 4h, avec commit des changements) :
+
+```cron
+0 4 * * * cd /srv/votons && /usr/bin/node scripts/maj-quotidienne.mjs --commit >> /var/log/votons-maj.log 2>&1
+```
+
+Après le cron, déployer les changements commités : `git pull && npm ci && npm run build && pm2 restart votons-api`.
 
 ## 🚀 Mise en production
 

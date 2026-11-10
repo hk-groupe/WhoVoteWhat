@@ -3,10 +3,15 @@
 // avec l'intitulé exact tel qu'il figure dans le programme (duplicatas conservés)
 // et le lien direct (ancre quand disponible) vers la proposition.
 // Régénérer : node scripts/extraire-propositions.mjs
-// Source : 2026-10-23
+// Source : 2026-11-10
 
 export const PROPOSITIONS_PROGRAMMES = {
   "glucksmann": [
+    {
+      "texte": "Porter le SMIC à 1 700 euros net par mois, réunir une conférence salariale et augmenter le pouvoir d'achat par une CSG progressive",
+      "theme": "economie",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-199"
+    },
     {
       "texte": "Abroger la réforme des retraites de 2023, sans capitalisation, avec un âge légal à 62 ans et des départs anticipés selon la pénibilité",
       "theme": "retraites",
@@ -68,6 +73,11 @@ export const PROPOSITIONS_PROGRAMMES = {
       "url": "https://www.wikiglucksmann.fr/programme.html#e-industrie-03"
     },
     {
+      "texte": "Financer par les superprofits des chèques énergie de 500 ou 200 euros et encadrer les marges pour baisser de 20 centimes le prix à la pompe",
+      "theme": "ecologie",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-200"
+    },
+    {
       "texte": "Ouvrir un leasing social d'un million de voitures électriques à 100 euros par mois pour les ménages modestes",
       "theme": "autres",
       "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-177"
@@ -123,6 +133,26 @@ export const PROPOSITIONS_PROGRAMMES = {
       "url": "https://www.wikiglucksmann.fr/programme.html#e-agriculture-01"
     },
     {
+      "texte": "Abroger Parcoursup, lancer des états généraux de l'orientation et revenir sur la réforme Blanquer du lycée",
+      "theme": "education",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-198"
+    },
+    {
+      "texte": "Maintenir les aides au logement, encadrer les loyers, revaloriser les bourses et rémunérer les stages d'étude 1 000 euros par mois",
+      "theme": "ecologie",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-197"
+    },
+    {
+      "texte": "Renoncer aux coupes sur les capacités d'investissement des collectivités locales pour permettre la rénovation des bâtiments scolaires",
+      "theme": "institutions",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-196"
+    },
+    {
+      "texte": "Annuler les suppressions de postes d'enseignants prévues pour 2027 et ouvrir de nouveaux postes, en particulier dans l'enseignement supérieur",
+      "theme": "ecologie",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-195"
+    },
+    {
       "texte": "Une rémunération minimale de 1000 € pour les stages de plus de deux mois",
       "theme": "education",
       "url": "https://www.wikiglucksmann.fr/programme.html#m-vid-140"
@@ -173,6 +203,16 @@ export const PROPOSITIONS_PROGRAMMES = {
       "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-188"
     },
     {
+      "texte": "Indemniser plus vite commerçants, artisans et particuliers victimes des violences et étendre le chômage partiel aux très petites entreprises",
+      "theme": "economie",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-204"
+    },
+    {
+      "texte": "Mettre fin à l'usage des armes mutilantes dans les manifestations et réformer la doctrine de maintien de l'ordre",
+      "theme": "autres",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-202"
+    },
+    {
       "texte": "Une guerre sans relâche contre le narcotrafic, en relayant les opérations coups de poing par une présence constante de la République",
       "theme": "securite",
       "url": "https://www.wikiglucksmann.fr/programme.html#e-securite-01"
@@ -183,6 +223,11 @@ export const PROPOSITIONS_PROGRAMMES = {
       "url": "https://www.wikiglucksmann.fr/programme.html#e-securite-02"
     },
     {
+      "texte": "Régulariser les 300 000 travailleurs sans-papiers, en soutenant la loi déposée par les députés socialistes à l'Assemblée nationale",
+      "theme": "economie",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-vid-147"
+    },
+    {
       "texte": "Régulariser les travailleurs sans-papiers pour mettre fin à la clandestinité qu'entretient l'hypocrisie actuelle",
       "theme": "economie",
       "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-187"
@@ -191,6 +236,16 @@ export const PROPOSITIONS_PROGRAMMES = {
       "texte": "Une convention citoyenne sur l'immigration, où partisans de l'immigration zéro et partisans du laisser-faire devront confronter leurs positions aux réalités",
       "theme": "immigration",
       "url": "https://www.wikiglucksmann.fr/programme.html#e-immigration-01"
+    },
+    {
+      "texte": "Sanctionner jusqu'à 6 % de leur chiffre d'affaires les plateformes qui ne retirent pas en temps réel les contenus appelant à la destruction",
+      "theme": "numerique",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-203"
+    },
+    {
+      "texte": "Mettre fin à l'usage des armes mutilantes dans les manifestations et réformer la doctrine de maintien de l'ordre",
+      "theme": "autres",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-202"
     },
     {
       "texte": "Un droit d'initiative citoyenne permettant de déclencher des référendums dans le cadre de la Constitution, chaque vote étant précédé d'une convention citoyenne",
@@ -206,6 +261,11 @@ export const PROPOSITIONS_PROGRAMMES = {
       "texte": "Définir quelques chantiers essentiels et ne pas en dévier au gré des crises et des sondages",
       "theme": "autres",
       "url": "https://www.wikiglucksmann.fr/programme.html#e-democratie-03"
+    },
+    {
+      "texte": "Sanctionner jusqu'à 6 % de leur chiffre d'affaires les plateformes qui ne retirent pas en temps réel les contenus appelant à la destruction",
+      "theme": "numerique",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-203"
     },
     {
       "texte": "Placer l'intelligence artificielle au cœur du contrat patriotique : définir un cadre, investir, former, orienter et démocratiser l'usage, puis proposer un contrat européen",
@@ -283,6 +343,11 @@ export const PROPOSITIONS_PROGRAMMES = {
       "url": "https://www.wikiglucksmann.fr/programme.html#e-egalite-02"
     },
     {
+      "texte": "Maintenir les aides au logement, encadrer les loyers, revaloriser les bourses et rémunérer les stages d'étude 1 000 euros par mois",
+      "theme": "ecologie",
+      "url": "https://www.wikiglucksmann.fr/programme.html#m-pos-197"
+    },
+    {
       "texte": "Une laïcité « simple, basique » fondée sur le droit de chacun de s'affranchir de sa religion et de son héritage communautaire",
       "theme": "europe",
       "url": "https://www.wikiglucksmann.fr/programme.html#e-republique-01"
@@ -304,6 +369,11 @@ export const PROPOSITIONS_PROGRAMMES = {
     }
   ],
   "attal": [
+    {
+      "texte": "Les mesures déjà annoncées École",
+      "theme": "education",
+      "url": "https://attalpresident.fr/programme/education#chantier-mesures-titre"
+    },
     {
       "texte": "Pour que le travail paie",
       "theme": "economie",
@@ -340,6 +410,11 @@ export const PROPOSITIONS_PROGRAMMES = {
       "url": "https://attalpresident.fr/programme/travail-salaires#refonder-le-code-du-travail"
     },
     {
+      "texte": "Les mesures déjà annoncées Travail & salaires",
+      "theme": "economie",
+      "url": "https://attalpresident.fr/programme/travail-salaires#chantier-mesures-titre"
+    },
+    {
       "texte": "Faire le choix de la puissance dans un monde hostile",
       "theme": "autres",
       "url": "https://attalpresident.fr/programme/frontieres#faire-le-choix-de-la-puissance-dans-un-monde-hostile"
@@ -355,6 +430,11 @@ export const PROPOSITIONS_PROGRAMMES = {
       "url": "https://attalpresident.fr/programme/frontieres#maitriser-l-immigration"
     },
     {
+      "texte": "Les mesures déjà annoncées Frontières",
+      "theme": "immigration",
+      "url": "https://attalpresident.fr/programme/frontieres#chantier-mesures-titre"
+    },
+    {
       "texte": "Faire le choix de la souveraineté",
       "theme": "autres",
       "url": "https://attalpresident.fr/programme/intelligence-artificielle#faire-le-choix-de-la-souverainete"
@@ -368,6 +448,11 @@ export const PROPOSITIONS_PROGRAMMES = {
       "texte": "Faire le choix de l’adoption massive : l’État doit prendre la main",
       "theme": "autres",
       "url": "https://attalpresident.fr/programme/intelligence-artificielle#faire-le-choix-de-l-adoption-massive-l-etat-doit-prendre-la-main"
+    },
+    {
+      "texte": "Les mesures déjà annoncées Intelligence artificielle",
+      "theme": "numerique",
+      "url": "https://attalpresident.fr/programme/intelligence-artificielle#chantier-mesures-titre"
     },
     {
       "texte": "Ce que la science économique nous dit et qu’on n’a pas le droit d’ignorer",
