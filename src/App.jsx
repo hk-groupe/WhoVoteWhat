@@ -158,7 +158,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Qui Vote<span className="accent"> Quoi</span></h1>
+          <h1>Votons<span className="accent">.app</span></h1>
           <p className="tagline">Chargement…</p>
         </header>
       </div>
@@ -174,7 +174,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Qui Vote<span className="accent"> Quoi</span></h1>
+          <h1>Votons<span className="accent">.app</span></h1>
           <p className="tagline">Back-office de gestion du contenu 🛠️</p>
         </header>
         <BackOffice onFermer={() => setEcran('accueil')} />
@@ -190,7 +190,7 @@ export default function App() {
       <header className="header">
         <div className="barre-titre">
           <span className="logo">🗳️</span>
-          <h1>Qui Vote<span className="accent"> Quoi</span></h1>
+          <h1>Votons<span className="accent">.app</span></h1>
           <Navigation ecran={ecran} naviguer={naviguer} />
         </div>
 
@@ -220,7 +220,7 @@ export default function App() {
           </div>
           <div className="bloc disclaimer" role="note">
             <h3>⚠️ Avertissement</h3>
-            <p><strong>QuiVoteQuoi est un projet indépendant de vulgarisation à but strictement informatif.</strong> Les contenus proposés — quiz d'affinité, récapitulatif des votes et positions des candidats — sont établis à partir de sources officielles, mais ne constituent <strong>ni un conseil de vote</strong>, ni une recommandation, ni un soutien à un candidat ou à une formation politique, et ne se substituent en aucun cas à la recherche et à la lecture intégrale des programmes électoraux et des textes officiels.</p>
+            <p><strong>Votons.app est un projet indépendant de vulgarisation à but strictement informatif.</strong> Les contenus proposés — quiz d'affinité, récapitulatif des votes et positions des candidats — sont établis à partir de sources officielles, mais ne constituent <strong>ni un conseil de vote</strong>, ni une recommandation, ni un soutien à un candidat ou à une formation politique, et ne se substituent en aucun cas à la recherche et à la lecture intégrale des programmes électoraux et des textes officiels.</p>
             <p>L'application a pour seul objet de vous aider à <strong>y voir plus clair</strong> dans l'offre politique et à orienter votre propre réflexion. Les synthèses et scores présentés résultent d'un traitement simplifié d'informations publiques : ils ne reflètent pas l'exhaustivité ni la complexité des programmes et ne sauraient engager la responsabilité de leurs auteurs. En utilisant ce site, vous reconnaissez que vos choix électoraux relèvent de votre seule et entière responsabilité.</p>
           </div>
           <button className="retour" onClick={() => setEcran('backoffice')}>🛠️ Back-office (admin)</button>
