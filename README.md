@@ -1,12 +1,30 @@
 # 🗳️ Votons.app — Présidentielle 2027
 
-Site d'information électorale : un quiz d'affinité pour découvrir quel candidat à l'élection présidentielle française de 2027 se rapproche le plus de vos idées.
+Site d'information électorale : un quiz d'affinité pour découvrir quel candidat à l'élection présidentielle française de 2027 se rapproche le plus de vos idées — et bien plus.
 
-## ✨ Fonctionnement
+> ℹ️ **Ce document explique, en toute transparence, comment le site fonctionne** : d'où viennent les données, comment les scores sont calculés, ce qui est automatisé, ce qui reste humain, et quelles sont nos limites. La documentation technique (installation, déploiement, stack) est dans [`README-dev.md`](./README-dev.md).
 
+## ✨ Les fonctionnalités
+
+### 🎯 Le quiz d'affinité
 1. **100 questions** (10 thèmes × 10) sur les vraies propositions des candidats : économie, retraites, institutions, immigration, sécurité, écologie, éducation, Europe & politique internationale, numérique & IA, religion & laïcité.
-2. **3 réponses possibles** : d'accord, mitigé, pas d'accord — le nombre de questions (10 à 100) est choisi librement sur la page d'accueil.
+2. **3 réponses possibles** : d'accord, mitigé, pas d'accord — le nombre de questions (10 à 100) est choisi librement.
 3. **Résultat** : score de compatibilité pour chaque candidat + détail des accords/désaccords, avec la position exacte extraite du programme officiel.
+
+### ✍️ Compose ton programme
+Piochez parmi **toutes les propositions extraites des programmes officiels 2027**, listées de manière anonyme et regroupées par thématique, pour composer votre propre programme — puis comparez-le à ceux des candidats : quelles propositions vous sont communes, lesquelles divergent, avec pour chacune le lien direct vers sa source dans le programme d'origine.
+
+### 🗳️ Récap des votes
+Voir clairement, **par groupe parlementaire, qui a voté quoi** à l'Assemblée nationale (17e législature) :
+- **Les 20 derniers scrutins publics** et leur résultat officiel (adopté / rejeté), avec le détail pour / contre / abstention de chaque groupe.
+- **Par thèmes** (budget & impôts, santé & fin de vie, enfance & protection) : la position cumulée de chaque groupe sur des scrutins de référence.
+- **Recherche** d'un scrutin par mot-clé ou numéro.
+
+### 👥 Les candidats
+La liste de tous les candidats déclarés, avec le résumé de leur programme, leurs statuts de candidature et l'état de publication de leur programme 2027.
+
+### 📅 Le calendrier
+Toutes les élections à venir, en France et en Europe.
 
 ## 📚 Sources — 100 % officielles
 
@@ -20,355 +38,69 @@ Les positions sont extraites des sites et programmes officiels des candidats :
 | Édouard Philippe | Horizons | [edouardphilippe.fr](https://www.edouardphilippe.fr/) |
 | Marine Le Pen | Rassemblement National | [rassemblementnational.fr](https://rassemblementnational.fr/) |
 
+Pour les candidats dont le programme 2027 n'est **pas encore publié**, les positions s'appuient sur **leur ancien programme ou leurs prises de position publiques** — un bandeau « ⚠️ » l'indique systématiquement, avec le lien vers la source utilisée. Ces positions seront remplacées par le programme officiel dès sa publication.
+
 Référence institutionnelle : [programme-candidats.interieur.gouv.fr](https://programme-candidats.interieur.gouv.fr/) (professions de foi publiées par le ministère de l'Intérieur).
 
-## 🧮 Méthode de scoring
+Pour le récap des votes, la source unique et officielle est l'**open data de l'Assemblée nationale** — https://www.assemblee-nationale.fr/dyn/17/scrutins — avec un lien direct depuis chaque fiche pour vérifier et aller plus loin.
+
+## 🧮 Méthode de scoring — comment le score est calculé
 
 - Chaque candidat a une position par question : **pour (1)**, **nuancé (0)**, **contre (-1)**.
 - Une réponse d'accord avec un candidat « pour » rapporte +1 ; un désaccord -1.
 - Les positions « nuancées » et les réponses « je ne sais pas » sont neutralisées (exclues du dénominateur).
 - Score final : `50 + (accords − désaccords) / questions comptées × 50`, normalisé sur 0–100 %.
 
-## 🗳️ Récap des votes
+**Code couleur des scores** : 0–25 % rouge · 25–50 % orange · 50–75 % bleu · 75–100 % vert.
 
-La deuxième brique du site : voir clairement, **par groupe parlementaire, qui a voté quoi** dans les projets de loi à l'Assemblée nationale (17e législature).
+## 🔍 Statuts et labels — que signifient-ils ?
 
-- **Les 20 derniers scrutins publics** et leur résultat officiel (adopté / rejeté), avec le détail pour / contre / abstention de chaque groupe.
-- **Par thèmes** (budget & impôts, santé & fin de vie, enfance & protection) : la position cumulée de chaque groupe sur des scrutins de référence — l'action réelle des partis.
-- **Recherche** d'un scrutin par mot-clé ou numéro.
+| Label | Signification |
+|---|---|
+| ⚠️ **Candidat déclaré** (violet) | Candidature déclarée publiquement, mais **pas encore officielle** : les parrainages n'ont pas été validés par le Conseil constitutionnel |
+| **Candidature conditionnelle** | La participation du candidat à l'élection n'est pas encore confirmée |
+| **Candidature officielle** | Candidature validée officiellement |
+| 📄 **Programme publié** | Le programme de campagne 2027 est publié : les propositions affichées sont directement issues du programme officiel |
+| 📄 **Programme non publié** | Le programme 2027 n'est pas encore publié : les positions s'appuient sur l'ancien programme ou des prises de position publiques |
 
-Source unique et officielle : les pages « Analyse du scrutin » de l'Assemblée nationale — https://www.assemblee-nationale.fr/dyn/17/scrutins — lien direct depuis chaque fiche.
+## 🔄 Comment les données sont mises à jour
 
-## 🚀 Démarrer
+La fraîcheur des données repose sur un mélange **d'automatisation et de travail éditorial humain** — voici exactement qui fait quoi :
 
-```bash
-npm install
-npm run dev
-```
+### Automatique (chaque jour)
+- **Scrutins de l'Assemblée nationale** : chaque nuit, l'open data officielle est téléchargée et agrégée par groupe parlementaire — la section « Récap des votes » se met à jour toute seule.
+- **Propositions des programmes** : les pages des programmes officiels publiés sont re-extraites chaque jour (intitulés exacts, liens directs).
+- **Surveillance des sources** : les URLs des programmes et sources de tous les candidats sont vérifiées (site inaccessible, page déplacée) — toute anomalie est signalée dans un rapport quotidien.
 
-Build de production :
+### Éditorial (par des humains)
+- **Statuts des candidatures** (déclaré / officiel / conditionnel) : il n'existe pas de flux machine public et fiable pour ces informations — elles sont vérifiées et saisies via le back-office.
+- **Positions sur les questions du quiz** : chaque position est relue, sourcée et datée par rapport au texte officiel du programme.
+- **Prises de parole** : sélection et reformulation sourcée.
 
-```bash
-npm run build
-```
+Un rapport de mise à jour est généré quotidiennement (`server/data/rapport-maj.json`) ; les anomalies détectées (ex. programme déplacé) sont vérifiées avant correction.
 
-Backend (API de contenu partagée + mise à jour quotidienne des scrutins) :
+## 🔒 Vie privée — ce que nous collectons (rien)
 
-```bash
-npm run api             # démarre l'API sur le port 4000 (PORT, CLE_SECRETE, ORIGINE_AUTORISEE configurables)
-npm run maj-scrutins    # consolide une fois l'open data officielle des scrutins
-npm run maj-quotidienne # met à jour TOUTES les données (voir ci-dessous)
-```
+**Aucune donnée personnelle n'est collectée.** :
 
-Au démarrage, l'API consolide l'open data si aucune donnée locale n'existe, puis rejoue la consolidation chaque nuit (03:30 par défaut, `HEURE_MAJ_SCRUTINS`).
+- Le quiz tourne **entièrement dans votre navigateur** — vos réponses ne quittent jamais votre appareil.
+- Aucun compte utilisateur, aucun cookie publicitaire, aucun traceur.
+- Le backend ne sert que du contenu (programmes, scrutins) — il ne reçoit ni ne stocke vos réponses.
+- Aucune donnée de navigation n'est exploitée à des fins commerciales.
 
-### 🔄 Mise à jour quotidienne complète (cron)
+## ⚖️ Limites assumées
 
-`npm run maj-quotidienne` orchestre toutes les mises à jour automatiques :
-
-1. **Scrutins** — open data de l'Assemblée nationale → `server/data/`
-2. **Propositions des programmes officiels** — extraction des sites de campagne → `src/data/propositions-programmes.mjs`
-3. **Vérification des URLs** des programmes et sources des candidats (404, redirections vers un autre domaine)
-4. **Cohérence** candidats du code vs contenu persisté (`server/data/contenu.json`)
-
-Un rapport complet est écrit dans `server/data/rapport-maj.json`. Le script sort en code 1 si une étape échoue (cron enverra la sortie par e-mail si un MTA est configuré). L'option `--commit` commite automatiquement les fichiers régénérés s'ils ont changé.
-
-**Ce qui reste éditorial** (pas d'API publique fiable) : statuts des candidatures (déclaré / officiel / conditionnel), positions sur les questions, prises de parole — le script les signale dans le rapport, la mise à jour se fait via le back-office.
-
-Exemple de cron (chaque jour à 4h, avec commit des changements) :
-
-```cron
-0 4 * * * cd /srv/votons && /usr/bin/node scripts/maj-quotidienne.mjs --commit >> /var/log/votons-maj.log 2>&1
-```
-
-Après le cron, déployer les changements commités : `git pull && npm ci && npm run build && pm2 restart votons-api`.
-
-## 🚀 Mise en production
-
-Le site a deux composants à déployer :
-
-- **Front** : site statique généré dans `dist/` — à servir derrière Nginx/Apache ou un hébergeur statique.
-- **API Node** (`server/index.mjs`) : contenu partagé (back-office) + consolidation quotidienne des scrutins. Elle doit tourner sur un serveur Node (pas d'hébergement statique pur).
-
-> 💡 **Contenu persisté** : si un `server/data/contenu.json` existe déjà (créé par une sauvegarde back-office), l'API **fusionne automatiquement** au démarrage les candidats et positions manquants du code source. Vos éditions du back-office restent intactes. Aucune suppression manuelle n'est nécessaire.
-
-Le site est en production sur **https://timerush.hk-groupe.fr/** — l'application **et** le back-office sont servis sur ce domaine unique (le back-office est accessible depuis le menu du site, l'API étant proxifiée sur `/api`).
-
-### Méthode A — Déploiement via Git avec clé SSH (recommandée)
-
-Le serveur tire le code directement depuis GitHub (`git pull`) en s'authentifiant avec une **clé de déploiement** (deploy key) dédiée — aucun mot de passe, aucun token.
-
-#### 1. Préparer le serveur
-
-- **Node.js 18+** et **npm** installés.
-- Le domaine `timerush.hk-groupe.fr` pointe (enregistrement A/AAAA) vers l'IP du serveur.
-- Un certificat HTTPS (voir étape 7, Certbot).
-- Accès SSH au serveur (ex. `ssh ubuntu@vps-c8527c7e.vps.ovh.net`).
-
-#### 2. Créer la clé de déploiement SSH
-
-Sur le serveur, générer une paire de clés dédiée au déploiement (sans phrase de passe, pour permettre `git pull` non interactif) :
-
-```bash
-ssh-keygen -t ed25519 -C "deploy-timerush" -f ~/.ssh/id_ed25519_deploy -N ""
-cat ~/.ssh/id_ed25519_deploy.pub
-```
-
-Déclarer la clé publique sur GitHub : repo `hk-groupe/WhoVoteWhat` → **Settings → Deploy keys → Add deploy key**, coller la clé publique, titre `deploy-timerush`, **Read only** suffit (pas besoin d'accès en écriture).
-
-Configurer SSH pour utiliser cette clé avec GitHub. Le fichier `~/.ssh/config` indique au client SSH quelle clé présenter quand on parle à `github.com` ; s'il n'existe pas encore, la commande `cat >>` le crée :
-
-```bash
-mkdir -p ~/.ssh && chmod 700 ~/.ssh
-cat >> ~/.ssh/config <<'EOF'
-Host github.com
-  User git
-  IdentityFile ~/.ssh/id_ed25519_deploy
-  IdentitiesOnly yes
-EOF
-chmod 600 ~/.ssh/config
-```
-
-- `Host github.com` : les lignes suivantes s'appliquent dès qu'une connexion vise `github.com` (c'est le cas de `git@github.com:hk-groupe/WhoVoteWhat.git`).
-- `User git` : utilisateur SSH imposé par GitHub pour Git.
-- `IdentityFile` : chemin de la **clé privée** de déploiement créée à l'étape précédente (le fichier sans `.pub`).
-- `IdentitiesOnly yes` : n'essaie que cette clé, sans parcourir les autres clés de l'agent — évite d'être rejeté pour trop de tentatives.
-
-Vérifier :
-
-```bash
-ssh -T git@github.com
-# attendu : "Hi hk-groupe/WhoVoteWhat! You've successfully authenticated..."
-```
-
-#### 3. Récupérer le code et installer
-
-```bash
-sudo mkdir -p /srv && sudo chown $USER /srv
-git clone git@github.com:hk-groupe/WhoVoteWhat.git /srv/WhoVoteWhat
-cd /srv/WhoVoteWhat
-npm ci
-```
-
-#### 4. Configurer les variables d'environnement
-
-| Variable | Rôle | Valeur recommandée en production |
-|---|---|---|
-| `PORT` | Port d'écoute de l'API | `4000` (ou le port choisi) |
-| `CLE_SECRETE` | Clé de session du back-office | une chaîne aléatoire longue (obligatoire, sinon les sessions ne survivent pas à un redémarrage) |
-| `ORIGINE_AUTORISEE` | Origine CORS autorisée pour l'API | `https://timerush.hk-groupe.fr` (ne pas laisser `*` en production) |
-| `HEURE_MAJ_SCRUTINS` | Heure de la mise à jour quotidienne des scrutins | `03:30` par défaut |
-| `VITE_API_URL` | URL de l'API intégrée au build du front | laisser vide — l'API est proxifiée sur `/api` du même domaine (renseigner uniquement si l'API est sur un autre domaine) |
-
-Exemple :
-
-```bash
-export PORT=4000
-export CLE_SECRETE="$(openssl rand -hex 32)"
-export ORIGINE_AUTORISEE="https://timerush.hk-groupe.fr"
-```
-
-Rendre la configuration persistante, par exemple dans un fichier PM2 chargé au démarrage — à créer **à la racine du projet** (remplacer `/srv/WhoVoteWhat` par votre chemin réel si différent, ex. `/home/ubuntu/WhoVoteWhat`) :
-
-```bash
-cat > ecosystem.config.cjs <<'EOF'
-module.exports = {
-  apps: [{
-    name: 'votons-api',
-    script: 'server/index.mjs',
-    env: {
-      PORT: 4000,
-      CLE_SECRETE: '<coller ici le résultat de la commande openssl rand -hex 32>',
-      ORIGINE_AUTORISEE: 'https://timerush.hk-groupe.fr'
-    }
-  }]
-}
-EOF
-chmod 600 ecosystem.config.cjs
-```
-
-#### 5. Construire le front
-
-```bash
-npm run build
-```
-
-Le site statique (application + back-office) est généré dans `dist/`.
-
-#### 6. Démarrer l'API en service persistant
-
-L'installation globale de PM2 écrit dans `/usr/lib/node_modules` : elle nécessite `sudo` (l'erreur npm `EACCES` apparaît sans lui).
-
-```bash
-sudo npm install -g pm2
-pm2 start ecosystem.config.cjs
-pm2 save
-sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u $USER --hp $HOME
-```
-
-> ⚠️ `pm2 startup` affiche lui-même la commande exacte à exécuter (avec `sudo env PATH=...`) : la copier telle quelle. Après le `pm2 save`, l'API redémarre automatiquement au reboot du serveur.
-
-Au premier démarrage, l'API consolide l'open data des scrutins, puis rejoue la consolidation chaque nuit — aucune tâche planifiée à configurer.
-
-#### 7. Exposer le site (reverse proxy + HTTPS automatique)
-
-Deux variantes selon le serveur web installé.
-
-**Variante Caddy (recommandée — HTTPS entièrement automatique, aucun certificat à gérer)** :
-
-```bash
-sudo tee /etc/caddy/Caddyfile >/dev/null <<'EOF'
-timerush.hk-groupe.fr {
-    root * /home/ubuntu/WhoVoteWhat/dist
-    encode gzip
-
-    handle /api/* {
-        reverse_proxy 127.0.0.1:4000
-    }
-
-    handle {
-        try_files {path} /index.html
-        file_server
-    }
-}
-EOF
-sudo systemctl reload caddy
-```
-
-Caddy obtient et renouvelle le certificat HTTPS tout seul, redirige le HTTP vers HTTPS, sert le front depuis `dist/` et proxifie l'API sur `/api`. Adapter le chemin `root` à l'emplacement du clone. Si Nginx est aussi installé, le désactiver pour libérer le port 80 : `sudo systemctl disable --now nginx`.
-
-**Variante Nginx + Certbot** :
-
-```bash
-sudo apt install nginx certbot python3-certbot-nginx
-sudo tee /etc/nginx/sites-available/timerush.hk-groupe.fr >/dev/null <<'EOF'
-server {
-  listen 80;
-  server_name timerush.hk-groupe.fr;
-  root /srv/WhoVoteWhat/dist;
-  index index.html;
-
-  location / {
-    try_files $uri $uri/ /index.html;
-  }
-
-  location /api {
-    proxy_pass http://127.0.0.1:4000;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-  }
-}
-EOF
-sudo ln -sf /etc/nginx/sites-available/timerush.hk-groupe.fr /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
-sudo certbot --nginx -d timerush.hk-groupe.fr
-```
-
-Le site (et le back-office, via le bouton « 🛠️ Back-office (admin) » du menu) est alors servi sur **https://timerush.hk-groupe.fr/** ; l'API répond sur `https://timerush.hk-groupe.fr/api/...`.
-
-Le front statique étant servi par Nginx depuis `dist/`, le chemin du projet dans `root` doit correspondre à l'emplacement du clone (adapter `/srv/WhoVoteWhat/dist` si le projet est ailleurs, ex. `root /home/ubuntu/WhoVoteWhat/dist;`).
-
-#### 8. Mettre à jour (routine)
-
-Après un push sur `main`, depuis le serveur (la clé de déploiement s'authentifie automatiquement, sans mot de passe) :
-
-```bash
-cd /srv/WhoVoteWhat
-git pull
-npm ci
-npm run build
-pm2 restart votons-api
-```
-
-### Méthode B — Déploiement via FTP / SFTP (glisser-déposer depuis votre PC)
-
-Adaptée à un serveur accessible en FTP/SFTP (VPS, hébergement mutualisé avec Node.js). Le backend n'ayant **aucune dépendance externe** (modules Node natifs uniquement), rien n'est à installer sur le serveur : vous déposez simplement les fichiers.
-
-#### 1. Construire en local
-
-```bash
-npm ci
-npm run build          # génère dist/
-```
-
-#### 2. Glisser-déposer sur le serveur
-
-Avec FileZilla, WinSCP ou lftp, transférez **uniquement** ces éléments (par exemple vers `/srv/WhoVoteWhat/`) :
-
-- `dist/` — le site statique
-- `server/` — le backend (⚠️ ne pas écraser `server/data/` s'il existe : il contient vos données back-office)
-- `public/` — assets servis par le backend
-- `package.json` et `package-lock.json`
-
-**N'uploadez pas** `node_modules/` (inutile sur le serveur : le backend tourne sans rien installer) ni `src/`, `scripts/`, fichiers de config (utiles uniquement pour rebuild en local).
-
-Exemple SFTP avec lftp (VPS OVH) :
-
-```bash
-lftp sftp://ubuntu@vps-c8527c7e.vps.ovh.net
-mirror -R dist/ /srv/WhoVoteWhat/dist/
-mirror -R server/ /srv/WhoVoteWhat/server/ -x data/
-mirror -R public/ /srv/WhoVoteWhat/public/
-put package.json -o /srv/WhoVoteWhat/package.json
-put package-lock.json -o /srv/WhoVoteWhat/package-lock.json
-```
-
-#### 3. Configurer et démarrer
-
-Sur le serveur (SSH), même configuration que la méthode A :
-
-```bash
-cd /srv/WhoVoteWhat
-export PORT=4000
-export CLE_SECRETE="$(openssl rand -hex 32)"
-export ORIGINE_AUTORISEE="https://timerush.hk-groupe.fr"
-
-# service persistant
-sudo npm install -g pm2
-pm2 start server/index.mjs --name votons-api
-pm2 save && pm2 startup
-```
-
-> 💡 Sur un VPS, la **méthode A (Git)** reste la plus simple au quotidien ; la méthode B convient si vous préférez FileZilla ou ne voulez pas de Git sur le serveur.
-
-#### 4. Mettre à jour (routine)
-
-1. En local : `git pull && npm ci && npm run build`
-2. Re-transférer `dist/` et `server/` (écraser, sauf `server/data/`)
-3. Sur le serveur : `pm2 restart votons-api`
-
-#### Variante « front seul » (hébergement 100 % statique, sans Node)
-
-Si votre hébergement ne propose pas Node, seul le front peut être déployé. Le site reste **totalement fonctionnel en lecture** grâce au repli sur les données du code source (candidats, questions, positions — y compris les compléments « ancien programme / prises de position publiques »).
-
-Limites : le back-office en ligne et la mise à jour quotidienne des scrutins ne fonctionnent pas ; le contenu est figé à la version buildée.
-
-```bash
-npm ci
-npm run build
-# puis uploader uniquement le contenu de dist/ à la racine du site
-```
-
-### ✅ Vérifier la mise en production
-
-- Le site se charge : page « 👥 Les candidats » affiche **19 candidats** (18 déclarés + Marine Tondelier, conditionnelle).
-- Bandeaux « ⚠️ » visibles sur les fiches des 14 candidats sans programme 2027 publié.
-- Le quiz fonctionne et classe les 19 candidats.
-- La section « 🗳️ Récap des votes » affiche les scrutins (données consolidées depuis l'API).
-- **https://timerush.hk-groupe.fr/** se charge, et le back-office est accessible depuis le menu (connexion requise, `CLE_SECRETE` configurée).
-- `https://timerush.hk-groupe.fr/api/contenu` répond en JSON (API proxifiée et lancée).
-- En cas d'API injoignable, le site reste consultable grâce aux données de repli embarquées.
-
-## 🛠️ Stack
-
-- **Front** : React 19 (Vite), aucune dépendance externe.
-- **Back** : Node sans dépendance (`node:http`). Deux rôles :
-  - **API de contenu partagée** — le back-office enregistre sur le serveur : tous les utilisateurs voient immédiatement les candidats, questions, thèmes et sources mis à jour, sans mettre à jour de fichiers.
-  - **Consolidation quotidienne des scrutins** — chaque nuit, l'open data officielle des scrutins de l'Assemblée nationale (`data.assemblee-nationale.fr`, Licence Ouverte 2.0) est téléchargée et agrégée par groupe ; la section « Récap des votes » se met à jour toute seule.
-- **Repli** : si le backend est injoignable, le front retombe sur les données du code source — le site reste consultable.
-- Aucune donnée personnelle collectée : le quiz tourne dans le navigateur, le backend ne sert que du contenu et des scrutins.
+- **Fenêtre glissante des scrutins** : le site affiche les 20 derniers scrutins et des votes de référence par thème (fenêtre de douze mois), pas l'intégralité de la législature. Les « non-votants » (présidents de séance, absents) ne sont pas comptés dans les jauges.
+- **Simplification assumée** : les scores et synthèses résultent d'un traitement simplifié d'informations publiques — ils ne reflètent pas l'exhaustivité ni la complexité des programmes.
+- **Programmes incomplets** : les programmes 2027 étant publiés progressivement, « Compose ton programme » ne compare aujourd'hui que les candidats au programme publié et extractible — les autres sont explicitement signalés.
+- **Datation** : les positions sont datées (octobre 2026) et mises à jour au fil des publications officielles.
 
 ## 📌 Avertissement
 
-Site indépendant et non partisan. Les programmes étant publiés progressivement par les candidats, les positions sont datées (octobre 2026) et mises à jour au fil des publications officielles.
+**Votons.app est un projet indépendant de vulgarisation à but strictement informatif.** Les contenus proposés — quiz d'affinité, compose ton programme, récapitulatif des votes et positions des candidats — sont établis à partir de sources officielles, mais ne constituent **ni un conseil de vote**, ni une recommandation, ni un soutien à un candidat ou à une formation politique, et ne se substituent en aucun cas à la recherche et la lecture intégrale des programmes électoraux et des textes officiels.
+
+L'application a pour seul objet de vous aider à **y voir plus clair** dans l'offre politique et à orienter votre propre réflexion. En utilisant ce site, vous reconnaissez que vos choix électoraux relèvent de votre seule et entière responsabilité.
+
+---
+
+🔧 Pour la documentation technique (installation, déploiement, choix de stack) : **[README-dev.md](./README-dev.md)**
