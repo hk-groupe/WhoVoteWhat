@@ -19,8 +19,9 @@
 import { writeFile, readFile, access } from 'node:fs/promises'
 import path from 'node:path'
 import { execSync } from 'node:child_process'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
-const RACINE = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..')
+const RACINE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const jour = new Date().toISOString()
 
 const rapport = {
@@ -38,7 +39,7 @@ const section = (titre) => console.log(`\n=== ${titre} ===`)
 // —— 1. Scrutins (Assemblée nationale) ——
 section('Scrutins — Assemblée nationale')
 try {
-  const { mettreAJourScrutins } = await import(path.join(RACINE, 'server/scrutins.mjs'))
+  const { mettreAJourScrutins } = await import(pathToFileURL(path.join(RACINE, 'server/scrutins.mjs')).href)
   const r = await mettreAJourScrutins()
   rapport.scrutins = { nb: r.scrutins, majLe: r.majLe, statut: 'ok' }
   console.log(`✅ ${r.scrutins} scrutins consolidés (dernière mise à jour : ${r.majLe})`)
@@ -69,8 +70,8 @@ try {
 // —— 3. Vérification des URLs des programmes des candidats ——
 section('Vérification des URLs des programmes')
 try {
-  const { CANDIDATS } = await import(path.join(RACINE, 'src/data/programmes.mjs'))
-  const { SOURCES_BASE } = await import(path.join(RACINE, 'src/data/positions-complements.mjs'))
+  const { CANDIDATS } = await import(pathToFileURL(path.join(RACINE, 'src/data/programmes.mjs')).href)
+  const { SOURCES_BASE } = await import(pathToFileURL(path.join(RACINE, 'src/data/positions-complements.mjs')).href)
   const urls = new Map()
   for (const c of CANDIDATS) {
     if (c.programme) urls.set(`${c.nom} (programme)`, c.programme)
@@ -116,7 +117,7 @@ try {
 // —— 4. Cohérence : candidats du code absents du contenu persisté ——
 section('Cohérence candidats / contenu')
 try {
-  const { CANDIDATS } = await import(path.join(RACINE, 'src/data/programmes.mjs'))
+  const { CANDIDATS } = await import(pathToFileURL(path.join(RACINE, 'src/data/programmes.mjs')).href)
   const fichierContenu = path.join(RACINE, 'server/data/contenu.json')
   let idsContenu = new Set()
   try {
