@@ -159,7 +159,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Votons<span className="accent"> Quoi</span></h1>
+          <h1>Votons</h1>
           <p className="tagline">Chargement…</p>
         </header>
       </div>
@@ -175,7 +175,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Votons<span className="accent"> Quoi</span></h1>
+          <h1>Votons</h1>
           <p className="tagline">Back-office de gestion du contenu 🛠️</p>
         </header>
         <BackOffice onFermer={() => setEcran('accueil')} />
@@ -191,7 +191,7 @@ export default function App() {
       <header className="header">
         <div className="barre-titre">
           <span className="logo">🗳️</span>
-          <h1>Votons<span className="accent"> Quoi</span></h1>
+          <h1>Votons</h1>
           <Navigation ecran={ecran} naviguer={naviguer} />
         </div>
 
@@ -348,7 +348,7 @@ export default function App() {
             <p>Le code de ce site est <strong>en accès libre</strong> : chacun peut le consulter, vérifier comment les scores sont calculés, corriger une position ou proposer une amélioration. La transparence est aussi dans le code, pas seulement dans les données.</p>
             <p>
               <a className="lien-repo" href="https://github.com/hk-groupe/WhoVoteWhat" target="_blank" rel="noreferrer">
-                📁 Consulter le dépôt Git (lien temporaire) ↗
+                📁 Consulter le dépôt GitHub ↗
               </a>
             </p>
           </div>
