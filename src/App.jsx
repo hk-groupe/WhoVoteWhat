@@ -7,6 +7,7 @@ import Calendrier from './Calendrier.jsx'
 import ComposeProgramme from './ComposeProgramme.jsx'
 import { BadgeStatut, BadgeProgramme } from './Badges.jsx'
 import { NomInformel } from './NomInformel.jsx'
+import { couleurScore } from './couleurScore.mjs'
 import LegendeLabels from './LegendeLabels.jsx'
 
 const NAV = [
@@ -444,7 +445,7 @@ export default function App() {
                           <BadgeStatut statut={s.candidat.statut} />
                           <BadgeProgramme publie={!sourcesBase[s.candidat.id]} nom={s.candidat.nom} />
                         </span>
-                        <div className="jauge"><div style={{ width: `${s.score}%`, background: s.candidat.couleur }}></div></div>
+                        <div className="jauge"><div style={{ width: `${s.score}%`, background: couleurScore(s.score) }}></div></div>
                         <span className="pct">{s.score}%</span>
                       </div>
                     ))}

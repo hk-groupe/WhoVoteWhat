@@ -2,6 +2,7 @@ import React from 'react'
 import { BadgeStatut } from './Badges.jsx'
 import LegendeLabels from './LegendeLabels.jsx'
 import { PROPOSITIONS_PROGRAMMES, SOURCES_PROGRAMMES } from './data/propositions-programmes.mjs'
+import { couleurScore } from './couleurScore.mjs'
 
 // « Compose ton programme » :
 // 1. L'intégralité des propositions extraites directement des programmes officiels
@@ -30,15 +31,6 @@ export default function ComposeProgramme({ donnees, onRetour }) {
   )
 
   const parCandidat = (cid) => propositions.filter((p) => p.origine === cid)
-
-  // Couleur du badge de score : vert pour les plus hauts, rouge pour les plus bas,
-  // dégradé arbitraire : >=60% vert, 40-59% vert-cyan, 25-39% ambre, <25% rouge.
-  const couleurScore = (score) => {
-    if (score >= 60) return '#2a9d3a'
-    if (score >= 40) return '#0ea5a5'
-    if (score >= 25) return '#e58a00'
-    return '#d00000'
-  }
 
   const candidatsAvecProgramme = Object.keys(PROPOSITIONS_PROGRAMMES)
   const tailles = candidatsAvecProgramme.map((cid) => parCandidat(cid).length)
