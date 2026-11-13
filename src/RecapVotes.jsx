@@ -111,16 +111,11 @@ function LigneThemeParti({ theme, scrutins, codeGroupe }) {
     { pour: 0, contre: 0, abstention: 0 },
   )
   if (cumul.pour + cumul.contre + cumul.abstention === 0) return null
-  let tendance = '➖ Mixte'
   const { pour, contre, abstention } = cumul
-  if (pour > contre && pour > abstention) tendance = '✅ Plutôt pour'
-  else if (contre > pour && contre > abstention) tendance = '❌ Plutôt contre'
-  else if (abstention >= pour && abstention >= contre) tendance = "🤷 S'abstenir"
   return (
     <li className="rv-ligne-theme">
       <span className="rv-theme-label">{t.emoji} {t.label}</span>
       <JaugeVote pour={pour} contre={contre} abstention={abstention} />
-      <span className="rv-position-groupe">{tendance}</span>
     </li>
   )
 }

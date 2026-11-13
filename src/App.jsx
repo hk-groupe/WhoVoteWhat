@@ -4,10 +4,16 @@ import BackOffice from './backoffice/BackOffice.jsx'
 import RecapVotes from './RecapVotes.jsx'
 import Candidats from './Candidats.jsx'
 import Calendrier from './Calendrier.jsx'
+import ComposeProgramme from './ComposeProgramme.jsx'
+import { BadgeStatut, BadgeProgramme } from './Badges.jsx'
+import { NomInformel } from './NomInformel.jsx'
+import { couleurScore } from './couleurScore.mjs'
+import LegendeLabels from './LegendeLabels.jsx'
 
 const NAV = [
   { id: 'accueil', label: 'Accueil', emoji: '🏠' },
   { id: 'quiz-config', label: 'Le quiz', emoji: '🎯' },
+  { id: 'compose-programme', label: 'Compose ton programme', emoji: '✍️' },
   { id: 'recap-votes', label: 'Que votent-ils ?', emoji: '🗳️' },
   { id: 'candidats', label: 'Les candidats', emoji: '👥' },
   { id: 'calendrier', label: 'Le calendrier', emoji: '📅' },
@@ -153,7 +159,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Qui Vote<span className="accent"> Quoi</span></h1>
+          <h1>Votons</h1>
           <p className="tagline">Chargement…</p>
         </header>
       </div>
@@ -169,7 +175,7 @@ export default function App() {
       <div className="app">
         <header className="header">
           <span className="logo">🗳️</span>
-          <h1>Qui Vote<span className="accent"> Quoi</span></h1>
+          <h1>Votons</h1>
           <p className="tagline">Back-office de gestion du contenu 🛠️</p>
         </header>
         <BackOffice onFermer={() => setEcran('accueil')} />
@@ -185,7 +191,7 @@ export default function App() {
       <header className="header">
         <div className="barre-titre">
           <span className="logo">🗳️</span>
-          <h1>Qui Vote<span className="accent"> Quoi</span></h1>
+          <h1>Votons</h1>
           <Navigation ecran={ecran} naviguer={naviguer} />
         </div>
 
@@ -196,23 +202,27 @@ export default function App() {
 
       {ecran === 'accueil' && (
         <section className="accueil">
+          <div className="bloc disclaimer" role="note">
+            <h3>⚠️ Avertissement</h3>
+            <p><strong>Votons.app est un projet indépendant de vulgarisation à but strictement informatif.</strong> Les contenus proposés — quiz d'affinité, composition de son programme, récapitulatif des votes et positions des candidats — sont établis à partir de sources officielles, mais ne constituent <strong>ni un conseil de vote, ni une recommandation, ni un soutien à un candidat ou à une formation politique, et ne se substituent en aucun cas à la recherche et à la lecture intégrale des programmes électoraux et des textes officiels.</strong></p>
+            <p>L'application a pour seul objet de vous aider à <strong>y voir plus clair dans l'offre politique et à orienter votre propre réflexion</strong>. Les <strong>synthèses et scores</strong> présentés résultent d'un traitement simplifié d'informations publiques : <strong>ils ne reflètent pas l'exhaustivité ni la complexité des programmes et ne sauraient</strong> engager la responsabilité de leurs auteurs. En utilisant ce site, vous reconnaissez que <strong>vos choix électoraux relèvent de votre seule et entière responsabilité</strong>.</p>
+          </div>
           <div className="bloc">
             <h2>Bienvenue 👋</h2>
             <p>Découvrez les sections du site pour mieux comprendre les programmes et les votes de vos élus :</p>
             <ul className="points">
               <li>🎯 <strong>Le quiz</strong> — configurez et lancez votre quiz pour trouver le candidat qui vous ressemble</li>
+              <li>✍️ <strong>Compose ton programme</strong> — piochez parmi toutes les propositions des programmes 2027, puis comparez votre programme à celui des candidats : points communs et divergences</li>
               <li>🗳️ <strong>Que votent-ils ?</strong> — le récap des votes : qui a voté quoi à l'Assemblée</li>
               <li>👥 <strong>Les candidats</strong> — la liste des candidats déclarés avec le résumé de leur programme</li>
               <li>📅 <strong>Le calendrier</strong> — toutes les élections à venir, en France et en Europe</li>
               <li>🔍 <strong>Notre transparence</strong> — comment ce site fonctionne, sources et méthode</li>
             </ul>
             <p className="aide-nav">Ouvrez le menu burger ☰ en haut de la page pour naviguer entre les sections.</p>
-            <button className="btn-principal" onClick={() => naviguer('quiz-config')}>🚀 Commencer le quiz</button>
-          </div>
-          <div className="bloc disclaimer" role="note">
-            <h3>⚠️ Avertissement</h3>
-            <p><strong>QuiVoteQuoi est un projet indépendant de vulgarisation à but strictement informatif.</strong> Les contenus proposés — quiz d'affinité, récapitulatif des votes et positions des candidats — sont établis à partir de sources officielles, mais ne constituent <strong>ni un conseil de vote</strong>, ni une recommandation, ni un soutien à un candidat ou à une formation politique, et ne se substituent en aucun cas à la recherche et à la lecture intégrale des programmes électoraux et des textes officiels.</p>
-            <p>L'application a pour seul objet de vous aider à <strong>y voir plus clair</strong> dans l'offre politique et à orienter votre propre réflexion. Les synthèses et scores présentés résultent d'un traitement simplifié d'informations publiques : ils ne reflètent pas l'exhaustivité ni la complexité des programmes et ne sauraient engager la responsabilité de leurs auteurs. En utilisant ce site, vous reconnaissez que vos choix électoraux relèvent de votre seule et entière responsabilité.</p>
+            <div className="accueil-actions">
+              <button className="btn-principal" onClick={() => naviguer('quiz-config')}>🚀 Commencer le quiz</button>
+              <button className="btn-principal btn-secondaire" onClick={() => naviguer('compose-programme')}>✍️ Compose ton programme</button>
+            </div>
           </div>
           <button className="retour" onClick={() => setEcran('backoffice')}>🛠️ Back-office (admin)</button>
         </section>
@@ -251,6 +261,7 @@ export default function App() {
         </section>
       )}
       {ecran === 'recap-votes' && <RecapVotes onRetour={() => setEcran('accueil')} />}
+      {ecran === 'compose-programme' && donnees && <ComposeProgramme donnees={donnees} onRetour={() => setEcran('accueil')} />}
       {ecran === 'candidats' && <Candidats donnees={donnees} onOuvrir={() => naviguer('quiz-config')} />}
       {ecran === 'calendrier' && <Calendrier />}
       {ecran === 'transparence' && (
@@ -337,7 +348,7 @@ export default function App() {
             <p>Le code de ce site est <strong>en accès libre</strong> : chacun peut le consulter, vérifier comment les scores sont calculés, corriger une position ou proposer une amélioration. La transparence est aussi dans le code, pas seulement dans les données.</p>
             <p>
               <a className="lien-repo" href="https://github.com/hk-groupe/WhoVoteWhat" target="_blank" rel="noreferrer">
-                📁 Consulter le dépôt Git (lien temporaire) ↗
+                📁 Consulter le dépôt GitHub ↗
               </a>
             </p>
           </div>
@@ -384,6 +395,19 @@ export default function App() {
       {ecran === 'resultat' && (() => {
         const scores = calculerScores()
         const gagnant = scores[0]
+        const sourcesBase = donnees.sourcesBase ?? {}
+        const categorie = (c) => {
+          if (c.statut === 'officiel') return sourcesBase[c.id] ? 'officiel-programme-non-publie' : 'officiel-programme-publie'
+          if (c.statut === 'declare' || c.statut === 'conditionnelle') return 'declare-non-officiel'
+          return 'autres'
+        }
+        const CATEGORIES = [
+          { id: 'officiel-programme-publie', titre: 'Candidats officiellement déclarés · programme diffusé' },
+          { id: 'officiel-programme-non-publie', titre: 'Candidats officiellement déclarés · programme non diffusé' },
+          { id: 'declare-non-officiel', titre: 'Candidats déclarés mais pas encore officiels · programme diffusé ou non' },
+          { id: 'autres', titre: 'Les autres candidats' },
+        ]
+        const rangGlobal = new Map(scores.map((s, i) => [s.candidat.id, i + 1]))
         return (
           <section className="resultat">
             {(donnees.sourcesBase ?? {})[gagnant.candidat.id] && (
@@ -395,8 +419,9 @@ export default function App() {
             )}
             <div className="carte-gagnant" style={{ background: gagnant.candidat.couleur }}>
               <span className="medaille">🏆</span>
-              <h2>Votre candidat le plus proche :<br />{gagnant.candidat.nom}</h2>
-              <p className="parti">{gagnant.candidat.parti}</p>
+              <h2>Le programme le plus proche de vos idées :</h2>
+              <p className="parti-gagnant"><strong>{gagnant.candidat.parti}</strong></p>
+              <p className="candidat-informel-gagnant">{gagnant.candidat.nom}</p>
               <p className="score-gagnant">{gagnant.score} % de compatibilité</p>
               <p className="resume">{legendes[gagnant.candidat.id]}</p>
               {gagnant.candidat.statut === 'conditionnelle' && (
@@ -404,21 +429,41 @@ export default function App() {
               )}
             </div>
             <h3>📊 Tous vos scores</h3>
-            <div className="classement">
-              {scores.map((s, i) => (
-                <div key={s.candidat.id} className="ligne-score">
-                  <span className="rang">#{i + 1}</span>
-                  <span className="nom">{s.candidat.nom}{s.candidat.statut === 'conditionnelle' ? ' ❓' : ''}</span>
-                  <div className="jauge"><div style={{ width: `${s.score}%`, background: s.candidat.couleur }}></div></div>
-                  <span className="pct">{s.score}%</span>
+            <LegendeLabels />
+            {CATEGORIES.map((cat) => {
+              const scoresCat = scores.filter((s) => categorie(s.candidat) === cat.id)
+              if (scoresCat.length === 0) return null
+              return (
+                <div key={cat.id} className="categorie-classement">
+                  <h4>{cat.titre}</h4>
+                  <div className="classement">
+                    {scoresCat.map((s) => (
+                      <div key={s.candidat.id} className="ligne-score">
+                        <span className="rang">#{rangGlobal.get(s.candidat.id)}</span>
+                        <span className="nom"><NomInformel candidat={s.candidat} /></span>
+                        <span className="badges-ligne">
+                          <BadgeStatut statut={s.candidat.statut} />
+                          <BadgeProgramme publie={!sourcesBase[s.candidat.id]} nom={s.candidat.nom} />
+                        </span>
+                        <div className="jauge"><div style={{ width: `${s.score}%`, background: couleurScore(s.score) }}></div></div>
+                        <span className="pct">{s.score}%</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
+              )
+            })}
             <details className="explications">
               <summary>🔍 Voir les accords / désaccords par candidat</summary>
               {scores.map((s) => (
                 <div key={s.candidat.id} className="explication-candidat">
-                  <h4>{s.candidat.nom} · {s.nbAccords} accords</h4>
+                  <h4>
+                    <NomInformel candidat={s.candidat} /> · {s.nbAccords} accords
+                    <span className="badges-ligne">
+                      <BadgeStatut statut={s.candidat.statut} />
+                      <BadgeProgramme publie={!sourcesBase[s.candidat.id]} nom={s.candidat.nom} />
+                    </span>
+                  </h4>
                   {(donnees.sourcesBase ?? {})[s.candidat.id] && (
                     <p className="avertissement-programme" role="note">
                       ⚠️ Programme 2027 non publié : positions basées sur l'ancien programme ou des prises de position publiques — <a href={donnees.sourcesBase[s.candidat.id].url} target="_blank" rel="noreferrer">{donnees.sourcesBase[s.candidat.id].label} ↗</a>
@@ -451,8 +496,7 @@ export default function App() {
       })()}
 
       <footer className="footer">
-        <p>Site indépendant, non partisan. Positions extraites des programmes officiels des candidats à l'élection présidentielle 2027.</p>
-        <p>Références : programme-candidats.interieur.gouv.fr · melenchon2027.fr · edouardphilippe.fr · attalpresident.fr · rassemblementnational.fr · place-publique.eu</p>
+        <p>Site indépendant, non partisan.</p>
       </footer>
     </div>
   )

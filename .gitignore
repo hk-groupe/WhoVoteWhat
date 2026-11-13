@@ -26,3 +26,4 @@ dist-ssr
 # Données générées par le backend (open data Assemblée nationale, contenu édité)
 server/data/
 server/.cache/
+.vibe/
