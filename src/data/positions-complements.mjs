@@ -6,20 +6,20 @@
 // Ces positions ne remplacent pas un programme 2027 : elles sont signalées comme telles dans l'interface.
 
 export const SOURCES_BASE = {
-  retailleau: { url: 'https://www.brunoretailleau.fr/', label: 'brunoretailleau.fr (discours et interventions publiques)' },
-  zemmour: { url: 'https://www.reconquete.fr/', label: 'Programme Reconquête 2022 (reconquete.fr)' },
+  retailleau: { url: 'https://www.senat.fr/senateur/retailleau_bruno04033b.html', label: 'Fiche officielle de Bruno Retailleau au Sénat (travaux parlementaires)' },
+  zemmour: { url: 'https://www.hatvp.fr/fiche-nominative/?declarant=zemmour-eric', label: 'Prises de position publiques d\'Éric Zemmour (HATVP, déclarations officielles)' },
   bertrand: { url: 'https://www.nous-france.fr/', label: 'nous-france.fr (programme et engagements publics)' },
-  lisnard: { url: 'https://www.davidlisnard.fr/', label: 'davidlisnard.fr (engagements publics, AMF)' },
-  roussel: { url: 'https://www.fabienroussel.fr/', label: 'Programme PCF 2022 (fabienroussel.fr)' },
-  ruffin: { url: 'https://www2.assemblee-nationale.fr/deputes/fiche/OMC_PA721796', label: 'Votes et prises de position à l\'Assemblée nationale' },
-  cazeneuve: { url: 'https://www.bernard-cazeneuve.fr/', label: 'bernard-cazeneuve.fr (La Convention, interventions publiques)' },
-  bouamrane: { url: 'https://karimbouamrane.fr/', label: 'karimbouamrane.fr (engagements publics, Parti socialiste)' },
-  batho: { url: 'https://www.generation-ecologie.fr/', label: 'Génération Écologie (generation-ecologie.fr)' },
-  arthaud: { url: 'https://www.lutte-ouvriere.fr/', label: 'Programme Lutte ouvrière 2022 (lutte-ouvriere.fr)' },
+  lisnard: { url: 'https://www.unenouvelleenergie.fr/', label: 'Nouvelle Énergie (unenouvelleenergie.fr, projet de David Lisnard)' },
+  roussel: { url: 'https://www.fabienroussel2027.fr/', label: 'Campagne 2027 de Fabien Roussel (fabienroussel2027.fr, PCF)' },
+  ruffin: { url: 'https://www.assemblee-nationale.fr/dyn/deputes/PA722142/positions-de-vote', label: 'Votes et prises de position à l\'Assemblée nationale' },
+  cazeneuve: { url: 'https://bc2027.fr/', label: 'Bernard Cazeneuve 2027 (bc2027.fr, La Convention)' },
+  bouamrane: { url: 'https://lafrancehumaineetforte.fr/', label: 'La France humaine et forte (lafrancehumaineetforte.fr, mouvement de Karim Bouamrane)' },
+  batho: { url: 'https://www.generationecologie.fr/', label: 'Génération Écologie (generationecologie.fr)' },
+  arthaud: { url: 'https://www.lutte-ouvriere.org/', label: 'Programme Lutte ouvrière (lutte-ouvriere.org)' },
   dupontaignan: { url: 'https://www.debout-la-france.fr/', label: 'Debout la France (debout-la-france.fr)' },
   philippot: { url: 'https://les-patriotes.com/', label: 'Les Patriotes (les-patriotes.com)' },
   asselineau: { url: 'https://www.upr.fr/', label: 'UPR (upr.fr)' },
-  tondelier: { url: 'https://parti-ecologiste.fr/', label: 'Les Écologistes (parti-ecologiste.fr, marinetondelier.fr)' },
+  tondelier: { url: 'https://marinetondelier.fr/', label: 'Marine Tondelier 2027 (marinetondelier.fr, Les Écologistes)' },
 }
 
 export const COMPLEMENTS = {

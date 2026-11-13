@@ -5,7 +5,7 @@ import { CANDIDATS, THEMES, QUESTIONS, INFOS, RESULTATS_LEGEND } from '../data/p
 import { fusionnerPositions, SOURCES_BASE } from '../data/positions-complements.mjs'
 import * as api from '../api/client.mjs'
 
-const CLE_SESSION = 'quivotequoi-session'
+const CLE_SESSION = 'votons-session'
 
 export const BASE = {
   candidats: CANDIDATS,
@@ -39,7 +39,7 @@ export function exporterJSON(donnees) {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = 'quivotequoi-donnees.json'
+  a.download = 'votons-donnees.json'
   a.click()
   URL.revokeObjectURL(url)
 }

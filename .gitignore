@@ -31,3 +31,4 @@ server/.cache/
 ecosystem.config.cjs
 *.pem
 *.key
+.vibe/

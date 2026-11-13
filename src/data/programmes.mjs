@@ -1,8 +1,30 @@
 // statut : 'declare' = candidat déclaré, 'conditionnelle' = candidature conditionnelle
 // (liste au 12 octobre 2026, source : electionpresidentielle2027.com/candidats-presidentielle-2027/)
 export const STATUTS = {
-  declare: { label: 'Candidat déclaré', emoji: '✅' },
-  conditionnelle: { label: 'Candidature conditionnelle', emoji: '❓' },
+  declare: {
+    label: 'Candidat déclaré',
+    emoji: '⚠️',
+    couleur: '#8700f7',
+    aide: "Candidature déclarée publiquement, mais pas encore officielle : les parrainages n'ont pas été validés par le Conseil constitutionnel.",
+  },
+  conditionnelle: {
+    label: 'Candidature conditionnelle',
+    emoji: '❓',
+    couleur: '#ffb703',
+    aide: "Candidature déclarée publiquement, mais pas encore officielle : les parrainages n'ont pas été validés par le Conseil constitutionnel.",
+  },
+  officiel: {
+    label: 'Candidature officielle',
+    emoji: '🏛️',
+    couleur: '#2a9d3a',
+    aide: 'Candidature officielle : parrainages validés par le Conseil constitutionnel.',
+  },
+  potentiel: {
+    label: 'Candidat potentiel',
+    emoji: '🔎',
+    couleur: '#6c757d',
+    aide: "Candidat potentiel : pas de candidature déclarée, mais présence remarquée lors des dernières élections. Aucun programme de campagne n'est publié à ce jour.",
+  },
 }
 
 export const CANDIDATS = [
@@ -61,9 +83,9 @@ export const CANDIDATS = [
     nom: 'Bruno Retailleau',
     parti: 'Les Républicains',
     couleur: '#2d6cdf',
-    site: 'https://www.brunoretailleau.fr/',
-    programme: 'https://www.brunoretailleau.fr/',
-    sourceLabel: 'brunoretailleau.fr',
+    site: 'https://www.senat.fr/senateur/retailleau_bruno04033b.html',
+    programme: 'https://www.senat.fr/senateur/retailleau_bruno04033b.html',
+    sourceLabel: 'Fiche Sénat de Bruno Retailleau (senat.fr)',
     statut: 'declare',
   },
   {
@@ -71,9 +93,9 @@ export const CANDIDATS = [
     nom: 'Éric Zemmour',
     parti: 'Reconquête',
     couleur: '#23252b',
-    site: 'https://www.reconquete.fr/',
-    programme: 'https://www.reconquete.fr/',
-    sourceLabel: 'reconquete.fr',
+    site: 'https://www.hatvp.fr/fiche-nominative/?declarant=zemmour-eric',
+    programme: 'https://www.hatvp.fr/fiche-nominative/?declarant=zemmour-eric',
+    sourceLabel: 'Fiche HATVP d\'Éric Zemmour (hatvp.fr)',
     statut: 'declare',
   },
   {
@@ -91,9 +113,9 @@ export const CANDIDATS = [
     nom: 'David Lisnard',
     parti: 'Nouvelle Énergie',
     couleur: '#00b4a0',
-    site: 'https://www.davidlisnard.fr/',
-    programme: 'https://www.davidlisnard.fr/',
-    sourceLabel: 'davidlisnard.fr',
+    site: 'https://lisnard2027.fr/',
+    programme: 'https://www.unenouvelleenergie.fr/',
+    sourceLabel: 'Nouvelle Énergie (unenouvelleenergie.fr)',
     statut: 'declare',
   },
   {
@@ -101,9 +123,9 @@ export const CANDIDATS = [
     nom: 'Fabien Roussel',
     parti: 'Parti communiste français',
     couleur: '#d62828',
-    site: 'https://www.fabienroussel.fr/',
-    programme: 'https://www.fabienroussel.fr/',
-    sourceLabel: 'fabienroussel.fr',
+    site: 'https://www.fabienroussel2027.fr/',
+    programme: 'https://www.fabienroussel2027.fr/',
+    sourceLabel: 'Campagne 2027 de Fabien Roussel (fabienroussel2027.fr)',
     statut: 'declare',
   },
   {
@@ -111,8 +133,8 @@ export const CANDIDATS = [
     nom: 'François Ruffin',
     parti: 'Debout !',
     couleur: '#e07a5f',
-    site: 'https://www.francoisruffin.fr/',
-    programme: 'https://www.francoisruffin.fr/',
+    site: 'https://francoisruffin.fr/',
+    programme: 'https://francoisruffin.fr/',
     sourceLabel: 'francoisruffin.fr',
     statut: 'declare',
   },
@@ -121,9 +143,9 @@ export const CANDIDATS = [
     nom: 'Bernard Cazeneuve',
     parti: 'La Convention',
     couleur: '#9d4edd',
-    site: 'https://www.bernard-cazeneuve.fr/',
-    programme: 'https://www.bernard-cazeneuve.fr/',
-    sourceLabel: 'bernard-cazeneuve.fr',
+    site: 'https://bc2027.fr/',
+    programme: 'https://bc2027.fr/',
+    sourceLabel: 'Bernard Cazeneuve 2027 (bc2027.fr)',
     statut: 'declare',
   },
   {
@@ -131,9 +153,9 @@ export const CANDIDATS = [
     nom: 'Karim Bouamrane',
     parti: 'Parti socialiste',
     couleur: '#ff7096',
-    site: 'https://karimbouamrane.fr/',
-    programme: 'https://karimbouamrane.fr/',
-    sourceLabel: 'karimbouamrane.fr',
+    site: 'https://lafrancehumaineetforte.fr/',
+    programme: 'https://lafrancehumaineetforte.fr/',
+    sourceLabel: 'La France humaine et forte (lafrancehumaineetforte.fr)',
     statut: 'declare',
   },
   {
@@ -141,9 +163,9 @@ export const CANDIDATS = [
     nom: 'Delphine Batho',
     parti: 'Génération Écologie',
     couleur: '#43aa8b',
-    site: 'https://www.generation-ecologie.fr/',
-    programme: 'https://www.generation-ecologie.fr/',
-    sourceLabel: 'generation-ecologie.fr',
+    site: 'https://www.generationecologie.fr/',
+    programme: 'https://www.generationecologie.fr/',
+    sourceLabel: 'generationecologie.fr',
     statut: 'declare',
   },
   {
@@ -151,8 +173,8 @@ export const CANDIDATS = [
     nom: 'Nathalie Arthaud',
     parti: 'Lutte ouvrière',
     couleur: '#b23a48',
-    site: 'https://www.lutte-ouvriere.fr/',
-    programme: 'https://www.lutte-ouvriere.fr/',
+    site: 'https://www.lutte-ouvriere.org/',
+    programme: 'https://www.lutte-ouvriere.org/',
     sourceLabel: 'lutte-ouvriere.fr',
     statut: 'declare',
   },
@@ -191,8 +213,8 @@ export const CANDIDATS = [
     nom: 'Marine Tondelier',
     parti: 'Les Écologistes',
     couleur: '#2dd4bf',
-    site: 'https://www.marinetondelier.fr/',
-    programme: 'https://www.marinetondelier.fr/',
+    site: 'https://marinetondelier.fr/',
+    programme: 'https://marinetondelier.fr/',
     sourceLabel: 'marinetondelier.fr',
     statut: 'conditionnelle',
   },
@@ -274,7 +296,7 @@ export const QUESTIONS = [
   {
     id: 'smic',
     theme: 'economie',
-    texte: 'Le SMIC devrait être porté à au moins 1 600 € net par mois, avec une indexation des salaires sur l\'inflation.',
+    texte: 'Le SMIC devrait être porté à au moins 1 600 € net par mois.',
     info: 'smic',
     positions: {
       melenchon: { position: 1, source: 'Porter immédiatement le SMIC à 1600 euros net et indexer les salaires sur l\'inflation' },
@@ -287,7 +309,7 @@ export const QUESTIONS = [
   {
     id: 'fortunes',
     theme: 'economie',
-    texte: 'Les très hauts patrimoines et les superprofits doivent être davantage taxés (retour de l\'ISF, taxe Zucman).',
+    texte: 'Les très hauts patrimoines devraient être davantage taxés (retour de l\'ISF ou équivalent).',
     info: 'isf',
     positions: {
       melenchon: { position: 1, source: 'Rétablir l\'ISF, instaurer la taxe Zucman (2 % sur les patrimoines de milliardaires)' },
@@ -300,7 +322,7 @@ export const QUESTIONS = [
   {
     id: 'travail',
     theme: 'economie',
-    texte: 'Il faut travailler davantage : assouplir les 35 heures et inciter au travail supplémentaire plutôt que redistribuer.',
+    texte: 'La durée légale du travail de 35 heures devrait être assouplie (modulation, heures supplémentaires facilitées).',
     info: 'travail35h',
     positions: {
       melenchon: { position: -1, source: 'Rétablir les 35 heures et passer aux 32 heures dans les métiers pénibles' },
@@ -313,7 +335,7 @@ export const QUESTIONS = [
   {
     id: 'impots',
     theme: 'economie',
-    texte: 'Il faut baisser les impôts des ménages, quitte à réduire les services publics.',
+    texte: 'Les impôts des ménages devraient être baissés, même si cela implique de réduire des services publics.',
     info: 'impotsRevenu',
     positions: {
       melenchon: { position: -1, source: 'Augmenter les recettes (ISF, taxe Zucman) pour financer les services publics ; pas de baisse d\'impôts' },
@@ -419,7 +441,7 @@ export const QUESTIONS = [
   {
     id: 'censure493',
     theme: 'institutions',
-    texte: 'Le 49.3 devrait être supprimé : le gouvernement ne devrait plus pouvoir faire adopter une loi sans le vote des députés.',
+    texte: 'Le gouvernement devrait devoir obtenir le vote des députés pour adopter une loi (suppression du 49.3).',
     info: 'censure',
     positions: {
       melenchon: { position: 1, source: 'Abolir le 49.3' },
@@ -604,7 +626,7 @@ export const QUESTIONS = [
   {
     id: 'nucleaire',
     theme: 'ecologie',
-    texte: 'Le nucléaire est essentiel : il faut lancer de nouveaux réacteurs (EPR) pour garantir notre souveraineté énergétique.',
+    texte: 'De nouveaux réacteurs nucléaires (EPR) devraient être construits en France.',
     info: 'epr2',
     positions: {
       melenchon: { position: -1, source: 'Sortir du nucléaire : abandonner les projets d\'EPR, planifier le démantèlement' },
@@ -617,7 +639,7 @@ export const QUESTIONS = [
   {
     id: 'ecologie_sociale',
     theme: 'ecologie',
-    texte: 'La transition écologique doit être massive et sociale (rénovation, transports publics, interdiction des produits polluants), même si elle contraint.',
+    texte: 'La transition écologique devrait être financée massivement par l\'État (rénovation, transports publics).',
     info: 'precariteEnergetique',
     positions: {
       melenchon: { position: 1, source: 'Plan de 200 Md€ d\'investissements écologiques, -65 % d\'émissions en 2030, 700 000 isolations/an' },
@@ -656,7 +678,7 @@ export const QUESTIONS = [
   {
     id: 'agriculture',
     theme: 'ecologie',
-    texte: 'L\'agriculture industrielle doit être réduite : interdiction des élevages intensifs et sortie des pesticides les plus dangereux.',
+    texte: 'Les pratiques agricoles industrielles (élevages intensifs, pesticides les plus dangereux) devraient être interdites ou fortement réduites.',
     info: 'ecophyto',
     positions: {
       melenchon: { position: 1, source: 'Interdire l\'élevage intensif, fermer les fermes-usines, éradiquer les pesticides dangereux' },
@@ -709,7 +731,7 @@ export const QUESTIONS = [
   {
     id: 'parcoursup',
     theme: 'education',
-    texte: 'Parcoursup doit être supprimé ou profondément réformé pour garantir l\'accès aux études sans sélection à l\'université.',
+    texte: 'Parcoursup devrait être profondément réformé pour garantir l\'accès aux études sans sélection à l\'université.',
     info: 'parcoursup',
     positions: {
       melenchon: { position: 1, source: 'Supprimer Parcoursup, accès de droit au supérieur pour tout bachelier' },
@@ -803,7 +825,7 @@ export const QUESTIONS = [
   {
     id: 'protections_sociales',
     theme: 'economie',
-    texte: 'La protection sociale (santé, famille, logement) doit être étendue et renforcée, quitte à augmenter les cotisations et la dépense publique.',
+    texte: 'La protection sociale (santé, famille, logement) devrait être étendue et renforcée, même si cela augmente les cotisations.',
     info: 'impotsRevenu',
     positions: {
       melenchon: { position: 1, source: 'Élargir la protection sociale, remboursement à 100 % des soins' },
@@ -816,7 +838,7 @@ export const QUESTIONS = [
   {
     id: 'pme',
     theme: 'economie',
-    texte: 'Il faut alléger massivement les charges et impôts des PME et artisans pour relancer la production et l\'emploi.',
+    texte: 'Les charges et impôts des PME et artisans devraient être fortement allégés.',
     info: 'travail35h',
     positions: {
       melenchon: { position: 0, source: 'Soutien aux TPE/PME via la commande publique, pas de cadeaux fiscaux généralisés' },
@@ -868,11 +890,11 @@ export const QUESTIONS = [
   {
     id: 'indexation_retraites',
     theme: 'retraites',
-    texte: 'Les retraites doivent être indexées chaque année sur l\'inflation ou le salaire moyen, par obligation légale.',
+    texte: 'Les retraites devraient être indexées chaque année sur l\'inflation, par obligation légale.',
     info: 'retraite2023',
     positions: {
       melenchon: { position: 1, source: 'Indexation légale des retraites sur l\'inflation' },
-      glucksmann: { position: 1, source: 'Indexer les petites retraites sur l\'inflation' },
+      glucksmann: { position: 0, source: 'Indexer les petites retraites sur l\'inflation' },
       attal: { position: 0, source: 'Revalorisation au cas par cas, sous réserve budgétaire' },
       philippe: { position: -1, source: 'Revalorisation conditionnée à la croissance, pas d\'indexation automatique' },
       lepen: { position: 1, source: 'Indexation sur l\'inflation garantie' }
@@ -881,7 +903,7 @@ export const QUESTIONS = [
   {
     id: 'retraite_jeunes',
     theme: 'retraites',
-    texte: 'Le système de retraites par répartition repose sur le travail des jeunes générations, qui cotisent pour financer les pensions des retraités : ce principe doit être maintenu tel quel.',
+    texte: 'Le système de retraites par répartition devrait être maintenu comme principe central du financement des pensions.',
     info: 'retraitesHistoire',
     positions: {
       melenchon: { position: 0, source: 'Financer par le capital et les hauts revenus, pas par les jeunes' },
@@ -985,7 +1007,7 @@ export const QUESTIONS = [
   {
     id: 'justice_independance',
     theme: 'institutions',
-    texte: 'L\'indépendance de la justice doit être renforcée : magistrats protégés, parquet indépendant du pouvoir exécutif.',
+    texte: 'Le parquet devrait être indépendant du pouvoir exécutif.',
     info: 'peinesPlanchers',
     positions: {
       melenchon: { position: 1, source: 'Protection des magistrats, parquet indépendant' },
@@ -1128,7 +1150,7 @@ export const QUESTIONS = [
   {
     id: 'zfe',
     theme: 'ecologie',
-    texte: 'Il faut supprimer ou assouplir les zones à faibles émissions (ZFE) qui pénalisent les automobilistes modestes.',
+    texte: 'Les zones à faibles émissions (ZFE) devraient être supprimées ou fortement assouplies.',
     info: 'precariteEnergetique',
     positions: {
       melenchon: { position: 0, source: 'Réaménager les ZFE avec des alternatives gratuites' },
@@ -1245,7 +1267,7 @@ export const QUESTIONS = [
   {
     id: 'notation',
     theme: 'education',
-    texte: 'L\'évaluation des élèves doit être repensée : réduire la note chiffrée, développer l\'évaluation par compétences et le redoublement ciblé.',
+    texte: 'L\'évaluation par compétences devrait être développée à l\'école, au détriment de la note chiffrée.',
     info: 'ecoleElementaire',
     positions: {
       melenchon: { position: 1, source: 'Repenser l\'évaluation, moins de notes' },
@@ -1297,7 +1319,7 @@ export const QUESTIONS = [
   {
     id: 'afrique',
     theme: 'europe',
-    texte: 'La politique africaine de la France doit être repensée : fin du françafric, coopération d\'égal à égal.',
+    texte: 'La politique africaine de la France devrait être refondée sur une coopération d\'égal à égal.',
     info: 'aideAuDeveloppement',
     positions: {
       melenchon: { position: 1, source: 'Fin de la Françafric, partenariat d\'égalité' },
@@ -1349,7 +1371,7 @@ export const QUESTIONS = [
   {
     id: 'reseaux_sociaux_mineurs',
     theme: 'numerique',
-    texte: 'Les réseaux sociaux doivent être interdits aux moins de 15-16 ans, avec vérification d\'âge obligatoire.',
+    texte: 'Les réseaux sociaux devraient être interdits aux mineurs de moins de 15 ans.',
     info: 'reseauxSociaux',
     positions: {
       melenchon: { position: 1, source: 'Interdiction avant 15 ans, vérification d\'âge' },
@@ -1362,7 +1384,7 @@ export const QUESTIONS = [
   {
     id: 'cryptographie_etat',
     theme: 'numerique',
-    texte: 'L\'État ne doit pas pouvoir accéder aux communications chiffrées des citoyens, même pour la lutte contre le crime et le terrorisme.',
+    texte: 'Les communications chiffrées des citoyens devraient rester inaccessibles à l\'État.',
     info: 'cryptographie',
     positions: {
       melenchon: { position: 1, source: 'Protéger le chiffrement, refuser les backdoors' },
@@ -1453,7 +1475,7 @@ export const QUESTIONS = [
   {
     id: 'laicite_ecole',
     theme: 'religion',
-    texte: 'La laïcité à l\'école doit être strictement appliquée, y compris par de nouvelles règles (tenues, menus, accommodements).',
+    texte: 'De nouvelles règles devraient renforcer l\'application de la laïcité à l\'école (tenues, accommodements).',
     info: 'laicite',
     positions: {
       melenchon: { position: 0, source: 'Laïcité républicaine, mais pas de stigmatisation' },
@@ -1531,7 +1553,7 @@ export const QUESTIONS = [
   {
     id: 'euthanasie_conscience',
     theme: 'religion',
-    texte: 'La conscience religieuse ne doit pas faire obstacle à l\'application des lois votées démocratiquement (fin de vie, PMA...).',
+    texte: 'Les convictions religieuses ne devraient pas permettre de s\'opposer à l\'application des lois (fin de vie, PMA...).',
     info: 'cultes',
     positions: {
       melenchon: { position: 1, source: 'La loi prime sur les convictions religieuses' },

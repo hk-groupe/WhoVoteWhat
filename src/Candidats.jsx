@@ -1,5 +1,6 @@
 import React from 'react'
-import { STATUTS } from './data/programmes.mjs'
+import { BadgeStatut, BadgeProgramme } from './Badges.jsx'
+import LegendeLabels from './LegendeLabels.jsx'
 
 // Résumé le plus exhaustif possible des programmes :
 // uniquement les propositions déclarées dans le programme du candidat.
@@ -36,6 +37,7 @@ export default function Candidats({ donnees, onOuvrir }) {
           son programme officiel.
         </p>
       </div>
+      <LegendeLabels />
       {candidats.map((c) => {
         const parTheme = engagementsParCandidat(c)
         const nbEngagements = Object.values(parTheme).reduce((n, l) => n + l.length, 0)
@@ -43,11 +45,10 @@ export default function Candidats({ donnees, onOuvrir }) {
           <details key={c.id} className="details-candidat" style={{ borderColor: c.couleur }}>
             <summary className="resume-candidat">
               <span className="dot" style={{ background: c.couleur, margin: 0 }}></span>
-              <strong>{c.nom}</strong>
-              <em>{c.parti}</em>
-              {c.statut && c.statut !== 'declare' && STATUTS[c.statut] && (
-                <em className="badge-statut">{STATUTS[c.statut].emoji} {STATUTS[c.statut].label}</em>
-              )}
+              <strong>{c.parti}</strong>
+              <em>{c.nom}</em>
+              <BadgeStatut statut={c.statut} />
+              <BadgeProgramme publie={!sourcesBase[c.id]} nom={c.nom} />
             </summary>
             <div className="contenu-candidat">
               <p className="synthese-candidat">{legendes[c.id]}</p>
