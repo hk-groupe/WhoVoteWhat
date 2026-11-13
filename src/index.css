@@ -9,8 +9,12 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
 body {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
   background: linear-gradient(135deg, var(--fond) 0%, #e0f7ff 50%, #ffeef7 100%);
   color: var(--texte);
   min-height: 100vh;
@@ -649,3 +653,33 @@ details summary.listmarker-off::before, details summary.no-triangle::before { co
 .statut-election { font-size: 0.88rem; color: #666; font-style: italic; margin: 2px 0 0; }
 .src-label { color: #666; font-style: italic; }
 .position-item .source a, em.source a { color: var(--violet); font-weight: 700; }
+
+/* ===== Responsive mobile ===== */
+@media (max-width: 600px) {
+  html { font-size: 17px; }
+  .app { padding: 16px 12px 48px; }
+  .header { margin-bottom: 20px; }
+  .logo { font-size: 36px; }
+  .bloc, .quiz { padding: 20px; border-radius: 18px; }
+  .btn-principal { font-size: 1.1rem; padding: 14px 28px; }
+  .question-texte { font-size: 1.25rem; }
+  .tagline { font-size: 1rem; padding: 6px 14px; }
+  .carte-candidat em, .source, .rv-meta, .rv-synthese, .rv-ligne-groupe, .rv-ligne-theme,
+  .badge-statut, .rv-badge, .rv-position-groupe, .statut-election, .bo-note, .disclaimer,
+  .avertissement-programme, .rv-description, .explication-candidat li {
+    font-size: 0.9rem;
+  }
+  .rv-jauge-vide { font-size: 0.8rem; }
+  .rv-titre { min-width: 0; }
+  .infobulle .infobulle-texte { width: min(280px, 78vw); }
+  .ligne-score {
+    grid-template-columns: 32px 1fr 52px;
+    grid-template-areas:
+      'rang nom pct'
+      'rang badges badges'
+      'rang jauge jauge';
+    gap: 4px 8px;
+    padding: 10px 12px;
+  }
+  .menu-nav { min-width: 220px; right: 0; }
+}
