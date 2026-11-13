@@ -26,3 +26,8 @@ dist-ssr
 # Données générées par le backend (open data Assemblée nationale, contenu édité)
 server/data/
 server/.cache/
+
+.env*
+ecosystem.config.cjs
+*.pem
+*.key
